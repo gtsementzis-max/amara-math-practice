@@ -184,17 +184,17 @@ const laterQuestions = [
   {section:'Word Problems', q:'📚 3 shelves each hold 9 books. How many books are there in total?', a:27, choices:[27,24,30,18]},
 ];
 
-// One color per table, used to draw an n×k array-grid for each table question
-const tableColors = ['#3b82f6','#0ea5a3','#8b5cf6','#f59e0b','#ef4444','#22c55e','#ec4899','#6366f1','#14b8a6','#eab308'];
+// One picture icon per table, used to draw an n×k array-grid for each table question
+const tableEmoji = ['⭐','🍎','🎈','🐸','🌸','🍪','⚽','🐝','🚗','🎁'];
 
-function renderArrayGrid(el, rows, cols, colorHex){
+function renderArrayGrid(el, rows, cols, emoji){
   el.className = 'array-grid';
-  el.style.gridTemplateColumns = `repeat(${cols}, 14px)`;
+  el.style.gridTemplateColumns = `repeat(${cols}, minmax(16px, 30px))`;
   el.innerHTML = '';
   for(let i=0;i<rows*cols;i++){
     const cell = document.createElement('div');
     cell.className = 'array-cell';
-    cell.style.background = colorHex;
+    cell.textContent = emoji;
     el.appendChild(cell);
   }
 }
@@ -228,7 +228,7 @@ function renderTableQuestion(){
   document.getElementById('sectionLabel').textContent = `The ${item.t}s Table`;
   const tableDemo = document.getElementById('tableDemo');
   tableDemo.style.display = 'inline-grid';
-  renderArrayGrid(tableDemo, item.t, item.a / item.t, tableColors[item.t - 1]);
+  renderArrayGrid(tableDemo, item.t, item.a / item.t, tableEmoji[item.t - 1]);
   document.getElementById('qtext').textContent = `${item.q} = ?`;
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className = 'qfeedback';

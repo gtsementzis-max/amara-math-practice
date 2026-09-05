@@ -114,9 +114,12 @@ a{color:var(--blue)}
 .match-btn.wrong{border-color:var(--red);background:#fdeaea;color:#b91c1c}
 .match-status{text-align:center;font-weight:700;color:var(--sub);margin-top:10px;min-height:1.2em}
 
-/* array-grid: rows x cols of small squares, visualizing a multiplication fact */
-.array-grid{display:inline-grid;gap:3px;margin:4px 0 12px}
-.array-cell{width:14px;height:14px;border-radius:3px}
+/* array-grid: rows x cols of picture icons, visualizing a multiplication fact */
+.array-grid{display:grid;gap:5px;margin:6px 0 14px;max-width:100%}
+.array-cell{
+  aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
+  font-size:clamp(14px,5vw,22px);line-height:1;
+}
 
 /* missing-number placeholder box */
 .mbox{

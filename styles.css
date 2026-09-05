@@ -113,6 +113,17 @@ a{color:var(--blue)}
 .match-btn.correct{border-color:var(--green);background:#e8f9ee;color:#15803d}
 .match-btn.wrong{border-color:var(--red);background:#fdeaea;color:#b91c1c}
 .match-status{text-align:center;font-weight:700;color:var(--sub);margin-top:10px;min-height:1.2em}
+
+/* array-grid: rows x cols of small squares, visualizing a multiplication fact */
+.array-grid{display:inline-grid;gap:3px;margin:4px 0 12px}
+.array-cell{width:14px;height:14px;border-radius:3px}
+
+/* missing-number placeholder box */
+.mbox{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:32px;height:32px;border:2px dashed var(--purple);border-radius:8px;
+  color:var(--purple);font-weight:800;background:#f5f0ff;padding:0 4px;
+}
 .btn{
   display:inline-block;background:var(--blue);color:#fff;border:none;border-radius:10px;
   padding:10px 18px;font-weight:700;font-size:1rem;cursor:pointer;text-decoration:none;font-family:inherit;

@@ -44,6 +44,7 @@
     <div id="quizBlock">
       <div class="section-label" id="sectionLabel"></div>
       <div class="qcard">
+        <div id="tableDemo"></div>
         <div class="qtext" id="qtext"></div>
         <div class="choices" id="choices"></div>
         <div class="qfeedback" id="feedback"></div>
@@ -175,13 +176,28 @@ const laterQuestions = [
   {section:'Missing Number', q:'? × 7 = 63', a:9, choices:[9,8,10,7]},
   {section:'Missing Number', q:'8 × ? = 32', a:4, choices:[4,3,5,6]},
   {section:'Missing Number', q:'? × 9 = 45', a:5, choices:[5,4,6,7]},
-  {section:'Word Problems', q:'Each box holds 6 crayons. How many crayons are in 4 boxes?', a:24, choices:[24,20,28,18]},
-  {section:'Word Problems', q:'A spider has 8 legs. How many legs do 5 spiders have?', a:40, choices:[40,32,48,35]},
-  {section:'Word Problems', q:'There are 7 rows of chairs with 6 chairs in each row. How many chairs are there in total?', a:42, choices:[42,36,48,35]},
-  {section:'Word Problems', q:'Amara reads 9 pages every day. How many pages does she read in 5 days?', a:45, choices:[45,40,50,36]},
-  {section:'Word Problems', q:'A pack of stickers has 4 sheets, and each sheet has 8 stickers. How many stickers are in the pack?', a:32, choices:[32,28,36,24]},
-  {section:'Word Problems', q:'3 shelves each hold 9 books. How many books are there in total?', a:27, choices:[27,24,30,18]},
+  {section:'Word Problems', q:'🖍️ Each box holds 6 crayons. How many crayons are in 4 boxes?', a:24, choices:[24,20,28,18]},
+  {section:'Word Problems', q:'🕷️ A spider has 8 legs. How many legs do 5 spiders have?', a:40, choices:[40,32,48,35]},
+  {section:'Word Problems', q:'🪑 There are 7 rows of chairs with 6 chairs in each row. How many chairs are there in total?', a:42, choices:[42,36,48,35]},
+  {section:'Word Problems', q:'📖 Amara reads 9 pages every day. How many pages does she read in 5 days?', a:45, choices:[45,40,50,36]},
+  {section:'Word Problems', q:'✨ A pack of stickers has 4 sheets, and each sheet has 8 stickers. How many stickers are in the pack?', a:32, choices:[32,28,36,24]},
+  {section:'Word Problems', q:'📚 3 shelves each hold 9 books. How many books are there in total?', a:27, choices:[27,24,30,18]},
 ];
+
+// One color per table, used to draw an n×k array-grid for each table question
+const tableColors = ['#3b82f6','#0ea5a3','#8b5cf6','#f59e0b','#ef4444','#22c55e','#ec4899','#6366f1','#14b8a6','#eab308'];
+
+function renderArrayGrid(el, rows, cols, colorHex){
+  el.className = 'array-grid';
+  el.style.gridTemplateColumns = `repeat(${cols}, 14px)`;
+  el.innerHTML = '';
+  for(let i=0;i<rows*cols;i++){
+    const cell = document.createElement('div');
+    cell.className = 'array-cell';
+    cell.style.background = colorHex;
+    el.appendChild(cell);
+  }
+}
 
 const LESSON_KEY = 'lesson1';
 const TOTAL = tableQuestions.length + matchingPairs.length + laterQuestions.length; // 40 + 8 + 14 = 62
@@ -210,6 +226,9 @@ function renderTableQuestion(){
   answered = false;
   const item = tableQuestions[idx];
   document.getElementById('sectionLabel').textContent = `The ${item.t}s Table`;
+  const tableDemo = document.getElementById('tableDemo');
+  tableDemo.style.display = 'inline-grid';
+  renderArrayGrid(tableDemo, item.t, item.a / item.t, tableColors[item.t - 1]);
   document.getElementById('qtext').textContent = `${item.q} = ?`;
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className = 'qfeedback';
@@ -229,8 +248,14 @@ function renderTableQuestion(){
 function renderLaterQuestion(){
   answered = false;
   const item = laterQuestions[idx];
-  document.getElementById('sectionLabel').textContent = item.section;
-  document.getElementById('qtext').textContent = item.section === 'Word Problems' ? item.q : `${item.q}`;
+  document.getElementById('sectionLabel').textContent = item.section === 'Missing Number' ? '🧩 Missing Number' : '📖 Word Problems';
+  document.getElementById('tableDemo').style.display = 'none';
+  const qtextEl = document.getElementById('qtext');
+  if(item.section === 'Missing Number'){
+    qtextEl.innerHTML = item.q.replace('?', '<span class="mbox">?</span>') + ' <span style="color:var(--sub);font-weight:500">— what goes in the box?</span>';
+  } else {
+    qtextEl.textContent = item.q;
+  }
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className = 'qfeedback';
   document.getElementById('nextBtn').style.display = 'none';

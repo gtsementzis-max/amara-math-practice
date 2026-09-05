@@ -12,7 +12,7 @@
 <div class="wrap">
   <div class="topnav"><a class="back" href="index.html">&larr; Back to Math Practice</a></div>
   <h1>Lesson 1: Multiplication Review</h1>
-  <p class="sub">Before we learn division, let's make sure your multiplication facts are solid — division uses them constantly.</p>
+  <p class="sub">Before we learn division, let's make sure your multiplication facts are solid — division uses them constantly. We'll go table by table, then mix it up with matching, missing numbers, and word problems.</p>
 
   <div class="card">
     <h2 style="margin-top:0">What multiplication means</h2>
@@ -26,7 +26,7 @@
   </div>
 
   <div class="card">
-    <h2 style="margin-top:0">Times table reference (2–10)</h2>
+    <h2 style="margin-top:0">Times table reference (1–10)</h2>
     <p style="color:var(--sub);margin-top:-4px">Skim this before you start — it's fine to look back at it during practice.</p>
     <div style="overflow-x:auto">
       <table id="times-table" style="border-collapse:collapse;width:100%;text-align:center;font-size:.85rem"></table>
@@ -34,19 +34,35 @@
   </div>
 
   <div class="card">
-    <h2 style="margin-top:0">Practice: 12 questions</h2>
+    <h2 style="margin-top:0">Practice</h2>
+    <p style="color:var(--sub);margin-top:-4px">We'll go through the 1s, 2s, 3s... up to the 10s (4 questions each), then matching, missing numbers, and word problems.</p>
     <div class="progress-strip">
-      <span id="qcount">Question 1 of 12</span>
+      <span id="qcount">Progress: 0 / 62</span>
       <span id="scorecount">Score: 0</span>
     </div>
-    <div class="qcard">
-      <div class="qtext" id="qtext"></div>
-      <div class="choices" id="choices"></div>
-      <div class="qfeedback" id="feedback"></div>
+
+    <div id="quizBlock">
+      <div class="section-label" id="sectionLabel"></div>
+      <div class="qcard">
+        <div class="qtext" id="qtext"></div>
+        <div class="choices" id="choices"></div>
+        <div class="qfeedback" id="feedback"></div>
+      </div>
+      <div style="text-align:right">
+        <button class="btn" id="nextBtn" style="display:none" onclick="nextQuestion()">Next &rarr;</button>
+      </div>
     </div>
-    <div style="text-align:right">
-      <button class="btn" id="nextBtn" style="display:none" onclick="nextQuestion()">Next &rarr;</button>
+
+    <div id="matchBlock" style="display:none">
+      <div class="section-label">Matching</div>
+      <p style="color:var(--sub)">Click an expression, then click the product it matches.</p>
+      <div class="match-wrap">
+        <div class="match-col" id="matchExprCol"></div>
+        <div class="match-col" id="matchProdCol"></div>
+      </div>
+      <div class="match-status" id="matchStatus"></div>
     </div>
+
     <div class="done-banner" id="doneBanner"></div>
   </div>
 </div>
@@ -68,13 +84,13 @@
   }
 })();
 
-// Times table 2-10
+// Times table 1-10
 (function(){
   const t = document.getElementById('times-table');
   let html = '<tr><th></th>';
   for(let c=1;c<=10;c++) html += `<th>${c}</th>`;
   html += '</tr>';
-  for(let r=2;r<=10;r++){
+  for(let r=1;r<=10;r++){
     html += `<tr><th style="text-align:right;padding-right:8px">${r}&times;</th>`;
     for(let c=1;c<=10;c++){
       html += `<td style="padding:3px 6px;border:1px solid #e4e9f2">${r*c}</td>`;
@@ -84,23 +100,97 @@
   t.innerHTML = html;
 })();
 
-const questions = [
-  {q:'2 × 6', a:12, choices:[12,10,14,8]},
-  {q:'3 × 5', a:15, choices:[15,18,12,20]},
-  {q:'4 × 4', a:16, choices:[16,12,20,8]},
-  {q:'5 × 6', a:30, choices:[30,25,35,24]},
-  {q:'6 × 3', a:18, choices:[18,21,15,24]},
-  {q:'7 × 2', a:14, choices:[14,12,16,9]},
-  {q:'8 × 3', a:24, choices:[24,21,32,27]},
-  {q:'9 × 4', a:36, choices:[36,32,40,27]},
-  {q:'10 × 5', a:50, choices:[50,45,55,40]},
-  {q:'4 × 8', a:32, choices:[32,28,36,24]},
-  {q:'7 × 7', a:49, choices:[49,42,56,48]},
-  {q:'9 × 9', a:81, choices:[81,72,90,79]},
+// Part 1: tables 1-10, 4 questions each = 40 questions
+const tableQuestions = [
+  {t:1, q:'1 × 3', a:3,  choices:[3,2,4,5]},
+  {t:1, q:'1 × 7', a:7,  choices:[7,6,8,9]},
+  {t:1, q:'1 × 9', a:9,  choices:[9,8,10,7]},
+  {t:1, q:'1 × 10', a:10, choices:[10,9,11,8]},
+
+  {t:2, q:'2 × 4', a:8,  choices:[8,6,10,12]},
+  {t:2, q:'2 × 6', a:12, choices:[12,10,14,8]},
+  {t:2, q:'2 × 8', a:16, choices:[16,14,18,12]},
+  {t:2, q:'2 × 9', a:18, choices:[18,16,20,14]},
+
+  {t:3, q:'3 × 3', a:9,  choices:[9,6,12,15]},
+  {t:3, q:'3 × 5', a:15, choices:[15,12,18,9]},
+  {t:3, q:'3 × 7', a:21, choices:[21,18,24,15]},
+  {t:3, q:'3 × 8', a:24, choices:[24,21,27,18]},
+
+  {t:4, q:'4 × 4', a:16, choices:[16,12,20,24]},
+  {t:4, q:'4 × 6', a:24, choices:[24,20,28,16]},
+  {t:4, q:'4 × 7', a:28, choices:[28,24,32,20]},
+  {t:4, q:'4 × 9', a:36, choices:[36,32,40,28]},
+
+  {t:5, q:'5 × 3', a:15, choices:[15,10,20,25]},
+  {t:5, q:'5 × 6', a:30, choices:[30,25,35,20]},
+  {t:5, q:'5 × 7', a:35, choices:[35,30,40,25]},
+  {t:5, q:'5 × 9', a:45, choices:[45,40,50,35]},
+
+  {t:6, q:'6 × 4', a:24, choices:[24,18,30,36]},
+  {t:6, q:'6 × 5', a:30, choices:[30,24,36,18]},
+  {t:6, q:'6 × 7', a:42, choices:[42,36,48,30]},
+  {t:6, q:'6 × 8', a:48, choices:[48,42,54,36]},
+
+  {t:7, q:'7 × 3', a:21, choices:[21,14,28,35]},
+  {t:7, q:'7 × 5', a:35, choices:[35,28,42,21]},
+  {t:7, q:'7 × 6', a:42, choices:[42,35,49,28]},
+  {t:7, q:'7 × 8', a:56, choices:[56,49,63,42]},
+
+  {t:8, q:'8 × 4', a:32, choices:[32,24,40,48]},
+  {t:8, q:'8 × 6', a:48, choices:[48,40,56,32]},
+  {t:8, q:'8 × 7', a:56, choices:[56,48,64,40]},
+  {t:8, q:'8 × 9', a:72, choices:[72,64,80,56]},
+
+  {t:9, q:'9 × 3', a:27, choices:[27,18,36,45]},
+  {t:9, q:'9 × 5', a:45, choices:[45,36,54,27]},
+  {t:9, q:'9 × 6', a:54, choices:[54,45,63,36]},
+  {t:9, q:'9 × 8', a:72, choices:[72,63,81,54]},
+
+  {t:10, q:'10 × 3', a:30, choices:[30,20,40,50]},
+  {t:10, q:'10 × 6', a:60, choices:[60,50,70,40]},
+  {t:10, q:'10 × 7', a:70, choices:[70,60,80,50]},
+  {t:10, q:'10 × 9', a:90, choices:[90,80,100,70]},
 ];
 
-let idx = 0, score = 0, answered = false;
-const LESSON_KEY = 'lesson1', TOTAL = questions.length;
+// Part 2: matching (8 pairs, all unique products)
+const matchingPairs = [
+  {expr:'2 × 7', product:14},
+  {expr:'3 × 6', product:18},
+  {expr:'4 × 5', product:20},
+  {expr:'5 × 5', product:25},
+  {expr:'6 × 7', product:42},
+  {expr:'7 × 3', product:21},
+  {expr:'8 × 3', product:24},
+  {expr:'9 × 4', product:36},
+];
+
+// Part 3: missing number (8) + word problems (6) = 14 questions
+const laterQuestions = [
+  {section:'Missing Number', q:'3 × ? = 21', a:7, choices:[7,6,8,5]},
+  {section:'Missing Number', q:'? × 4 = 28', a:7, choices:[7,6,8,9]},
+  {section:'Missing Number', q:'5 × ? = 40', a:8, choices:[8,7,9,6]},
+  {section:'Missing Number', q:'? × 6 = 48', a:8, choices:[8,7,9,6]},
+  {section:'Missing Number', q:'9 × ? = 54', a:6, choices:[6,5,7,8]},
+  {section:'Missing Number', q:'? × 7 = 63', a:9, choices:[9,8,10,7]},
+  {section:'Missing Number', q:'8 × ? = 32', a:4, choices:[4,3,5,6]},
+  {section:'Missing Number', q:'? × 9 = 45', a:5, choices:[5,4,6,7]},
+  {section:'Word Problems', q:'Each box holds 6 crayons. How many crayons are in 4 boxes?', a:24, choices:[24,20,28,18]},
+  {section:'Word Problems', q:'A spider has 8 legs. How many legs do 5 spiders have?', a:40, choices:[40,32,48,35]},
+  {section:'Word Problems', q:'There are 7 rows of chairs with 6 chairs in each row. How many chairs are there in total?', a:42, choices:[42,36,48,35]},
+  {section:'Word Problems', q:'Amara reads 9 pages every day. How many pages does she read in 5 days?', a:45, choices:[45,40,50,36]},
+  {section:'Word Problems', q:'A pack of stickers has 4 sheets, and each sheet has 8 stickers. How many stickers are in the pack?', a:32, choices:[32,28,36,24]},
+  {section:'Word Problems', q:'3 shelves each hold 9 books. How many books are there in total?', a:27, choices:[27,24,30,18]},
+];
+
+const LESSON_KEY = 'lesson1';
+const TOTAL = tableQuestions.length + matchingPairs.length + laterQuestions.length; // 40 + 8 + 14 = 62
+
+let phase = 'tables'; // 'tables' -> 'matching' -> 'later' -> 'done'
+let idx = 0;          // index within tableQuestions, then within laterQuestions
+let done = 0;         // overall progress count (out of TOTAL)
+let score = 0;
+let answered = false;
 
 function shuffle(arr){
   const a = arr.slice();
@@ -111,11 +201,15 @@ function shuffle(arr){
   return a;
 }
 
-function renderQuestion(){
-  answered = false;
-  const item = questions[idx];
-  document.getElementById('qcount').textContent = `Question ${idx+1} of ${TOTAL}`;
+function updateHeader(){
+  document.getElementById('qcount').textContent = `Progress: ${done} / ${TOTAL}`;
   document.getElementById('scorecount').textContent = `Score: ${score}`;
+}
+
+function renderTableQuestion(){
+  answered = false;
+  const item = tableQuestions[idx];
+  document.getElementById('sectionLabel').textContent = `The ${item.t}s Table`;
   document.getElementById('qtext').textContent = `${item.q} = ?`;
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className = 'qfeedback';
@@ -126,47 +220,157 @@ function renderQuestion(){
     const btn = document.createElement('button');
     btn.className = 'choice';
     btn.textContent = c;
-    btn.onclick = () => selectAnswer(c, btn);
+    btn.onclick = () => selectAnswer(c, btn, item.a, item.q);
     choicesEl.appendChild(btn);
   });
+  updateHeader();
 }
 
-function selectAnswer(value, btn){
+function renderLaterQuestion(){
+  answered = false;
+  const item = laterQuestions[idx];
+  document.getElementById('sectionLabel').textContent = item.section;
+  document.getElementById('qtext').textContent = item.section === 'Word Problems' ? item.q : `${item.q}`;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'qfeedback';
+  document.getElementById('nextBtn').style.display = 'none';
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  shuffle(item.choices).forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c;
+    btn.onclick = () => selectAnswer(c, btn, item.a, item.section === 'Word Problems' ? item.q : `${item.q} → ${item.a}`);
+    choicesEl.appendChild(btn);
+  });
+  updateHeader();
+}
+
+function selectAnswer(value, btn, correctAnswer, label){
   if(answered) return;
   answered = true;
-  const item = questions[idx];
   const feedback = document.getElementById('feedback');
   const allBtns = document.querySelectorAll('#choices .choice');
   allBtns.forEach(b=>{
-    if(parseInt(b.textContent,10) === item.a) b.classList.add('correct');
+    if(parseInt(b.textContent,10) === correctAnswer) b.classList.add('correct');
   });
-  if(value === item.a){
+  if(value === correctAnswer){
     score++;
     btn.classList.add('correct');
-    feedback.textContent = 'Correct! ' + item.q + ' = ' + item.a;
+    feedback.textContent = 'Correct! The answer is ' + correctAnswer + '.';
     feedback.className = 'qfeedback ok';
   } else {
     btn.classList.add('wrong');
-    feedback.textContent = 'Not quite — ' + item.q + ' = ' + item.a + '. Take another look at the table above if you need to.';
+    feedback.textContent = 'Not quite — the answer is ' + correctAnswer + '. Check the table above if you need to.';
     feedback.className = 'qfeedback no';
   }
-  document.getElementById('scorecount').textContent = `Score: ${score}`;
+  done++;
+  updateHeader();
+  const isLastTable = phase === 'tables' && idx === tableQuestions.length - 1;
+  const isLastLater = phase === 'later' && idx === laterQuestions.length - 1;
   document.getElementById('nextBtn').style.display = 'inline-block';
-  document.getElementById('nextBtn').textContent = (idx === TOTAL-1) ? 'Finish' : 'Next →';
+  document.getElementById('nextBtn').textContent = (isLastTable || isLastLater) ? 'Continue →' : 'Next →';
 }
 
 function nextQuestion(){
   idx++;
-  if(idx >= TOTAL){
-    finish();
-    return;
+  if(phase === 'tables'){
+    if(idx >= tableQuestions.length){
+      startMatching();
+      return;
+    }
+    renderTableQuestion();
+  } else if(phase === 'later'){
+    if(idx >= laterQuestions.length){
+      finish();
+      return;
+    }
+    renderLaterQuestion();
   }
-  renderQuestion();
+}
+
+// --- Matching phase ---
+let matchSolved = 0;
+let selectedExprBtn = null, selectedExprValue = null;
+
+function startMatching(){
+  phase = 'matching';
+  document.getElementById('quizBlock').style.display = 'none';
+  document.getElementById('matchBlock').style.display = 'block';
+  matchSolved = 0;
+  selectedExprBtn = null;
+  selectedExprValue = null;
+
+  const exprCol = document.getElementById('matchExprCol');
+  const prodCol = document.getElementById('matchProdCol');
+  exprCol.innerHTML = '';
+  prodCol.innerHTML = '';
+
+  shuffle(matchingPairs).forEach(pair=>{
+    const b = document.createElement('button');
+    b.className = 'match-btn';
+    b.textContent = pair.expr;
+    b.dataset.product = pair.product;
+    b.onclick = () => pickExpr(b, pair.product);
+    exprCol.appendChild(b);
+  });
+  shuffle(matchingPairs).forEach(pair=>{
+    const b = document.createElement('button');
+    b.className = 'match-btn';
+    b.textContent = pair.product;
+    b.onclick = () => pickProduct(b, pair.product);
+    prodCol.appendChild(b);
+  });
+  document.getElementById('matchStatus').textContent = `Pairs matched: 0 / ${matchingPairs.length}`;
+}
+
+function pickExpr(btn, productValue){
+  if(btn.disabled) return;
+  document.querySelectorAll('#matchExprCol .match-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedExprBtn = btn;
+  selectedExprValue = productValue;
+}
+
+function pickProduct(btn, productValue){
+  if(btn.disabled || !selectedExprBtn) return;
+  if(productValue === selectedExprValue){
+    btn.classList.remove('wrong');
+    btn.classList.add('correct');
+    selectedExprBtn.classList.remove('selected');
+    selectedExprBtn.classList.add('correct');
+    btn.disabled = true;
+    selectedExprBtn.disabled = true;
+    selectedExprBtn = null;
+    selectedExprValue = null;
+    matchSolved++;
+    score++;
+    done++;
+    updateHeader();
+    document.getElementById('matchStatus').textContent = `Pairs matched: ${matchSolved} / ${matchingPairs.length}`;
+    if(matchSolved >= matchingPairs.length){
+      document.getElementById('matchStatus').textContent = 'All matched! Nice work.';
+      setTimeout(startLater, 700);
+    }
+  } else {
+    btn.classList.add('wrong');
+    setTimeout(()=>btn.classList.remove('wrong'), 500);
+  }
+}
+
+// --- Part 3 (missing number + word problems) ---
+function startLater(){
+  phase = 'later';
+  idx = 0;
+  document.getElementById('matchBlock').style.display = 'none';
+  document.getElementById('quizBlock').style.display = 'block';
+  renderLaterQuestion();
 }
 
 function finish(){
-  document.querySelector('.qcard').style.display = 'none';
-  document.getElementById('nextBtn').style.display = 'none';
+  phase = 'done';
+  document.getElementById('quizBlock').style.display = 'none';
+  document.getElementById('matchBlock').style.display = 'none';
   document.getElementById('qcount').textContent = 'Done!';
   const rec = mathSave(LESSON_KEY, score, TOTAL);
   const banner = document.getElementById('doneBanner');
@@ -175,7 +379,7 @@ function finish(){
     <a class="btn green" style="margin-top:10px" href="lesson2-division-basics.html">Continue to Lesson 2: What Is Division? →</a>`;
 }
 
-renderQuestion();
+renderTableQuestion();
 </script>
 </body>
 </html>

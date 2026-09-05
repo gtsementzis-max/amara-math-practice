@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Division Practice — Amara's Math Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav"><a class="back" href="index.html">&larr; Back to Math Practice</a></div>
+  <h1>Lesson 3: Division Practice</h1>
+  <p class="sub">15 questions: first straight division facts, then word problems. Same shortcut as before —
+    think about the multiplication fact hiding inside each one.</p>
+
+  <div class="card">
+    <div class="explain">
+      Quick reminder: <b>12 &divide; 3 = 4</b> because <b>3 &times; 4 = 12</b>. Every division problem below
+      has a multiplication fact behind it — find it and you've got the answer.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0" id="section-title">Part A — Division facts</h2>
+    <div class="progress-strip">
+      <span id="qcount">Question 1 of 15</span>
+      <span id="scorecount">Score: 0</span>
+    </div>
+    <div class="qcard">
+      <div class="qtext" id="qtext"></div>
+      <div class="choices" id="choices"></div>
+      <div class="qfeedback" id="feedback"></div>
+    </div>
+    <div style="text-align:right">
+      <button class="btn" id="nextBtn" style="display:none" onclick="nextQuestion()">Next &rarr;</button>
+    </div>
+    <div class="done-banner" id="doneBanner"></div>
+  </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+const questions = [
+  // Part A: straight facts
+  {part:'A', q:'18 ÷ 6', a:3, hint:'6 × 3 = 18', choices:[3,4,2,6]},
+  {part:'A', q:'21 ÷ 7', a:3, hint:'7 × 3 = 21', choices:[3,4,2,7]},
+  {part:'A', q:'32 ÷ 8', a:4, hint:'8 × 4 = 32', choices:[4,5,3,8]},
+  {part:'A', q:'45 ÷ 9', a:5, hint:'9 × 5 = 45', choices:[5,6,4,9]},
+  {part:'A', q:'24 ÷ 6', a:4, hint:'6 × 4 = 24', choices:[4,5,3,6]},
+  {part:'A', q:'36 ÷ 6', a:6, hint:'6 × 6 = 36', choices:[6,5,7,4]},
+  {part:'A', q:'28 ÷ 7', a:4, hint:'7 × 4 = 28', choices:[4,5,3,7]},
+  {part:'A', q:'63 ÷ 9', a:7, hint:'9 × 7 = 63', choices:[7,8,6,9]},
+  {part:'A', q:'48 ÷ 8', a:6, hint:'8 × 6 = 48', choices:[6,7,5,8]},
+  {part:'A', q:'54 ÷ 9', a:6, hint:'9 × 6 = 54', choices:[6,7,5,9]},
+  // Part B: word problems
+  {part:'B', q:'Amara has 24 stickers to share equally among 4 friends. How many stickers does each friend get?', a:6, hint:'24 ÷ 4 — and 4 × 6 = 24', choices:[6,5,8,4]},
+  {part:'B', q:'35 students are going on a field trip, and each bus holds 7 students. How many buses are needed?', a:5, hint:'35 ÷ 7 — and 7 × 5 = 35', choices:[5,6,4,7]},
+  {part:'B', q:'A baker has 40 muffins and puts them into boxes of 8. How many boxes does she fill?', a:5, hint:'40 ÷ 8 — and 8 × 5 = 40', choices:[5,6,4,8]},
+  {part:'B', q:'18 apples are shared equally between 3 baskets. How many apples go in each basket?', a:6, hint:'18 ÷ 3 — and 3 × 6 = 18', choices:[6,7,5,3]},
+  {part:'B', q:'27 crayons are shared equally among 9 kids. How many crayons does each kid get?', a:3, hint:'27 ÷ 9 — and 9 × 3 = 27', choices:[3,4,2,9]},
+];
+
+let idx = 0, score = 0, answered = false;
+const LESSON_KEY = 'lesson3', TOTAL = questions.length;
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function renderQuestion(){
+  answered = false;
+  const item = questions[idx];
+  document.getElementById('qcount').textContent = `Question ${idx+1} of ${TOTAL}`;
+  document.getElementById('scorecount').textContent = `Score: ${score}`;
+  document.getElementById('section-title').textContent = item.part === 'A' ? 'Part A — Division facts' : 'Part B — Word problems';
+  document.getElementById('qtext').textContent = item.part === 'A' ? `${item.q} = ?` : item.q;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'qfeedback';
+  document.getElementById('nextBtn').style.display = 'none';
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  shuffle(item.choices).forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c;
+    btn.onclick = () => selectAnswer(c, btn);
+    choicesEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(value, btn){
+  if(answered) return;
+  answered = true;
+  const item = questions[idx];
+  const feedback = document.getElementById('feedback');
+  const allBtns = document.querySelectorAll('#choices .choice');
+  allBtns.forEach(b=>{
+    if(parseInt(b.textContent,10) === item.a) b.classList.add('correct');
+  });
+  if(value === item.a){
+    score++;
+    btn.classList.add('correct');
+    feedback.textContent = `Correct! The answer is ${item.a} (${item.hint}).`;
+    feedback.className = 'qfeedback ok';
+  } else {
+    btn.classList.add('wrong');
+    feedback.textContent = `Not quite — the answer is ${item.a}. Remember: ${item.hint}.`;
+    feedback.className = 'qfeedback no';
+  }
+  document.getElementById('scorecount').textContent = `Score: ${score}`;
+  document.getElementById('nextBtn').style.display = 'inline-block';
+  document.getElementById('nextBtn').textContent = (idx === TOTAL-1) ? 'Finish' : 'Next →';
+}
+
+function nextQuestion(){
+  idx++;
+  if(idx >= TOTAL){
+    finish();
+    return;
+  }
+  renderQuestion();
+}
+
+function finish(){
+  document.querySelector('.qcard').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('qcount').textContent = 'Done!';
+  const rec = mathSave(LESSON_KEY, score, TOTAL);
+  const banner = document.getElementById('doneBanner');
+  banner.style.display = 'block';
+  let msg = `You scored ${score} / ${TOTAL} (best so far: ${rec.best} / ${TOTAL}).`;
+  if(rec.best === TOTAL){
+    msg += `<br>You've got it! 🎉`;
+  } else {
+    msg += `<br>Nice work — you can always come back and try again.`;
+  }
+  msg += `<br><a class="btn green" style="margin-top:10px" href="index.html">Back to Math Practice →</a>`;
+  banner.innerHTML = msg;
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multiplication Review — Amara's Math Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav"><a class="back" href="index.html">&larr; Back to Math Practice</a></div>
+  <h1>Lesson 1: Multiplication Review</h1>
+  <p class="sub">Before we learn division, let's make sure your multiplication facts are solid — division uses them constantly.</p>
+
+  <div class="card">
+    <h2 style="margin-top:0">What multiplication means</h2>
+    <div class="explain">
+      <b>4 &times; 3</b> means <b>4 groups of 3</b>. You can find the answer by adding 3 four times:
+      3 + 3 + 3 + 3 = 12. So 4 &times; 3 = 12.
+    </div>
+    <p>Here it is as a picture — 4 groups, each with 3 dots:</p>
+    <div class="groups" id="demo-groups"></div>
+    <p style="color:var(--sub);font-size:.9rem">Count the groups (4), count each group (3), then count every dot (12). That's what &times; is doing.</p>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Times table reference (2–10)</h2>
+    <p style="color:var(--sub);margin-top:-4px">Skim this before you start — it's fine to look back at it during practice.</p>
+    <div style="overflow-x:auto">
+      <table id="times-table" style="border-collapse:collapse;width:100%;text-align:center;font-size:.85rem"></table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Practice: 12 questions</h2>
+    <div class="progress-strip">
+      <span id="qcount">Question 1 of 12</span>
+      <span id="scorecount">Score: 0</span>
+    </div>
+    <div class="qcard">
+      <div class="qtext" id="qtext"></div>
+      <div class="choices" id="choices"></div>
+      <div class="qfeedback" id="feedback"></div>
+    </div>
+    <div style="text-align:right">
+      <button class="btn" id="nextBtn" style="display:none" onclick="nextQuestion()">Next &rarr;</button>
+    </div>
+    <div class="done-banner" id="doneBanner"></div>
+  </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+// Visual demo: 4 groups of 3
+(function(){
+  const el = document.getElementById('demo-groups');
+  for(let g=0; g<4; g++){
+    const grp = document.createElement('div');
+    grp.className = 'group';
+    for(let d=0; d<3; d++){
+      const dot = document.createElement('div');
+      dot.className = 'dot';
+      grp.appendChild(dot);
+    }
+    el.appendChild(grp);
+  }
+})();
+
+// Times table 2-10
+(function(){
+  const t = document.getElementById('times-table');
+  let html = '<tr><th></th>';
+  for(let c=1;c<=10;c++) html += `<th>${c}</th>`;
+  html += '</tr>';
+  for(let r=2;r<=10;r++){
+    html += `<tr><th style="text-align:right;padding-right:8px">${r}&times;</th>`;
+    for(let c=1;c<=10;c++){
+      html += `<td style="padding:3px 6px;border:1px solid #e4e9f2">${r*c}</td>`;
+    }
+    html += '</tr>';
+  }
+  t.innerHTML = html;
+})();
+
+const questions = [
+  {q:'2 × 6', a:12, choices:[12,10,14,8]},
+  {q:'3 × 5', a:15, choices:[15,18,12,20]},
+  {q:'4 × 4', a:16, choices:[16,12,20,8]},
+  {q:'5 × 6', a:30, choices:[30,25,35,24]},
+  {q:'6 × 3', a:18, choices:[18,21,15,24]},
+  {q:'7 × 2', a:14, choices:[14,12,16,9]},
+  {q:'8 × 3', a:24, choices:[24,21,32,27]},
+  {q:'9 × 4', a:36, choices:[36,32,40,27]},
+  {q:'10 × 5', a:50, choices:[50,45,55,40]},
+  {q:'4 × 8', a:32, choices:[32,28,36,24]},
+  {q:'7 × 7', a:49, choices:[49,42,56,48]},
+  {q:'9 × 9', a:81, choices:[81,72,90,79]},
+];
+
+let idx = 0, score = 0, answered = false;
+const LESSON_KEY = 'lesson1', TOTAL = questions.length;
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function renderQuestion(){
+  answered = false;
+  const item = questions[idx];
+  document.getElementById('qcount').textContent = `Question ${idx+1} of ${TOTAL}`;
+  document.getElementById('scorecount').textContent = `Score: ${score}`;
+  document.getElementById('qtext').textContent = `${item.q} = ?`;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'qfeedback';
+  document.getElementById('nextBtn').style.display = 'none';
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  shuffle(item.choices).forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c;
+    btn.onclick = () => selectAnswer(c, btn);
+    choicesEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(value, btn){
+  if(answered) return;
+  answered = true;
+  const item = questions[idx];
+  const feedback = document.getElementById('feedback');
+  const allBtns = document.querySelectorAll('#choices .choice');
+  allBtns.forEach(b=>{
+    if(parseInt(b.textContent,10) === item.a) b.classList.add('correct');
+  });
+  if(value === item.a){
+    score++;
+    btn.classList.add('correct');
+    feedback.textContent = 'Correct! ' + item.q + ' = ' + item.a;
+    feedback.className = 'qfeedback ok';
+  } else {
+    btn.classList.add('wrong');
+    feedback.textContent = 'Not quite — ' + item.q + ' = ' + item.a + '. Take another look at the table above if you need to.';
+    feedback.className = 'qfeedback no';
+  }
+  document.getElementById('scorecount').textContent = `Score: ${score}`;
+  document.getElementById('nextBtn').style.display = 'inline-block';
+  document.getElementById('nextBtn').textContent = (idx === TOTAL-1) ? 'Finish' : 'Next →';
+}
+
+function nextQuestion(){
+  idx++;
+  if(idx >= TOTAL){
+    finish();
+    return;
+  }
+  renderQuestion();
+}
+
+function finish(){
+  document.querySelector('.qcard').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('qcount').textContent = 'Done!';
+  const rec = mathSave(LESSON_KEY, score, TOTAL);
+  const banner = document.getElementById('doneBanner');
+  banner.style.display = 'block';
+  banner.innerHTML = `You scored ${score} / ${TOTAL} (best so far: ${rec.best} / ${TOTAL}).<br>
+    <a class="btn green" style="margin-top:10px" href="lesson2-division-basics.html">Continue to Lesson 2: What Is Division? →</a>`;
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

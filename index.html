@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amara's Math Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <h1>🧮 Amara's Math Practice</h1>
+  <p class="sub">Multiplication review → understanding division. Go through the lessons in order — each one builds on the last.</p>
+
+  <a class="lesson card" href="lesson1-multiplication-review.html" style="text-decoration:none">
+    <div class="lesson-num" style="background:var(--blue)">1</div>
+    <div class="lesson-body">
+      <h3>Multiplication Review</h3>
+      <p>Warm up your times tables — you'll need them for division.</p>
+      <div class="bar-track"><div class="bar-fill" id="bar-lesson1" style="background:var(--blue)"></div></div>
+      <div class="bar-label" id="label-lesson1">0 / 12</div>
+    </div>
+  </a>
+
+  <a class="lesson card" href="lesson2-division-basics.html" style="text-decoration:none">
+    <div class="lesson-num" style="background:var(--purple)">2</div>
+    <div class="lesson-body">
+      <h3>What Is Division?</h3>
+      <p>Splitting into equal groups, and how it connects to multiplication.</p>
+      <div class="bar-track"><div class="bar-fill" id="bar-lesson2" style="background:var(--purple)"></div></div>
+      <div class="bar-label" id="label-lesson2">0 / 10</div>
+    </div>
+  </a>
+
+  <a class="lesson card" href="lesson3-division-practice.html" style="text-decoration:none">
+    <div class="lesson-num" style="background:var(--teal)">3</div>
+    <div class="lesson-body">
+      <h3>Division Practice</h3>
+      <p>Facts and word problems, using what you just learned.</p>
+      <div class="bar-track"><div class="bar-fill" id="bar-lesson3" style="background:var(--teal)"></div></div>
+      <div class="bar-label" id="label-lesson3">0 / 15</div>
+    </div>
+  </a>
+
+  <p style="text-align:center;margin-top:24px">
+    <button class="btn ghost" onclick="if(confirm('Reset all progress?')){mathReset();location.reload();}">Reset all progress</button>
+  </p>
+
+  <footer class="foot">Amara's Math Practice — practice runs entirely on this device.</footer>
+</div>
+
+<script src="common.js"></script>
+<script>
+function refreshBars(){
+  const data = mathLoad();
+  const lessons = [
+    {key:'lesson1', total:12},
+    {key:'lesson2', total:10},
+    {key:'lesson3', total:15},
+  ];
+  lessons.forEach(l=>{
+    const rec = data[l.key];
+    const best = rec ? rec.best : 0;
+    const pct = Math.round((best / l.total) * 100);
+    document.getElementById('bar-'+l.key).style.width = pct + '%';
+    document.getElementById('label-'+l.key).textContent = best + ' / ' + l.total;
+  });
+}
+refreshBars();
+window.addEventListener('amara-math-updated', refreshBars);
+</script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Is Division? — Amara's Math Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav"><a class="back" href="index.html">&larr; Back to Math Practice</a></div>
+  <h1>Lesson 2: What Is Division?</h1>
+  <p class="sub">Division is just multiplication asked backwards. Let's go through it slowly, one idea at a time.</p>
+
+  <div class="card">
+    <h2 style="margin-top:0">Idea 1: Sharing equally</h2>
+    <div class="explain">
+      Imagine you have <b>12 cookies</b> and <b>3 friends</b>. If everyone gets the same number,
+      how many cookies does each friend get? You're splitting 12 into 3 equal groups.
+    </div>
+    <div class="groups" id="share-groups"></div>
+    <p style="color:var(--sub);font-size:.9rem">3 friends, 4 cookies each. That's <b>12 &divide; 3 = 4</b>.</p>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Idea 2: Making equal groups</h2>
+    <div class="explain">
+      Now imagine the <b>same 12 cookies</b>, but this time you're packing them into bags of <b>3</b>.
+      How many bags do you need?
+    </div>
+    <div class="groups" id="group-groups"></div>
+    <p style="color:var(--sub);font-size:.9rem">4 bags, 3 cookies in each. That's <b>12 &divide; 3 = 4</b> again — same numbers, different question.</p>
+    <div class="explain">
+      Both questions use the same division fact. Sometimes division asks
+      "<b>how many in each group?</b>" and sometimes it asks "<b>how many groups?</b>" — either way, you divide.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">The parts of a division problem</h2>
+    <div class="example">
+      <div style="font-size:1.4rem;font-weight:800;text-align:center;color:var(--ink)">
+        12 &divide; 3 = 4
+      </div>
+      <div style="display:flex;justify-content:space-around;margin-top:10px;font-size:.85rem;color:var(--sub);text-align:center">
+        <div><b style="color:var(--blue)">12</b><br>dividend<br><span style="font-size:.8em">(the total)</span></div>
+        <div><b style="color:var(--purple)">3</b><br>divisor<br><span style="font-size:.8em">(size of each group)</span></div>
+        <div><b style="color:var(--green)">4</b><br>quotient<br><span style="font-size:.8em">(the answer)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">The big shortcut: fact families</h2>
+    <div class="explain">
+      You already know your multiplication facts from Lesson 1 — and every multiplication fact
+      secretly gives you <b>two division facts for free</b>. These four facts are called a
+      <b>fact family</b> because they all use the same three numbers.
+    </div>
+    <div class="fact-house">
+      <div>3 &times; 4 = 12</div><div>12 &divide; 3 = 4</div>
+      <div>4 &times; 3 = 12</div><div>12 &divide; 4 = 3</div>
+    </div>
+    <div class="fact-house">
+      <div>2 &times; 5 = 10</div><div>10 &divide; 2 = 5</div>
+      <div>5 &times; 2 = 10</div><div>10 &divide; 5 = 2</div>
+    </div>
+    <p style="color:var(--sub);font-size:.9rem">
+      So if you ever get stuck on a division problem, ask yourself:
+      "what do I multiply by the small number to get the big number?"
+    </p>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Try the shortcut (worked examples)</h2>
+    <p style="color:var(--sub);margin-top:-4px">Read each one and see how the multiplication fact hands you the answer.</p>
+    <div class="example">6 &times; 7 = 42 &nbsp;&rarr;&nbsp; so 42 &divide; 7 = <b>6</b> &nbsp;(and 42 &divide; 6 = <b>7</b>)</div>
+    <div class="example">8 &times; 5 = 40 &nbsp;&rarr;&nbsp; so 40 &divide; 5 = <b>8</b> &nbsp;(and 40 &divide; 8 = <b>5</b>)</div>
+    <div class="example">9 &times; 3 = 27 &nbsp;&rarr;&nbsp; so 27 &divide; 3 = <b>9</b> &nbsp;(and 27 &divide; 9 = <b>3</b>)</div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Practice: 10 questions</h2>
+    <p style="color:var(--sub);margin-top:-4px">These all divide evenly — no leftovers. If you're stuck, think "what times the divisor gives the dividend?"</p>
+    <div class="progress-strip">
+      <span id="qcount">Question 1 of 10</span>
+      <span id="scorecount">Score: 0</span>
+    </div>
+    <div class="qcard">
+      <div class="qtext" id="qtext"></div>
+      <div class="choices" id="choices"></div>
+      <div class="qfeedback" id="feedback"></div>
+    </div>
+    <div style="text-align:right">
+      <button class="btn" id="nextBtn" style="display:none" onclick="nextQuestion()">Next &rarr;</button>
+    </div>
+    <div class="done-banner" id="doneBanner"></div>
+  </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+function renderGroups(elId, numGroups, perGroup){
+  const el = document.getElementById(elId);
+  for(let g=0; g<numGroups; g++){
+    const grp = document.createElement('div');
+    grp.className = 'group';
+    for(let d=0; d<perGroup; d++){
+      const dot = document.createElement('div');
+      dot.className = 'dot';
+      grp.appendChild(dot);
+    }
+    el.appendChild(grp);
+  }
+}
+renderGroups('share-groups', 3, 4);
+renderGroups('group-groups', 4, 3);
+
+const questions = [
+  {q:'12 ÷ 3', a:4, hint:'3 × 4 = 12', choices:[4,3,6,5]},
+  {q:'20 ÷ 5', a:4, hint:'5 × 4 = 20', choices:[4,5,3,6]},
+  {q:'18 ÷ 2', a:9, hint:'2 × 9 = 18', choices:[9,8,7,6]},
+  {q:'30 ÷ 10', a:3, hint:'10 × 3 = 30', choices:[3,4,2,5]},
+  {q:'16 ÷ 4', a:4, hint:'4 × 4 = 16', choices:[4,3,5,8]},
+  {q:'15 ÷ 5', a:3, hint:'5 × 3 = 15', choices:[3,5,4,2]},
+  {q:'14 ÷ 2', a:7, hint:'2 × 7 = 14', choices:[7,6,8,4]},
+  {q:'27 ÷ 3', a:9, hint:'3 × 9 = 27', choices:[9,8,7,6]},
+  {q:'40 ÷ 10', a:4, hint:'10 × 4 = 40', choices:[4,5,3,6]},
+  {q:'24 ÷ 4', a:6, hint:'4 × 6 = 24', choices:[6,5,7,4]},
+];
+
+let idx = 0, score = 0, answered = false;
+const LESSON_KEY = 'lesson2', TOTAL = questions.length;
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function renderQuestion(){
+  answered = false;
+  const item = questions[idx];
+  document.getElementById('qcount').textContent = `Question ${idx+1} of ${TOTAL}`;
+  document.getElementById('scorecount').textContent = `Score: ${score}`;
+  document.getElementById('qtext').textContent = `${item.q} = ?`;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'qfeedback';
+  document.getElementById('nextBtn').style.display = 'none';
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  shuffle(item.choices).forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c;
+    btn.onclick = () => selectAnswer(c, btn);
+    choicesEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(value, btn){
+  if(answered) return;
+  answered = true;
+  const item = questions[idx];
+  const feedback = document.getElementById('feedback');
+  const allBtns = document.querySelectorAll('#choices .choice');
+  allBtns.forEach(b=>{
+    if(parseInt(b.textContent,10) === item.a) b.classList.add('correct');
+  });
+  if(value === item.a){
+    score++;
+    btn.classList.add('correct');
+    feedback.textContent = `Correct! ${item.q} = ${item.a} (think: ${item.hint})`;
+    feedback.className = 'qfeedback ok';
+  } else {
+    btn.classList.add('wrong');
+    feedback.textContent = `Not quite — ${item.q} = ${item.a}. Remember: ${item.hint}.`;
+    feedback.className = 'qfeedback no';
+  }
+  document.getElementById('scorecount').textContent = `Score: ${score}`;
+  document.getElementById('nextBtn').style.display = 'inline-block';
+  document.getElementById('nextBtn').textContent = (idx === TOTAL-1) ? 'Finish' : 'Next →';
+}
+
+function nextQuestion(){
+  idx++;
+  if(idx >= TOTAL){
+    finish();
+    return;
+  }
+  renderQuestion();
+}
+
+function finish(){
+  document.querySelector('.qcard').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('qcount').textContent = 'Done!';
+  const rec = mathSave(LESSON_KEY, score, TOTAL);
+  const banner = document.getElementById('doneBanner');
+  banner.style.display = 'block';
+  banner.innerHTML = `You scored ${score} / ${TOTAL} (best so far: ${rec.best} / ${TOTAL}).<br>
+    <a class="btn green" style="margin-top:10px" href="lesson3-division-practice.html">Continue to Lesson 3: Division Practice →</a>`;
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

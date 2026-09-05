@@ -24,3 +24,37 @@ function mathReset(){
   localStorage.removeItem(MATH_STORE_KEY);
   window.dispatchEvent(new CustomEvent('amara-math-updated'));
 }
+
+// Shared visuals: one picture icon per number 1-10, reused everywhere a
+// multiplication/division fact needs a concrete picture instead of raw digits.
+const TABLE_EMOJI = ['⭐','🍎','🎈','🐸','🌸','🍪','⚽','🐝','🚗','🎁'];
+
+// Draws an n-row by k-column grid of the given emoji (the "array model" of n × k).
+function renderArrayGrid(el, rows, cols, emoji){
+  el.className = 'array-grid';
+  el.style.gridTemplateColumns = `repeat(${cols}, minmax(16px, 30px))`;
+  el.innerHTML = '';
+  for(let i=0;i<rows*cols;i++){
+    const cell = document.createElement('div');
+    cell.className = 'array-cell';
+    cell.textContent = emoji;
+    el.appendChild(cell);
+  }
+}
+
+// Draws numGroups separate dashed boxes, each holding perGroup of the given emoji
+// (the "equal groups" model used for division: numGroups × perGroup items total).
+function renderGroupsVisual(el, numGroups, perGroup, emoji){
+  el.className = 'groups';
+  el.innerHTML = '';
+  for(let g=0; g<numGroups; g++){
+    const grp = document.createElement('div');
+    grp.className = 'group';
+    for(let d=0; d<perGroup; d++){
+      const item = document.createElement('span');
+      item.textContent = emoji;
+      grp.appendChild(item);
+    }
+    el.appendChild(grp);
+  }
+}

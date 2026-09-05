@@ -89,6 +89,7 @@
       <span id="scorecount">Score: 0</span>
     </div>
     <div class="qcard">
+      <div id="qDemo"></div>
       <div class="qtext" id="qtext"></div>
       <div class="choices" id="choices"></div>
       <div class="qfeedback" id="feedback"></div>
@@ -102,33 +103,20 @@
 
 <script src="common.js"></script>
 <script>
-function renderGroups(elId, numGroups, perGroup){
-  const el = document.getElementById(elId);
-  for(let g=0; g<numGroups; g++){
-    const grp = document.createElement('div');
-    grp.className = 'group';
-    for(let d=0; d<perGroup; d++){
-      const dot = document.createElement('div');
-      dot.className = 'dot';
-      grp.appendChild(dot);
-    }
-    el.appendChild(grp);
-  }
-}
-renderGroups('share-groups', 3, 4);
-renderGroups('group-groups', 4, 3);
+renderGroupsVisual(document.getElementById('share-groups'), 3, 4, '🍪');
+renderGroupsVisual(document.getElementById('group-groups'), 4, 3, '🍪');
 
 const questions = [
-  {q:'12 ÷ 3', a:4, hint:'3 × 4 = 12', choices:[4,3,6,5]},
-  {q:'20 ÷ 5', a:4, hint:'5 × 4 = 20', choices:[4,5,3,6]},
-  {q:'18 ÷ 2', a:9, hint:'2 × 9 = 18', choices:[9,8,7,6]},
-  {q:'30 ÷ 10', a:3, hint:'10 × 3 = 30', choices:[3,4,2,5]},
-  {q:'16 ÷ 4', a:4, hint:'4 × 4 = 16', choices:[4,3,5,8]},
-  {q:'15 ÷ 5', a:3, hint:'5 × 3 = 15', choices:[3,5,4,2]},
-  {q:'14 ÷ 2', a:7, hint:'2 × 7 = 14', choices:[7,6,8,4]},
-  {q:'27 ÷ 3', a:9, hint:'3 × 9 = 27', choices:[9,8,7,6]},
-  {q:'40 ÷ 10', a:4, hint:'10 × 4 = 40', choices:[4,5,3,6]},
-  {q:'24 ÷ 4', a:6, hint:'4 × 6 = 24', choices:[6,5,7,4]},
+  {q:'12 ÷ 3', a:4, divisor:3, hint:'3 × 4 = 12', choices:[4,3,6,5]},
+  {q:'20 ÷ 5', a:4, divisor:5, hint:'5 × 4 = 20', choices:[4,5,3,6]},
+  {q:'18 ÷ 2', a:9, divisor:2, hint:'2 × 9 = 18', choices:[9,8,7,6]},
+  {q:'30 ÷ 10', a:3, divisor:10, hint:'10 × 3 = 30', choices:[3,4,2,5]},
+  {q:'16 ÷ 4', a:4, divisor:4, hint:'4 × 4 = 16', choices:[4,3,5,8]},
+  {q:'15 ÷ 5', a:3, divisor:5, hint:'5 × 3 = 15', choices:[3,5,4,2]},
+  {q:'14 ÷ 2', a:7, divisor:2, hint:'2 × 7 = 14', choices:[7,6,8,4]},
+  {q:'27 ÷ 3', a:9, divisor:3, hint:'3 × 9 = 27', choices:[9,8,7,6]},
+  {q:'40 ÷ 10', a:4, divisor:10, hint:'10 × 4 = 40', choices:[4,5,3,6]},
+  {q:'24 ÷ 4', a:6, divisor:4, hint:'4 × 6 = 24', choices:[6,5,7,4]},
 ];
 
 let idx = 0, score = 0, answered = false;
@@ -148,6 +136,7 @@ function renderQuestion(){
   const item = questions[idx];
   document.getElementById('qcount').textContent = `Question ${idx+1} of ${TOTAL}`;
   document.getElementById('scorecount').textContent = `Score: ${score}`;
+  renderGroupsVisual(document.getElementById('qDemo'), item.divisor, item.a, TABLE_EMOJI[item.divisor - 1]);
   document.getElementById('qtext').textContent = `${item.q} = ?`;
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className = 'qfeedback';

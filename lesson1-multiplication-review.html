@@ -71,19 +71,7 @@
 <script src="common.js"></script>
 <script>
 // Visual demo: 4 groups of 3
-(function(){
-  const el = document.getElementById('demo-groups');
-  for(let g=0; g<4; g++){
-    const grp = document.createElement('div');
-    grp.className = 'group';
-    for(let d=0; d<3; d++){
-      const dot = document.createElement('div');
-      dot.className = 'dot';
-      grp.appendChild(dot);
-    }
-    el.appendChild(grp);
-  }
-})();
+renderGroupsVisual(document.getElementById('demo-groups'), 4, 3, '⭐');
 
 // Times table 1-10
 (function(){
@@ -184,21 +172,6 @@ const laterQuestions = [
   {section:'Word Problems', q:'📚 3 shelves each hold 9 books. How many books are there in total?', a:27, choices:[27,24,30,18]},
 ];
 
-// One picture icon per table, used to draw an n×k array-grid for each table question
-const tableEmoji = ['⭐','🍎','🎈','🐸','🌸','🍪','⚽','🐝','🚗','🎁'];
-
-function renderArrayGrid(el, rows, cols, emoji){
-  el.className = 'array-grid';
-  el.style.gridTemplateColumns = `repeat(${cols}, minmax(16px, 30px))`;
-  el.innerHTML = '';
-  for(let i=0;i<rows*cols;i++){
-    const cell = document.createElement('div');
-    cell.className = 'array-cell';
-    cell.textContent = emoji;
-    el.appendChild(cell);
-  }
-}
-
 const LESSON_KEY = 'lesson1';
 const TOTAL = tableQuestions.length + matchingPairs.length + laterQuestions.length; // 40 + 8 + 14 = 62
 
@@ -228,7 +201,7 @@ function renderTableQuestion(){
   document.getElementById('sectionLabel').textContent = `The ${item.t}s Table`;
   const tableDemo = document.getElementById('tableDemo');
   tableDemo.style.display = 'inline-grid';
-  renderArrayGrid(tableDemo, item.t, item.a / item.t, tableEmoji[item.t - 1]);
+  renderArrayGrid(tableDemo, item.t, item.a / item.t, TABLE_EMOJI[item.t - 1]);
   document.getElementById('qtext').textContent = `${item.q} = ?`;
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className = 'qfeedback';

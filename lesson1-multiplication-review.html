@@ -26,6 +26,12 @@
   </div>
 
   <div class="card">
+    <h2 style="margin-top:0">Now you try: build the array</h2>
+    <p class="sub" style="margin-top:-4px">Tap a box to place a star in it. Spread them out evenly — same number in every box.</p>
+    <div id="buildActivity"></div>
+  </div>
+
+  <div class="card">
     <h2 style="margin-top:0">Times table reference (1–10)</h2>
     <p style="color:var(--sub);margin-top:-4px">Skim this before you start — it's fine to look back at it during practice.</p>
     <div style="overflow-x:auto">
@@ -72,6 +78,36 @@
 <script>
 // Visual demo: 4 groups of 3
 renderGroupsVisual(document.getElementById('demo-groups'), 4, 3, '⭐');
+
+// "We do" step: hands-on build-it-yourself, before the independent quiz below
+const buildRounds = [
+  {total:4, numBoxes:2, perBox:2, emoji:'⭐'},
+  {total:9, numBoxes:3, perBox:3, emoji:'🍎'},
+  {total:8, numBoxes:4, perBox:2, emoji:'🎈'},
+];
+let buildRoundIdx = 0;
+function loadBuildRound(){
+  const el = document.getElementById('buildActivity');
+  const round = buildRounds[buildRoundIdx];
+  initBuildActivity(el, {
+    total: round.total, numBoxes: round.numBoxes, perBox: round.perBox, emoji: round.emoji,
+    onComplete: (successEl) => {
+      const btn = document.createElement('button');
+      btn.className = 'btn green';
+      btn.style.marginTop = '10px';
+      btn.style.display = 'block';
+      if(buildRoundIdx < buildRounds.length - 1){
+        btn.textContent = 'Try another →';
+        btn.onclick = () => { buildRoundIdx++; loadBuildRound(); };
+      } else {
+        btn.textContent = "Great work — I'm ready for the quiz below!";
+        btn.onclick = () => { btn.remove(); };
+      }
+      successEl.appendChild(btn);
+    }
+  });
+}
+loadBuildRound();
 
 // Times table 1-10
 (function(){

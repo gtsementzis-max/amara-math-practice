@@ -1,0 +1,79 @@
+/* ===== Dragon theme shared by the dragon lessons (Lesson 2, Lesson 3, ...) =====
+   Load AFTER styles.css. Only recolours/extends the base theme; page-specific
+   bits stay in each lesson's own <style>. */
+body{background:#f6f1ff}
+.card{border-color:#e6dcff}
+.card h2{display:flex;align-items:center;gap:10px;margin-top:0}
+.card h2 .ico{font-size:1.9rem;line-height:1}
+.explain{background:#f3ecff;border-color:#dccbff}
+.explain b{color:#6d28d9}
+.example{background:#fff4e5;border-color:#f8d5a3;font-size:1.05rem}
+.note{color:var(--sub);font-size:.95rem;margin:6px 0 0}
+
+/* hero banner */
+.dragon-hero{
+  background:linear-gradient(135deg,#2b1b4d 0%,#5b2a86 55%,#b3261e 100%);
+  color:#fff;border-radius:22px;padding:22px 24px;margin-bottom:20px;
+  display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  box-shadow:0 8px 24px rgba(43,27,77,.28);
+}
+.dragon-hero .big{font-size:clamp(4rem,14vw,6.5rem);line-height:1;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
+.dragon-hero .txt{flex:1;min-width:220px}
+.dragon-hero .badge{display:inline-block;background:rgba(255,255,255,.18);border-radius:99px;padding:3px 12px;font-size:.78rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px}
+.dragon-hero h1{color:#fff;font-size:clamp(1.5rem,5vw,2.1rem);margin:0 0 6px}
+.dragon-hero p{margin:0;color:#f3e8ff;font-size:1rem}
+
+/* story strip (big emoji + paragraph) */
+.story{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.story .big{font-size:clamp(3rem,10vw,4.5rem);line-height:1}
+.story p{flex:1;min-width:220px;margin:0;font-size:1.05rem}
+
+/* dragon eggs (SVG symbols injected by dragon.js) and emoji items */
+.egg{
+  width:var(--egg,46px);height:calc(var(--egg,46px)*1.25);display:block;
+  filter:drop-shadow(0 3px 3px rgba(0,0,0,.25));
+}
+.egg-slot{
+  width:var(--egg,46px);height:calc(var(--egg,46px)*1.25);
+  border:3px dashed rgba(122,74,30,.55);border-radius:50% 50% 50% 50% / 62% 62% 38% 38%;
+}
+.nest-emoji{font-size:calc(var(--egg,46px)*.95);line-height:1.15;display:block;text-align:center}
+
+/* nests (generic "container" for equal groups) */
+.nests{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;margin:16px 0;--egg:46px}
+.nest{
+  position:relative;display:grid;justify-content:center;align-content:center;gap:5px;
+  min-width:110px;min-height:84px;padding:18px 16px 22px;
+  background:
+    repeating-linear-gradient(115deg,rgba(122,74,30,.16) 0 4px,transparent 4px 13px),
+    linear-gradient(180deg,#f3d79f 0%,#d9a960 40%,#a3652f 100%);
+  border:3px solid #7a4a1e;
+  border-radius:28px 28px 80px 80px / 22px 22px 60px 60px;
+  box-shadow:inset 0 10px 16px rgba(0,0,0,.18),0 6px 12px rgba(0,0,0,.16);
+  transition:transform .15s,box-shadow .15s;
+}
+.nest .tag{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:#7a4a1e;color:#fff;font-size:.74rem;font-weight:800;border-radius:99px;padding:2px 11px;white-space:nowrap;
+}
+.nest.tappable{cursor:pointer}
+.nest.tappable:hover{transform:translateY(-3px);box-shadow:inset 0 10px 16px rgba(0,0,0,.18),0 10px 18px rgba(0,0,0,.2)}
+.nest.full{border-color:#16a34a;box-shadow:inset 0 10px 16px rgba(0,0,0,.14),0 0 0 4px rgba(34,197,94,.35)}
+.nest.shake{animation:nestshake .4s;border-color:var(--red)}
+@keyframes nestshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+
+/* item pool for the tap-into-nests activity */
+.egg-pool{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;min-height:62px;--egg:48px}
+
+/* quiz */
+.qcard{border-color:#e6dcff;background:#fff}
+.qcard .nests{--egg:40px;gap:14px}
+.qstory{font-size:1.05rem;margin:4px 0 6px}
+.qstory b{color:#6d28d9}
+.qtext{font-size:1.5rem}
+.choice{font-size:1.2rem;padding:10px 20px}
+.hatch .egg,.hatch .nest-emoji{animation:wobble .5s ease-in-out 3;transform-origin:50% 90%}
+@keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-14deg) translateY(-4px)}75%{transform:rotate(14deg) translateY(-4px)}}
+.qfeedback{font-size:1rem}
+.done-banner{font-size:1.05rem}
+.done-banner .rank{font-size:1.4rem;display:block;margin-bottom:6px}

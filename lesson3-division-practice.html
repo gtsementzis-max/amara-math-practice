@@ -3,32 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Division Practice — Amara's Math Practice</title>
+<title>Dragon Rider Trials — Amara's Math Practice</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="dragon.css">
+<style>
+.reminder{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.reminder .nests{margin:0;--egg:34px;gap:12px;flex:0 0 auto}
+.reminder .explain{flex:1;min-width:240px;margin:0}
+.qstory.adventure{font-size:1.2rem;font-weight:700;line-height:1.45}
+</style>
 </head>
 <body>
 <div class="wrap">
   <div class="topnav"><a class="back" href="index.html">&larr; Back to Math Practice</a></div>
-  <h1>Lesson 3: Division Practice</h1>
-  <p class="sub">15 questions: first straight division facts, then word problems. Same shortcut as before —
-    think about the multiplication fact hiding inside each one.</p>
 
-  <div class="card">
-    <div class="explain">
-      Quick reminder: <b>12 &divide; 3 = 4</b> because <b>3 &times; 4 = 12</b>. Every division problem below
-      has a multiplication fact behind it — find it and you've got the answer.
+  <div class="dragon-hero">
+    <div class="big">🐲</div>
+    <div class="txt">
+      <span class="badge">Lesson 3 · Division practice</span>
+      <h1>Dragon Rider Trials</h1>
+      <p>You hatched the eggs in Lesson 2 — now train to become a Dragon Rider! 15 challenges: 10 dragon facts, then 5 dragon adventures. The multiplication fact is always hiding inside.</p>
     </div>
   </div>
 
   <div class="card">
-    <h2 style="margin-top:0" id="section-title">Part A — Division facts</h2>
+    <div class="reminder">
+      <div id="reminder-nests"></div>
+      <div class="explain">
+        Quick reminder: <b>12 &divide; 3 = 4</b> because <b>3 &times; 4 = 12</b>. Every challenge below
+        has a multiplication fact behind it — find it and you've got the answer.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="ico" id="section-ico">🔥</span> <span id="section-title">Part A — Dragon Fact Trials</span></h2>
+    <p class="note" id="section-note" style="margin-top:-4px"></p>
     <div class="progress-strip">
       <span id="qcount">Question 1 of 15</span>
-      <span id="scorecount">Score: 0</span>
+      <span id="scorecount">🔥 Score: 0</span>
     </div>
     <div class="qcard">
+      <div class="qstory" id="qstory"></div>
       <div id="qDemo"></div>
       <div class="qtext" id="qtext"></div>
       <div class="choices" id="choices"></div>
@@ -42,9 +60,15 @@
 </div>
 
 <script src="common.js"></script>
+<script src="dragon.js"></script>
 <script>
+renderNests(document.getElementById('reminder-nests'), 3, 4, 'ember', 'Nest');
+
+// Every question draws `nests` nests with `per` items each (nests × per = the total), so the
+// picture always matches the story: "how many in each nest?" → nests = divisor, per = answer;
+// "how many nests/chests/dragons?" → nests = answer, per = divisor.
 const questions = [
-  // Part A: straight facts
+  // Part A: straight facts, shown as dragon eggs in nests
   {part:'A', q:'18 ÷ 6', a:3, divisor:6, hint:'6 × 3 = 18', choices:[3,4,2,6]},
   {part:'A', q:'21 ÷ 7', a:3, divisor:7, hint:'7 × 3 = 21', choices:[3,4,2,7]},
   {part:'A', q:'32 ÷ 8', a:4, divisor:8, hint:'8 × 4 = 32', choices:[4,5,3,8]},
@@ -55,12 +79,17 @@ const questions = [
   {part:'A', q:'63 ÷ 9', a:7, divisor:9, hint:'9 × 7 = 63', choices:[7,8,6,9]},
   {part:'A', q:'48 ÷ 8', a:6, divisor:8, hint:'8 × 6 = 48', choices:[6,7,5,8]},
   {part:'A', q:'54 ÷ 9', a:6, divisor:9, hint:'9 × 6 = 54', choices:[6,7,5,9]},
-  // Part B: word problems
-  {part:'B', q:'✨ Amara has 24 stickers to share equally among 4 friends. How many stickers does each friend get?', a:6, divisor:4, hint:'24 ÷ 4 — and 4 × 6 = 24', choices:[6,5,8,4]},
-  {part:'B', q:'🚌 35 students are going on a field trip, and each bus holds 7 students. How many buses are needed?', a:5, divisor:7, hint:'35 ÷ 7 — and 7 × 5 = 35', choices:[5,6,4,7]},
-  {part:'B', q:'🧁 A baker has 40 muffins and puts them into boxes of 8. How many boxes does she fill?', a:5, divisor:8, hint:'40 ÷ 8 — and 8 × 5 = 40', choices:[5,6,4,8]},
-  {part:'B', q:'🍎 18 apples are shared equally between 3 baskets. How many apples go in each basket?', a:6, divisor:3, hint:'18 ÷ 3 — and 3 × 6 = 18', choices:[6,7,5,3]},
-  {part:'B', q:'🖍️ 27 crayons are shared equally among 9 kids. How many crayons does each kid get?', a:3, divisor:9, hint:'27 ÷ 9 — and 9 × 3 = 27', choices:[3,4,2,9]},
+  // Part B: dragon adventures (word problems)
+  {part:'B', q:'💎 The dragon hoard has <b>24 fire gems</b>, shared equally among <b>4 baby dragons</b>. How many gems does each baby dragon get?',
+    a:6, divisor:4, nests:4, per:6, item:'💎', label:'Dragon', hint:'24 ÷ 4 — and 4 × 6 = 24', choices:[6,5,8,4]},
+  {part:'B', q:'🧝 <b>35 dragon riders</b> are flying to Dragon Mountain. Each dragon can carry <b>7 riders</b>. How many dragons are needed?',
+    a:5, divisor:7, nests:5, per:7, item:'🧝', label:'Dragon', hint:'35 ÷ 7 — and 7 × 5 = 35', choices:[5,6,4,7]},
+  {part:'B', q:'🪙 The Dragon Keeper packs <b>40 gold coins</b> into treasure chests. Each chest holds <b>8 coins</b>. How many chests does she fill?',
+    a:5, divisor:8, nests:5, per:8, item:'🪙', label:'Chest', hint:'40 ÷ 8 — and 8 × 5 = 40', choices:[5,6,4,8]},
+  {part:'B', q:'🐟 <b>18 fish</b> are shared equally between <b>3 hungry dragons</b>. How many fish does each dragon eat?',
+    a:6, divisor:3, nests:3, per:6, item:'🐟', label:'Dragon', hint:'18 ÷ 3 — and 3 × 6 = 18', choices:[6,7,5,3]},
+  {part:'B', q:'🐲 <b>27 baby dragons</b> are shared equally among <b>9 caves</b>. How many baby dragons sleep in each cave?',
+    a:3, divisor:9, nests:9, per:3, item:'🐲', label:'Cave', hint:'27 ÷ 9 — and 9 × 3 = 27', choices:[3,4,2,9]},
 ];
 
 let idx = 0, score = 0, answered = false;
@@ -78,11 +107,33 @@ function shuffle(arr){
 function renderQuestion(){
   answered = false;
   const item = questions[idx];
+  const total = item.a * item.divisor;
+  const isA = item.part === 'A';
   document.getElementById('qcount').textContent = `Question ${idx+1} of ${TOTAL}`;
-  document.getElementById('scorecount').textContent = `Score: ${score}`;
-  document.getElementById('section-title').textContent = item.part === 'A' ? 'Part A — Division facts' : 'Part B — Word problems';
-  renderGroupsVisual(document.getElementById('qDemo'), item.divisor, item.a, TABLE_EMOJI[item.divisor - 1]);
-  document.getElementById('qtext').textContent = item.part === 'A' ? `${item.q} = ?` : item.q;
+  document.getElementById('scorecount').textContent = `🔥 Score: ${score}`;
+  document.getElementById('section-ico').textContent = isA ? '🔥' : '🗺️';
+  document.getElementById('section-title').textContent = isA ? 'Part A — Dragon Fact Trials' : 'Part B — Dragon Adventures';
+  document.getElementById('section-note').innerHTML = isA
+    ? 'Every clutch shares out evenly. If you\'re stuck, count the eggs in <b>one</b> nest, or think "what times the number of nests gives the total?"'
+    : 'Read each adventure carefully: is it asking <b>how many in each group</b>, or <b>how many groups</b>? Either way, you divide.';
+
+  const story = document.getElementById('qstory');
+  story.className = 'qstory' + (isA ? '' : ' adventure');
+  story.innerHTML = isA
+    ? (idx % 2 === 0
+        ? `🐉 Mama Dragon shares <b>${total} eggs</b> equally into <b>${item.divisor} nests</b>. How many eggs in each nest?`
+        : `🔥 <b>${total} dragon eggs</b>, <b>${item.divisor} nests</b>, all shared fairly. How many eggs per nest?`)
+    : item.q;
+
+  const demo = document.getElementById('qDemo');
+  demo.classList.remove('hatch');
+  const nests = isA ? item.divisor : item.nests;
+  const per   = isA ? item.a : item.per;
+  const pic   = isA ? EGG_ORDER[idx % EGG_ORDER.length] : item.item;
+  renderNests(demo, nests, per, pic, isA ? '' : item.label);
+  demo.style.setProperty('--egg', total > 40 ? '30px' : total > 24 ? '34px' : '40px');
+
+  document.getElementById('qtext').textContent = isA ? `${item.q} = ?` : '';
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className = 'qfeedback';
   document.getElementById('nextBtn').style.display = 'none';
@@ -102,31 +153,28 @@ function selectAnswer(value, btn){
   answered = true;
   const item = questions[idx];
   const feedback = document.getElementById('feedback');
-  const allBtns = document.querySelectorAll('#choices .choice');
-  allBtns.forEach(b=>{
+  document.querySelectorAll('#choices .choice').forEach(b=>{
     if(parseInt(b.textContent,10) === item.a) b.classList.add('correct');
   });
   if(value === item.a){
     score++;
     btn.classList.add('correct');
-    feedback.textContent = `Correct! The answer is ${item.a} (${item.hint}).`;
+    document.getElementById('qDemo').classList.add('hatch');
+    feedback.textContent = `🐲 Correct! The answer is ${item.a} (${item.hint}). Dragon power!`;
     feedback.className = 'qfeedback ok';
   } else {
     btn.classList.add('wrong');
-    feedback.textContent = `Not quite — the answer is ${item.a}. Remember: ${item.hint}.`;
+    feedback.textContent = `Not quite — the answer is ${item.a}. Count what's in one group! Remember: ${item.hint}.`;
     feedback.className = 'qfeedback no';
   }
-  document.getElementById('scorecount').textContent = `Score: ${score}`;
+  document.getElementById('scorecount').textContent = `🔥 Score: ${score}`;
   document.getElementById('nextBtn').style.display = 'inline-block';
   document.getElementById('nextBtn').textContent = (idx === TOTAL-1) ? 'Finish' : 'Next →';
 }
 
 function nextQuestion(){
   idx++;
-  if(idx >= TOTAL){
-    finish();
-    return;
-  }
+  if(idx >= TOTAL){ finish(); return; }
   renderQuestion();
 }
 
@@ -135,14 +183,14 @@ function finish(){
   document.getElementById('nextBtn').style.display = 'none';
   document.getElementById('qcount').textContent = 'Done!';
   const rec = mathSave(LESSON_KEY, score, TOTAL);
+  const rank = score === TOTAL ? '🏆 Dragon Master — you have tamed division!'
+             : score >= 11    ? '🐉 Dragon Rider — great flying!'
+             :                  '🥚 Egg Keeper — fly back and try again!';
   const banner = document.getElementById('doneBanner');
   banner.style.display = 'block';
-  let msg = `You scored ${score} / ${TOTAL} (best so far: ${rec.best} / ${TOTAL}).`;
-  if(rec.best === TOTAL){
-    msg += `<br>You've got it! 🎉`;
-  } else {
-    msg += `<br>Nice work — you can always come back and try again.`;
-  }
+  let msg = `<span class="rank">${rank}</span>You scored ${score} / ${TOTAL} (best so far: ${rec.best} / ${TOTAL}).`;
+  if(rec.best === TOTAL) msg += `<br>You've got it! 🎉`;
+  else msg += `<br>Nice work — you can always come back and try again.`;
   msg += `<br><a class="btn green" style="margin-top:10px" href="index.html">Back to Math Practice →</a>`;
   banner.innerHTML = msg;
 }

@@ -3,98 +3,218 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>What Is Division? — Amara's Math Practice</title>
+<title>Dragon Egg Division — Amara's Math Practice</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<style>
+/* ===== Dragon theme — this lesson only (shared styles.css is untouched) ===== */
+body{background:#f6f1ff}
+.card{border-color:#e6dcff}
+.card h2{display:flex;align-items:center;gap:10px;margin-top:0}
+.card h2 .ico{font-size:1.9rem;line-height:1}
+.explain{background:#f3ecff;border-color:#dccbff}
+.explain b{color:#6d28d9}
+.example{background:#fff4e5;border-color:#f8d5a3;font-size:1.05rem}
+.note{color:var(--sub);font-size:.95rem;margin:6px 0 0}
+
+/* hero banner */
+.dragon-hero{
+  background:linear-gradient(135deg,#2b1b4d 0%,#5b2a86 55%,#b3261e 100%);
+  color:#fff;border-radius:22px;padding:22px 24px;margin-bottom:20px;
+  display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  box-shadow:0 8px 24px rgba(43,27,77,.28);
+}
+.dragon-hero .big{font-size:clamp(4rem,14vw,6.5rem);line-height:1;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
+.dragon-hero .txt{flex:1;min-width:220px}
+.dragon-hero .badge{display:inline-block;background:rgba(255,255,255,.18);border-radius:99px;padding:3px 12px;font-size:.78rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px}
+.dragon-hero h1{color:#fff;font-size:clamp(1.5rem,5vw,2.1rem);margin:0 0 6px}
+.dragon-hero p{margin:0;color:#f3e8ff;font-size:1rem}
+
+/* story strip */
+.story{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.story .big{font-size:clamp(3rem,10vw,4.5rem);line-height:1}
+.story p{flex:1;min-width:220px;margin:0;font-size:1.05rem}
+
+/* dragon eggs (SVG symbols defined at the bottom of the page) */
+.egg{
+  width:var(--egg,46px);height:calc(var(--egg,46px)*1.25);display:block;
+  filter:drop-shadow(0 3px 3px rgba(0,0,0,.25));
+}
+.egg-slot{
+  width:var(--egg,46px);height:calc(var(--egg,46px)*1.25);
+  border:3px dashed rgba(122,74,30,.55);border-radius:50% 50% 50% 50% / 62% 62% 38% 38%;
+}
+
+/* nests */
+.nests{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;margin:16px 0;--egg:46px}
+.nest{
+  position:relative;display:grid;justify-content:center;align-content:center;gap:5px;
+  min-width:110px;min-height:84px;padding:18px 16px 22px;
+  background:
+    repeating-linear-gradient(115deg,rgba(122,74,30,.16) 0 4px,transparent 4px 13px),
+    linear-gradient(180deg,#f3d79f 0%,#d9a960 40%,#a3652f 100%);
+  border:3px solid #7a4a1e;
+  border-radius:28px 28px 80px 80px / 22px 22px 60px 60px;
+  box-shadow:inset 0 10px 16px rgba(0,0,0,.18),0 6px 12px rgba(0,0,0,.16);
+  transition:transform .15s,box-shadow .15s;
+}
+.nest .tag{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:#7a4a1e;color:#fff;font-size:.74rem;font-weight:800;border-radius:99px;padding:2px 11px;white-space:nowrap;
+}
+.nest.tappable{cursor:pointer}
+.nest.tappable:hover{transform:translateY(-3px);box-shadow:inset 0 10px 16px rgba(0,0,0,.18),0 10px 18px rgba(0,0,0,.2)}
+.nest.full{border-color:#16a34a;box-shadow:inset 0 10px 16px rgba(0,0,0,.14),0 0 0 4px rgba(34,197,94,.35)}
+.nest.shake{animation:nestshake .4s;border-color:var(--red)}
+@keyframes nestshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+
+/* egg pool for the hands-on activity */
+.egg-pool{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;min-height:62px;--egg:48px}
+
+/* "parts of a division problem" diagram */
+.parts{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px;margin:14px 0}
+.part{text-align:center}
+.part .num{font-size:2.2rem;font-weight:800;line-height:1.1;margin-top:6px}
+.part .lbl{font-size:.9rem;color:var(--ink);font-weight:700}
+.part .lbl span{display:block;font-size:.78rem;color:var(--sub);font-weight:500}
+.op{font-size:2.6rem;font-weight:800;color:var(--sub);padding:0 4px}
+.pile{display:grid;grid-template-columns:repeat(4,auto);gap:5px;justify-content:center;--egg:36px}
+.parts .nests{margin:0;gap:10px;--egg:32px}
+.parts .nest{min-width:74px;min-height:56px;padding:12px 12px 14px}
+
+/* fact family */
+.fact-house{background:#f3ecff;border-color:#dccbff}
+.fact-house div{font-size:1.15rem}
+
+/* quiz */
+.qcard{border-color:#e6dcff;background:#fff}
+.qcard .nests{--egg:40px;gap:14px}
+.qstory{font-size:1.05rem;margin:4px 0 6px}
+.qstory b{color:#6d28d9}
+.qtext{font-size:1.5rem}
+.choice{font-size:1.2rem;padding:10px 20px}
+.hatch .egg{animation:wobble .5s ease-in-out 3;transform-origin:50% 90%}
+@keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-14deg) translateY(-4px)}75%{transform:rotate(14deg) translateY(-4px)}}
+.qfeedback{font-size:1rem}
+.done-banner{font-size:1.05rem}
+.done-banner .rank{font-size:1.4rem;display:block;margin-bottom:6px}
+</style>
 </head>
 <body>
 <div class="wrap">
   <div class="topnav"><a class="back" href="index.html">&larr; Back to Math Practice</a></div>
-  <h1>Lesson 2: What Is Division?</h1>
-  <p class="sub">Division is just multiplication asked backwards. Let's go through it slowly, one idea at a time.</p>
 
-  <div class="card">
-    <h2 style="margin-top:0">Idea 1: Sharing equally</h2>
-    <div class="explain">
-      Imagine you have <b>12 cookies</b> and <b>3 friends</b>. If everyone gets the same number,
-      how many cookies does each friend get? You're splitting 12 into 3 equal groups.
+  <div class="dragon-hero">
+    <div class="big">🐉</div>
+    <div class="txt">
+      <span class="badge">Lesson 2 · What is division?</span>
+      <h1>Dragon Egg Division</h1>
+      <p>Mama Dragon needs your help sharing her eggs between the nests. Division is just multiplication asked backwards — let's take it one nest at a time.</p>
     </div>
-    <div class="groups" id="share-groups"></div>
-    <p style="color:var(--sub);font-size:.9rem">3 friends, 4 cookies each. That's <b>12 &divide; 3 = 4</b>.</p>
   </div>
 
   <div class="card">
-    <h2 style="margin-top:0">Idea 2: Making equal groups</h2>
-    <div class="explain">
-      Now imagine the <b>same 12 cookies</b>, but this time you're packing them into bags of <b>3</b>.
-      How many bags do you need?
+    <div class="story">
+      <div class="big">🌋</div>
+      <p>Deep inside Dragon Mountain, <b>Mama Dragon</b> has laid a clutch of eggs. Baby dragons only hatch when the eggs are shared <b>fairly</b> — every nest must hold exactly the same number of eggs. That fair sharing has a math name: <b>division</b>.</p>
     </div>
-    <div class="groups" id="group-groups"></div>
-    <p style="color:var(--sub);font-size:.9rem">4 bags, 3 cookies in each. That's <b>12 &divide; 3 = 4</b> again — same numbers, different question.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="ico">🥚</span> Idea 1: Sharing the eggs equally</h2>
+    <div class="explain">
+      Mama Dragon has <b>12 eggs</b> and <b>3 nests</b>. If every nest gets the same number,
+      how many eggs go in each nest? You're splitting 12 into 3 equal groups.
+    </div>
+    <div id="share-nests"></div>
+    <p class="note">3 nests, 4 eggs in each. That's <b>12 &divide; 3 = 4</b>.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="ico">🪺</span> Idea 2: Making equal nests</h2>
+    <div class="explain">
+      Now the <b>same 12 eggs</b>, but this time each nest can only hold <b>3 eggs</b>.
+      How many nests does Mama Dragon need?
+    </div>
+    <div id="group-nests"></div>
+    <p class="note">4 nests, 3 eggs in each. That's <b>12 &divide; 3 = 4</b> again — same numbers, different question.</p>
     <div class="explain">
       Both questions use the same division fact. Sometimes division asks
-      "<b>how many in each group?</b>" and sometimes it asks "<b>how many groups?</b>" — either way, you divide.
+      "<b>how many in each nest?</b>" and sometimes it asks "<b>how many nests?</b>" — either way, you divide.
     </div>
   </div>
 
   <div class="card">
-    <h2 style="margin-top:0">Now you try: share them out</h2>
-    <p class="sub" style="margin-top:-4px">Tap a box to place one item in it. Share evenly — every box should end up with the same number.</p>
+    <h2><span class="ico">🔥</span> Now you try: fill the nests</h2>
+    <p class="sub" style="margin-top:-4px">Tap a nest to place one egg in it. Share fairly — every nest must end up with the same number of eggs, or the babies won't hatch!</p>
     <div id="buildActivity"></div>
   </div>
 
   <div class="card">
-    <h2 style="margin-top:0">The parts of a division problem</h2>
+    <h2><span class="ico">📜</span> The parts of a division problem</h2>
     <div class="example">
-      <div style="font-size:1.4rem;font-weight:800;text-align:center;color:var(--ink)">
-        12 &divide; 3 = 4
-      </div>
-      <div style="display:flex;justify-content:space-around;margin-top:10px;font-size:.85rem;color:var(--sub);text-align:center">
-        <div><b style="color:var(--blue)">12</b><br>dividend<br><span style="font-size:.8em">(the total)</span></div>
-        <div><b style="color:var(--purple)">3</b><br>divisor<br><span style="font-size:.8em">(size of each group)</span></div>
-        <div><b style="color:var(--green)">4</b><br>quotient<br><span style="font-size:.8em">(the answer)</span></div>
+      <div style="font-size:1.6rem;font-weight:800;text-align:center;color:var(--ink)">12 &divide; 3 = 4</div>
+      <div class="parts">
+        <div class="part">
+          <div class="pile" id="pile12"></div>
+          <div class="num" style="color:var(--blue)">12</div>
+          <div class="lbl">dividend<span>the whole clutch of eggs</span></div>
+        </div>
+        <div class="op">&divide;</div>
+        <div class="part">
+          <div id="nests3"></div>
+          <div class="num" style="color:var(--purple)">3</div>
+          <div class="lbl">divisor<span>how many nests</span></div>
+        </div>
+        <div class="op">=</div>
+        <div class="part">
+          <div id="nest4"></div>
+          <div class="num" style="color:var(--green)">4</div>
+          <div class="lbl">quotient<span>eggs in each nest</span></div>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="card">
-    <h2 style="margin-top:0">The big shortcut: fact families</h2>
+    <h2><span class="ico">🐲</span> The dragon's secret: fact families</h2>
     <div class="explain">
       You already know your multiplication facts from Lesson 1 — and every multiplication fact
-      secretly gives you <b>two division facts for free</b>. These four facts are called a
+      secretly hatches <b>two division facts for free</b>. These four facts are called a
       <b>fact family</b> because they all use the same three numbers.
     </div>
     <div class="fact-house">
-      <div>3 &times; 4 = 12</div><div>12 &divide; 3 = 4</div>
-      <div>4 &times; 3 = 12</div><div>12 &divide; 4 = 3</div>
+      <div>3 nests &times; 4 eggs = 12</div><div>12 &divide; 3 = 4</div>
+      <div>4 nests &times; 3 eggs = 12</div><div>12 &divide; 4 = 3</div>
     </div>
     <div class="fact-house">
-      <div>2 &times; 5 = 10</div><div>10 &divide; 2 = 5</div>
-      <div>5 &times; 2 = 10</div><div>10 &divide; 5 = 2</div>
+      <div>2 nests &times; 5 eggs = 10</div><div>10 &divide; 2 = 5</div>
+      <div>5 nests &times; 2 eggs = 10</div><div>10 &divide; 5 = 2</div>
     </div>
-    <p style="color:var(--sub);font-size:.9rem">
+    <p class="note">
       So if you ever get stuck on a division problem, ask yourself:
-      "what do I multiply by the small number to get the big number?"
+      "what do I multiply the small number by to get the big number?"
     </p>
   </div>
 
   <div class="card">
-    <h2 style="margin-top:0">Try the shortcut (worked examples)</h2>
-    <p style="color:var(--sub);margin-top:-4px">Read each one and see how the multiplication fact hands you the answer.</p>
-    <div class="example">6 &times; 7 = 42 &nbsp;&rarr;&nbsp; so 42 &divide; 7 = <b>6</b> &nbsp;(and 42 &divide; 6 = <b>7</b>)</div>
-    <div class="example">8 &times; 5 = 40 &nbsp;&rarr;&nbsp; so 40 &divide; 5 = <b>8</b> &nbsp;(and 40 &divide; 8 = <b>5</b>)</div>
-    <div class="example">9 &times; 3 = 27 &nbsp;&rarr;&nbsp; so 27 &divide; 3 = <b>9</b> &nbsp;(and 27 &divide; 9 = <b>3</b>)</div>
+    <h2><span class="ico">✨</span> Try the secret (worked examples)</h2>
+    <p class="note" style="margin-top:-4px">Read each one and see how the multiplication fact hands you the answer.</p>
+    <div class="example">6 nests &times; 7 eggs = 42 &nbsp;&rarr;&nbsp; so 42 &divide; 7 = <b>6</b> &nbsp;(and 42 &divide; 6 = <b>7</b>)</div>
+    <div class="example">8 nests &times; 5 eggs = 40 &nbsp;&rarr;&nbsp; so 40 &divide; 5 = <b>8</b> &nbsp;(and 40 &divide; 8 = <b>5</b>)</div>
+    <div class="example">9 nests &times; 3 eggs = 27 &nbsp;&rarr;&nbsp; so 27 &divide; 3 = <b>9</b> &nbsp;(and 27 &divide; 9 = <b>3</b>)</div>
   </div>
 
   <div class="card">
-    <h2 style="margin-top:0">Practice: 10 questions</h2>
-    <p style="color:var(--sub);margin-top:-4px">These all divide evenly — no leftovers. If you're stuck, think "what times the divisor gives the dividend?"</p>
+    <h2><span class="ico">🏆</span> Dragon Keeper Challenge: 10 questions</h2>
+    <p class="note" style="margin-top:-4px">Every clutch shares out evenly — no leftover eggs. If you're stuck, count the eggs in <b>one</b> nest, or think "what times the number of nests gives the total?"</p>
     <div class="progress-strip">
       <span id="qcount">Question 1 of 10</span>
-      <span id="scorecount">Score: 0</span>
+      <span id="scorecount">🔥 Score: 0</span>
     </div>
     <div class="qcard">
+      <div class="qstory" id="qstory"></div>
       <div id="qDemo"></div>
       <div class="qtext" id="qtext"></div>
       <div class="choices" id="choices"></div>
@@ -107,34 +227,163 @@
   </div>
 </div>
 
+<!-- Dragon egg artwork: one gradient + symbol per egg colour, reused everywhere via <use> -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" id="eggDefs"></svg>
+
 <script src="common.js"></script>
 <script>
-renderGroupsVisual(document.getElementById('share-groups'), 3, 4, '🍪');
-renderGroupsVisual(document.getElementById('group-groups'), 4, 3, '🍪');
+// ---------- dragon egg artwork ----------
+const EGG_TYPES = {
+  ember:  {c1:'#ffc08a', c2:'#c2410c', spot:'#7c2d12'},
+  forest: {c1:'#b5f0b5', c2:'#15803d', spot:'#14532d'},
+  storm:  {c1:'#b9e0ff', c2:'#1d4ed8', spot:'#1e3a8a'},
+  shadow: {c1:'#e2c6ff', c2:'#6d28d9', spot:'#3b0764'},
+  gold:   {c1:'#fff4b0', c2:'#d97706', spot:'#92400e'},
+};
+const EGG_ORDER = Object.keys(EGG_TYPES);
 
-// "We do" step: hands-on sharing, before the independent quiz below
+(function buildEggDefs(){
+  let defs = '<defs>';
+  for(const [name, c] of Object.entries(EGG_TYPES)){
+    defs += `
+      <radialGradient id="grad-${name}" cx="38%" cy="28%" r="78%">
+        <stop offset="0" stop-color="${c.c1}"/>
+        <stop offset="1" stop-color="${c.c2}"/>
+      </radialGradient>
+      <symbol id="egg-${name}" viewBox="0 0 64 80">
+        <path d="M32 3C47 3 60 27 60 48c0 17-12.5 29-28 29S4 65 4 48C4 27 17 3 32 3z"
+              fill="url(#grad-${name})" stroke="rgba(0,0,0,.28)" stroke-width="1.5"/>
+        <g fill="${c.spot}" opacity=".55">
+          <ellipse cx="22" cy="30" rx="4" ry="5"/>
+          <ellipse cx="41" cy="21" rx="3" ry="4"/>
+          <ellipse cx="45" cy="46" rx="5" ry="6"/>
+          <ellipse cx="24" cy="55" rx="3.5" ry="4.5"/>
+          <ellipse cx="35" cy="67" rx="3" ry="3.5"/>
+          <ellipse cx="33" cy="40" rx="2.5" ry="3"/>
+        </g>
+        <ellipse cx="22" cy="18" rx="6" ry="9" fill="#fff" opacity=".35" transform="rotate(-20 22 18)"/>
+      </symbol>`;
+  }
+  defs += '</defs>';
+  document.getElementById('eggDefs').innerHTML = defs;
+})();
+
+function eggSVG(type){
+  return `<svg class="egg" viewBox="0 0 64 80" aria-hidden="true"><use href="#egg-${type}"/></svg>`;
+}
+// How many eggs per row inside a nest, so each clutch looks tidy.
+function nestCols(n){
+  return ({1:1,2:2,3:3,4:2,5:3,6:3,7:4,8:4,9:3,10:5})[n] || 4;
+}
+function makeNest(perNest, filled, type, label){
+  const nest = document.createElement('div');
+  nest.className = 'nest';
+  nest.style.gridTemplateColumns = `repeat(${nestCols(Math.max(perNest,1))}, auto)`;
+  if(label) nest.innerHTML = `<span class="tag">${label}</span>`;
+  for(let d=0; d<perNest; d++){
+    nest.insertAdjacentHTML('beforeend', d < filled ? eggSVG(type) : '<span class="egg-slot"></span>');
+  }
+  return nest;
+}
+// numNests nests, each holding perNest eggs — the "equal groups" picture of division.
+function renderNests(el, numNests, perNest, type, labels){
+  el.className = 'nests';
+  el.innerHTML = '';
+  for(let g=0; g<numNests; g++){
+    el.appendChild(makeNest(perNest, perNest, type, labels ? `Nest ${g+1}` : ''));
+  }
+}
+
+// ---------- "I do": the two demo pictures ----------
+renderNests(document.getElementById('share-nests'), 3, 4, 'ember', true);
+renderNests(document.getElementById('group-nests'), 4, 3, 'forest', true);
+
+// parts-of-a-problem diagram
+document.getElementById('pile12').innerHTML = eggSVG('storm').repeat(12);
+renderNests(document.getElementById('nests3'), 3, 0, 'storm');
+renderNests(document.getElementById('nest4'), 1, 4, 'storm');
+
+// ---------- "We do": tap eggs into nests ----------
+function initNestActivity(container, opts){
+  const { total, numNests, perNest, type, successText, onComplete } = opts;
+  let pool = total;
+  const counts = new Array(numNests).fill(0);
+
+  container.innerHTML = `
+    <div class="build-wrap">
+      <div class="build-status" data-role="pool-label"></div>
+      <div class="egg-pool" data-role="pool"></div>
+      <div class="nests" data-role="nests"></div>
+      <div class="build-status" data-role="status"></div>
+      <div class="build-success" data-role="success"></div>
+    </div>`;
+  const poolLabel = container.querySelector('[data-role="pool-label"]');
+  const poolEl = container.querySelector('[data-role="pool"]');
+  const nestsEl = container.querySelector('[data-role="nests"]');
+  const statusEl = container.querySelector('[data-role="status"]');
+  const successEl = container.querySelector('[data-role="success"]');
+
+  function renderPool(){
+    poolLabel.textContent = pool > 0
+      ? `${pool} egg${pool===1?'':'s'} left. Tap a nest to place one:`
+      : '';
+    poolEl.innerHTML = eggSVG(type).repeat(pool);
+  }
+  function renderAll(){
+    nestsEl.innerHTML = '';
+    for(let b=0; b<numNests; b++){
+      const nest = makeNest(perNest, counts[b], type, `Nest ${b+1}`);
+      nest.classList.add('tappable');
+      if(counts[b] >= perNest) nest.classList.add('full');
+      nest.onclick = () => tap(b, nest);
+      nestsEl.appendChild(nest);
+    }
+  }
+  function tap(b, nestEl){
+    if(pool <= 0) return;
+    if(counts[b] >= perNest){
+      nestEl.classList.add('shake');
+      statusEl.textContent = 'That nest is full — the dragon says no more eggs! Try another nest.';
+      setTimeout(()=>nestEl.classList.remove('shake'), 400);
+      return;
+    }
+    counts[b]++;
+    pool--;
+    statusEl.textContent = '';
+    renderPool();
+    renderAll();
+    if(pool === 0){
+      successEl.style.display = 'block';
+      successEl.textContent = successText(total, numNests, perNest);
+      if(onComplete) onComplete(successEl);
+    }
+  }
+  renderPool();
+  renderAll();
+}
+
 const buildRounds = [
-  {total:12, numBoxes:3, perBox:4, emoji:'🍪'},
-  {total:10, numBoxes:5, perBox:2, emoji:'🌸'},
-  {total:8, numBoxes:2, perBox:4, emoji:'🍎'},
+  {total:12, numNests:3, perNest:4, type:'shadow'},
+  {total:10, numNests:5, perNest:2, type:'gold'},
+  {total:8,  numNests:2, perNest:4, type:'ember'},
 ];
 let buildRoundIdx = 0;
 function loadBuildRound(){
   const el = document.getElementById('buildActivity');
   const round = buildRounds[buildRoundIdx];
-  initBuildActivity(el, {
-    total: round.total, numBoxes: round.numBoxes, perBox: round.perBox, emoji: round.emoji,
-    successText: (t, n, p) => `${t} ÷ ${n} = ${p}! Every box got ${p}.`,
+  initNestActivity(el, {
+    total: round.total, numNests: round.numNests, perNest: round.perNest, type: round.type,
+    successText: (t, n, p) => `🐲 ${t} ÷ ${n} = ${p}! Every nest has ${p} eggs — the baby dragons are hatching!`,
     onComplete: (successEl) => {
       const btn = document.createElement('button');
       btn.className = 'btn green';
       btn.style.marginTop = '10px';
       btn.style.display = 'block';
       if(buildRoundIdx < buildRounds.length - 1){
-        btn.textContent = 'Try another →';
+        btn.textContent = 'Next clutch of eggs →';
         btn.onclick = () => { buildRoundIdx++; loadBuildRound(); };
       } else {
-        btn.textContent = "Great work — I'm ready to keep going!";
+        btn.textContent = "Great work — I'm ready for the challenge!";
         btn.onclick = () => { btn.remove(); };
       }
       successEl.appendChild(btn);
@@ -143,17 +392,18 @@ function loadBuildRound(){
 }
 loadBuildRound();
 
+// ---------- "You do": the quiz ----------
 const questions = [
-  {q:'12 ÷ 3', a:4, divisor:3, hint:'3 × 4 = 12', choices:[4,3,6,5]},
-  {q:'20 ÷ 5', a:4, divisor:5, hint:'5 × 4 = 20', choices:[4,5,3,6]},
-  {q:'18 ÷ 2', a:9, divisor:2, hint:'2 × 9 = 18', choices:[9,8,7,6]},
+  {q:'12 ÷ 3',  a:4, divisor:3,  hint:'3 × 4 = 12',  choices:[4,3,6,5]},
+  {q:'20 ÷ 5',  a:4, divisor:5,  hint:'5 × 4 = 20',  choices:[4,5,3,6]},
+  {q:'18 ÷ 2',  a:9, divisor:2,  hint:'2 × 9 = 18',  choices:[9,8,7,6]},
   {q:'30 ÷ 10', a:3, divisor:10, hint:'10 × 3 = 30', choices:[3,4,2,5]},
-  {q:'16 ÷ 4', a:4, divisor:4, hint:'4 × 4 = 16', choices:[4,3,5,8]},
-  {q:'15 ÷ 5', a:3, divisor:5, hint:'5 × 3 = 15', choices:[3,5,4,2]},
-  {q:'14 ÷ 2', a:7, divisor:2, hint:'2 × 7 = 14', choices:[7,6,8,4]},
-  {q:'27 ÷ 3', a:9, divisor:3, hint:'3 × 9 = 27', choices:[9,8,7,6]},
+  {q:'16 ÷ 4',  a:4, divisor:4,  hint:'4 × 4 = 16',  choices:[4,3,5,8]},
+  {q:'15 ÷ 5',  a:3, divisor:5,  hint:'5 × 3 = 15',  choices:[3,5,4,2]},
+  {q:'14 ÷ 2',  a:7, divisor:2,  hint:'2 × 7 = 14',  choices:[7,6,8,4]},
+  {q:'27 ÷ 3',  a:9, divisor:3,  hint:'3 × 9 = 27',  choices:[9,8,7,6]},
   {q:'40 ÷ 10', a:4, divisor:10, hint:'10 × 4 = 40', choices:[4,5,3,6]},
-  {q:'24 ÷ 4', a:6, divisor:4, hint:'4 × 6 = 24', choices:[6,5,7,4]},
+  {q:'24 ÷ 4',  a:6, divisor:4,  hint:'4 × 6 = 24',  choices:[6,5,7,4]},
 ];
 
 let idx = 0, score = 0, answered = false;
@@ -171,9 +421,14 @@ function shuffle(arr){
 function renderQuestion(){
   answered = false;
   const item = questions[idx];
+  const total = item.a * item.divisor;
   document.getElementById('qcount').textContent = `Question ${idx+1} of ${TOTAL}`;
-  document.getElementById('scorecount').textContent = `Score: ${score}`;
-  renderGroupsVisual(document.getElementById('qDemo'), item.divisor, item.a, TABLE_EMOJI[item.divisor - 1]);
+  document.getElementById('scorecount').textContent = `🔥 Score: ${score}`;
+  document.getElementById('qstory').innerHTML =
+    `🐉 Mama Dragon shares <b>${total} eggs</b> equally into <b>${item.divisor} nests</b>. How many eggs in each nest?`;
+  const demo = document.getElementById('qDemo');
+  demo.classList.remove('hatch');
+  renderNests(demo, item.divisor, item.a, EGG_ORDER[idx % EGG_ORDER.length]);
   document.getElementById('qtext').textContent = `${item.q} = ?`;
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className = 'qfeedback';
@@ -194,31 +449,28 @@ function selectAnswer(value, btn){
   answered = true;
   const item = questions[idx];
   const feedback = document.getElementById('feedback');
-  const allBtns = document.querySelectorAll('#choices .choice');
-  allBtns.forEach(b=>{
+  document.querySelectorAll('#choices .choice').forEach(b=>{
     if(parseInt(b.textContent,10) === item.a) b.classList.add('correct');
   });
   if(value === item.a){
     score++;
     btn.classList.add('correct');
-    feedback.textContent = `Correct! ${item.q} = ${item.a} (think: ${item.hint})`;
+    document.getElementById('qDemo').classList.add('hatch');
+    feedback.textContent = `🐲 Correct! ${item.q} = ${item.a} — the eggs are hatching! (think: ${item.hint})`;
     feedback.className = 'qfeedback ok';
   } else {
     btn.classList.add('wrong');
-    feedback.textContent = `Not quite — ${item.q} = ${item.a}. Remember: ${item.hint}.`;
+    feedback.textContent = `Not quite — ${item.q} = ${item.a}. Count the eggs in one nest! Remember: ${item.hint}.`;
     feedback.className = 'qfeedback no';
   }
-  document.getElementById('scorecount').textContent = `Score: ${score}`;
+  document.getElementById('scorecount').textContent = `🔥 Score: ${score}`;
   document.getElementById('nextBtn').style.display = 'inline-block';
   document.getElementById('nextBtn').textContent = (idx === TOTAL-1) ? 'Finish' : 'Next →';
 }
 
 function nextQuestion(){
   idx++;
-  if(idx >= TOTAL){
-    finish();
-    return;
-  }
+  if(idx >= TOTAL){ finish(); return; }
   renderQuestion();
 }
 
@@ -227,9 +479,13 @@ function finish(){
   document.getElementById('nextBtn').style.display = 'none';
   document.getElementById('qcount').textContent = 'Done!';
   const rec = mathSave(LESSON_KEY, score, TOTAL);
+  const rank = score === TOTAL ? '🏆 Dragon Master!'
+             : score >= 7     ? '🐉 Dragon Rider!'
+             :                  '🥚 Egg Keeper — try again to hatch more dragons!';
   const banner = document.getElementById('doneBanner');
   banner.style.display = 'block';
-  banner.innerHTML = `You scored ${score} / ${TOTAL} (best so far: ${rec.best} / ${TOTAL}).<br>
+  banner.innerHTML = `<span class="rank">${rank}</span>
+    You scored ${score} / ${TOTAL} (best so far: ${rec.best} / ${TOTAL}).<br>
     <a class="btn green" style="margin-top:10px" href="lesson3-division-practice.html">Continue to Lesson 3: Division Practice →</a>`;
 }
 

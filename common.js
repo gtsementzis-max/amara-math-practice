@@ -141,3 +141,27 @@ function initBuildActivity(container, opts){
   renderPool();
   renderBoxes();
 }
+
+// Draws two adjoining groups of unit blocks (a then b), each wrapped into rows of
+// 5 so they're easy to subitize/count — the concrete "blocks" model for an
+// addition fact like a + b, used by the addition-with-blocks lesson.
+function renderAdditionBlocks(el, a, b){
+  el.className = 'addend-blocks';
+  el.innerHTML = '';
+  function makeGroup(count, cls){
+    const grp = document.createElement('div');
+    grp.className = 'block-group';
+    for(let i=0;i<count;i++){
+      const blk = document.createElement('span');
+      blk.className = 'block ' + cls;
+      grp.appendChild(blk);
+    }
+    return grp;
+  }
+  el.appendChild(makeGroup(a, 'block-a'));
+  const plus = document.createElement('div');
+  plus.className = 'block-plus';
+  plus.textContent = '+';
+  el.appendChild(plus);
+  el.appendChild(makeGroup(b, 'block-b'));
+}

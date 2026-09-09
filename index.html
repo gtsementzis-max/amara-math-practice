@@ -11,7 +11,17 @@
 <body>
 <div class="wrap">
   <h1>🧮 Amara's Math Practice</h1>
-  <p class="sub">Multiplication review → understanding division. Go through the lessons in order — each one builds on the last.</p>
+  <p class="sub">Addition basics → multiplication review → understanding division. Go through the lessons in order — each one builds on the last.</p>
+
+  <a class="lesson card" href="lesson0-addition-blocks.html" style="text-decoration:none">
+    <div class="lesson-num" style="background:var(--amber)">0</div>
+    <div class="lesson-body">
+      <h3>Addition with Blocks</h3>
+      <p>Kumon-style drills, biggest to smallest: the 9s, then 8s, then 7s... down to the 1s.</p>
+      <div class="bar-track"><div class="bar-fill" id="bar-lesson0" style="background:var(--amber)"></div></div>
+      <div class="bar-label" id="label-lesson0">0 / 45</div>
+    </div>
+  </a>
 
   <a class="lesson card" href="lesson1-multiplication-review.html" style="text-decoration:none">
     <div class="lesson-num" style="background:var(--blue)">1</div>
@@ -55,6 +65,7 @@
 function refreshBars(){
   const data = mathLoad();
   const lessons = [
+    {key:'lesson0', total:45},
     {key:'lesson1', total:62},
     {key:'lesson2', total:10},
     {key:'lesson3', total:15},

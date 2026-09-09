@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Addition with Blocks — Amara's Math Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav"><a class="back" href="index.html">&larr; Back to Math Practice</a></div>
+  <h1>Lesson 0: Addition with Blocks</h1>
+  <p class="sub">Before multiplication, let's make sure addition is rock solid. We'll use blocks so every fact is
+  something you can actually see and count — not just remember. We'll go one number at a time, starting with the
+  biggest, <b>9</b>, then <b>8</b>, then <b>7</b>, all the way down to <b>1</b>.</p>
+
+  <div class="card">
+    <h2 style="margin-top:0">What the blocks show you</h2>
+    <div class="explain">
+      <b>9 + 4</b> means <b>9 blocks</b> and <b>4 more blocks</b>, all pushed together. Count every block and
+      that's your answer.
+    </div>
+    <div id="demo-blocks"></div>
+    <p style="color:var(--sub);font-size:.9rem">9 blue blocks, 4 orange blocks, 13 blocks total. That's <b>9 + 4 = 13</b>.</p>
+    <p style="color:var(--sub);font-size:.9rem">Tip: the blocks are grouped in rows of 5, so you can count by 5s instead of one at a time.</p>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Try it yourself</h2>
+    <p class="sub" style="margin-top:-4px">Use the buttons to change each number and watch the blocks and the equation update.</p>
+    <div class="stepper-row">
+      <div class="stepper">
+        <button class="btn ghost" onclick="changeTry('a',-1)">&minus;</button>
+        <span id="tryAVal">9</span>
+        <button class="btn ghost" onclick="changeTry('a',1)">+</button>
+      </div>
+      <div class="block-plus">+</div>
+      <div class="stepper">
+        <button class="btn ghost" onclick="changeTry('b',-1)">&minus;</button>
+        <span id="tryBVal">4</span>
+        <button class="btn ghost" onclick="changeTry('b',1)">+</button>
+      </div>
+    </div>
+    <div id="tryBlocks"></div>
+    <div class="example" id="tryEquation" style="text-align:center;font-size:1.3rem;font-weight:800">9 + 4 = 13</div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Practice, one number at a time</h2>
+    <p style="color:var(--sub);margin-top:-4px">We'll drill the 9s first, then the 8s, then the 7s, and so on down to the 1s (5 questions each).</p>
+    <div class="progress-strip">
+      <span id="qcount">Question 1 of 45</span>
+      <span id="scorecount">Score: 0</span>
+    </div>
+    <div class="section-label" id="sectionLabel"></div>
+    <div class="qcard">
+      <div id="qDemo"></div>
+      <div class="qtext" id="qtext"></div>
+      <div class="choices" id="choices"></div>
+      <div class="qfeedback" id="feedback"></div>
+    </div>
+    <div style="text-align:right">
+      <button class="btn" id="nextBtn" style="display:none" onclick="nextQuestion()">Next &rarr;</button>
+    </div>
+    <div class="done-banner" id="doneBanner"></div>
+  </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+renderAdditionBlocks(document.getElementById('demo-blocks'), 9, 4);
+
+// "Try it yourself" stepper demo
+let tryA = 9, tryB = 4;
+function renderTry(){
+  document.getElementById('tryAVal').textContent = tryA;
+  document.getElementById('tryBVal').textContent = tryB;
+  renderAdditionBlocks(document.getElementById('tryBlocks'), tryA, tryB);
+  document.getElementById('tryEquation').textContent = `${tryA} + ${tryB} = ${tryA + tryB}`;
+}
+function changeTry(which, delta){
+  if(which === 'a') tryA = Math.min(9, Math.max(1, tryA + delta));
+  else tryB = Math.min(9, Math.max(1, tryB + delta));
+  renderTry();
+}
+renderTry();
+
+// Kumon-style drill: one "family" (the bigger addend) at a time, 9 down to 1,
+// 5 questions per family, biggest number first.
+const questions = [
+  {a:9,b:2},{a:9,b:5},{a:9,b:1},{a:9,b:7},{a:9,b:9},
+  {a:8,b:3},{a:8,b:6},{a:8,b:1},{a:8,b:8},{a:8,b:4},
+  {a:7,b:4},{a:7,b:2},{a:7,b:7},{a:7,b:9},{a:7,b:5},
+  {a:6,b:5},{a:6,b:3},{a:6,b:8},{a:6,b:1},{a:6,b:6},
+  {a:5,b:6},{a:5,b:2},{a:5,b:9},{a:5,b:4},{a:5,b:5},
+  {a:4,b:7},{a:4,b:3},{a:4,b:8},{a:4,b:5},{a:4,b:4},
+  {a:3,b:8},{a:3,b:4},{a:3,b:9},{a:3,b:6},{a:3,b:3},
+  {a:2,b:9},{a:2,b:5},{a:2,b:7},{a:2,b:8},{a:2,b:2},
+  {a:1,b:9},{a:1,b:8},{a:1,b:6},{a:1,b:4},{a:1,b:1},
+].map(q => ({...q, family: q.a, sum: q.a + q.b}));
+
+function mkChoices(correct){
+  const pool = [correct];
+  for(const d of [-2,-1,1,2,3,-3]){
+    if(pool.length >= 4) break;
+    const v = correct + d;
+    if(v >= 0 && !pool.includes(v)) pool.push(v);
+  }
+  return pool;
+}
+
+let idx = 0, score = 0, answered = false;
+const LESSON_KEY = 'lesson0', TOTAL = questions.length;
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function renderQuestion(){
+  answered = false;
+  const item = questions[idx];
+  document.getElementById('qcount').textContent = `Question ${idx+1} of ${TOTAL}`;
+  document.getElementById('scorecount').textContent = `Score: ${score}`;
+  const isFirstOfFamily = idx === 0 || questions[idx-1].family !== item.family;
+  if(isFirstOfFamily){
+    document.getElementById('sectionLabel').textContent = `The ${item.family}-Family`;
+  }
+  renderAdditionBlocks(document.getElementById('qDemo'), item.a, item.b);
+  document.getElementById('qtext').textContent = `${item.a} + ${item.b} = ?`;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'qfeedback';
+  document.getElementById('nextBtn').style.display = 'none';
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  shuffle(mkChoices(item.sum)).forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c;
+    btn.onclick = () => selectAnswer(c, btn);
+    choicesEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(value, btn){
+  if(answered) return;
+  answered = true;
+  const item = questions[idx];
+  const feedback = document.getElementById('feedback');
+  const allBtns = document.querySelectorAll('#choices .choice');
+  allBtns.forEach(b=>{
+    if(parseInt(b.textContent,10) === item.sum) b.classList.add('correct');
+  });
+  if(value === item.sum){
+    score++;
+    btn.classList.add('correct');
+    feedback.textContent = `Correct! ${item.a} + ${item.b} = ${item.sum}.`;
+    feedback.className = 'qfeedback ok';
+  } else {
+    btn.classList.add('wrong');
+    feedback.textContent = `Not quite — ${item.a} + ${item.b} = ${item.sum}. Count the blocks again.`;
+    feedback.className = 'qfeedback no';
+  }
+  document.getElementById('scorecount').textContent = `Score: ${score}`;
+  document.getElementById('nextBtn').style.display = 'inline-block';
+  document.getElementById('nextBtn').textContent = (idx === TOTAL-1) ? 'Finish' : 'Next →';
+}
+
+function nextQuestion(){
+  idx++;
+  if(idx >= TOTAL){
+    finish();
+    return;
+  }
+  renderQuestion();
+}
+
+function finish(){
+  document.querySelector('.qcard').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('sectionLabel').style.display = 'none';
+  document.getElementById('qcount').textContent = 'Done!';
+  const rec = mathSave(LESSON_KEY, score, TOTAL);
+  const banner = document.getElementById('doneBanner');
+  banner.style.display = 'block';
+  banner.innerHTML = `You scored ${score} / ${TOTAL} (best so far: ${rec.best} / ${TOTAL}).<br>
+    <a class="btn green" style="margin-top:10px" href="lesson1-multiplication-review.html">Continue to Lesson 1: Multiplication Review &rarr;</a>`;
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

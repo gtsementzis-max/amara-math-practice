@@ -148,6 +148,20 @@ a{color:var(--blue)}
   min-width:32px;height:32px;border:2px dashed var(--purple);border-radius:8px;
   color:var(--purple);font-weight:800;background:#f5f0ff;padding:0 4px;
 }
+/* addition blocks: two colored groups of unit squares, wrapped every 5 for counting */
+.addend-blocks{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0}
+.block-group{display:flex;flex-wrap:wrap;gap:4px;max-width:132px}
+.block{width:22px;height:22px;border-radius:5px}
+.block-a{background:var(--blue)}
+.block-b{background:var(--amber)}
+.block-plus{font-size:1.4rem;font-weight:800;color:var(--sub)}
+
+/* number stepper for the "try it yourself" addition demo */
+.stepper-row{display:flex;align-items:center;justify-content:center;gap:16px;margin:14px 0}
+.stepper{display:flex;align-items:center;gap:10px}
+.stepper span{display:inline-block;min-width:1.4em;text-align:center;font-size:1.5rem;font-weight:800}
+.stepper .btn{padding:6px 14px;line-height:1}
+
 .btn{
   display:inline-block;background:var(--blue);color:#fff;border:none;border-radius:10px;
   padding:10px 18px;font-weight:700;font-size:1rem;cursor:pointer;text-decoration:none;font-family:inherit;

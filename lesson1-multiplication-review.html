@@ -3,53 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Multiplication Review — Amara's Math Practice</title>
+<title>The Dragon Hatchery — Amara's Math Practice</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="dragon.css">
+<style>
+/* page-specific: times-table reference + matching recolour */
+#times-table{border-collapse:collapse;width:100%;text-align:center;font-size:.9rem}
+#times-table th{background:#f3ecff;color:#6d28d9;padding:5px 6px;border:1px solid #dccbff;font-weight:800}
+#times-table td{padding:5px 6px;border:1px solid #e6dcff}
+#times-table tr:nth-child(even) td{background:#faf7ff}
+.match-btn{font-size:1.1rem}
+.match-btn.selected{border-color:#6d28d9;background:#f3ecff}
+.qstory.adventure{font-size:1.2rem;font-weight:700;line-height:1.45}
+.mbox{min-width:40px;height:40px;font-size:1.3rem}
+</style>
 </head>
 <body>
 <div class="wrap">
   <div class="topnav"><a class="back" href="index.html">&larr; Back to Math Practice</a></div>
-  <h1>Lesson 1: Multiplication Review</h1>
-  <p class="sub">Before we learn division, let's make sure your multiplication facts are solid — division uses them constantly. We'll go table by table, then mix it up with matching, missing numbers, and word problems.</p>
 
-  <div class="card">
-    <h2 style="margin-top:0">What multiplication means</h2>
-    <div class="explain">
-      <b>4 &times; 3</b> means <b>4 groups of 3</b>. You can find the answer by adding 3 four times:
-      3 + 3 + 3 + 3 = 12. So 4 &times; 3 = 12.
+  <div class="dragon-hero">
+    <div class="big">🐉</div>
+    <div class="txt">
+      <span class="badge">Lesson 1 · Multiplication review</span>
+      <h1>The Dragon Hatchery</h1>
+      <p>Welcome to the Hatchery, Dragon Keeper! Before Mama Dragon can share her eggs between nests (that's division — Lesson 2), you need to count them fast: <b>nests &times; eggs in each nest</b>. We'll go table by table, then matching, missing numbers, and dragon adventures.</p>
     </div>
-    <p>Here it is as a picture — 4 groups, each with 3 stars:</p>
-    <div class="groups" id="demo-groups"></div>
-    <p style="color:var(--sub);font-size:.9rem">Count the groups (4), count each group (3), then count every star (12). That's what &times; is doing.</p>
   </div>
 
   <div class="card">
-    <h2 style="margin-top:0">Now you try: build the array</h2>
-    <p class="sub" style="margin-top:-4px">Tap a box to place a star in it. Spread them out evenly — same number in every box.</p>
+    <h2><span class="ico">🥚</span> What multiplication means</h2>
+    <div class="explain">
+      <b>4 &times; 3</b> means <b>4 nests with 3 eggs in each</b>. You can find the answer by adding 3 four times:
+      3 + 3 + 3 + 3 = 12. So 4 &times; 3 = 12.
+    </div>
+    <p>Here it is as a picture — 4 nests, each with 3 dragon eggs:</p>
+    <div id="demo-nests"></div>
+    <p class="note">Count the nests (4), count each nest (3), then count every egg (12). That's what &times; is doing.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="ico">🔥</span> Now you try: fill the nests</h2>
+    <p class="sub" style="margin-top:-4px">Tap a nest to place one egg in it. Spread them out evenly — the same number in every nest.</p>
     <div id="buildActivity"></div>
   </div>
 
   <div class="card">
-    <h2 style="margin-top:0">Times table reference (1–10)</h2>
-    <p style="color:var(--sub);margin-top:-4px">Skim this before you start — it's fine to look back at it during practice.</p>
+    <h2><span class="ico">📜</span> Dragon Keeper's times table (1–10)</h2>
+    <p class="note" style="margin-top:-4px">Skim this before you start — it's fine to look back at it during practice.</p>
     <div style="overflow-x:auto">
-      <table id="times-table" style="border-collapse:collapse;width:100%;text-align:center;font-size:.85rem"></table>
+      <table id="times-table"></table>
     </div>
   </div>
 
   <div class="card">
-    <h2 style="margin-top:0">Practice</h2>
-    <p style="color:var(--sub);margin-top:-4px">We'll go through the 1s, 2s, 3s... up to the 10s (4 questions each), then matching, missing numbers, and word problems.</p>
+    <h2><span class="ico">🏆</span> Hatchery Practice</h2>
+    <p class="note" style="margin-top:-4px">We'll go through the 1s, 2s, 3s... up to the 10s (4 questions each), then matching, missing numbers, and dragon adventures.</p>
     <div class="progress-strip">
       <span id="qcount">Progress: 0 / 62</span>
-      <span id="scorecount">Score: 0</span>
+      <span id="scorecount">🔥 Score: 0</span>
     </div>
 
     <div id="quizBlock">
       <div class="section-label" id="sectionLabel"></div>
       <div class="qcard">
+        <div class="qstory" id="qstory"></div>
         <div id="tableDemo"></div>
         <div class="qtext" id="qtext"></div>
         <div class="choices" id="choices"></div>
@@ -61,8 +81,8 @@
     </div>
 
     <div id="matchBlock" style="display:none">
-      <div class="section-label">Matching</div>
-      <p style="color:var(--sub)">Click an expression, then click the product it matches.</p>
+      <div class="section-label">🔮 Dragon Rune Matching</div>
+      <p style="color:var(--sub)">Each rune on the left is a multiplication spell. Click a spell, then click the power (product) it makes.</p>
       <div class="match-wrap">
         <div class="match-col" id="matchExprCol"></div>
         <div class="match-col" id="matchProdCol"></div>
@@ -75,32 +95,34 @@
 </div>
 
 <script src="common.js"></script>
+<script src="dragon.js"></script>
 <script>
-// Visual demo: 4 groups of 3
-renderGroupsVisual(document.getElementById('demo-groups'), 4, 3, '⭐');
+// Visual demo: 4 nests of 3 eggs
+renderNests(document.getElementById('demo-nests'), 4, 3, 'ember', 'Nest');
 
 // "We do" step: hands-on build-it-yourself, before the independent quiz below
 const buildRounds = [
-  {total:4, numBoxes:2, perBox:2, emoji:'⭐'},
-  {total:9, numBoxes:3, perBox:3, emoji:'🍎'},
-  {total:8, numBoxes:4, perBox:2, emoji:'🎈'},
+  {total:4, numNests:2, perNest:2, item:'shadow'},
+  {total:9, numNests:3, perNest:3, item:'forest'},
+  {total:8, numNests:4, perNest:2, item:'gold'},
 ];
 let buildRoundIdx = 0;
 function loadBuildRound(){
   const el = document.getElementById('buildActivity');
   const round = buildRounds[buildRoundIdx];
-  initBuildActivity(el, {
-    total: round.total, numBoxes: round.numBoxes, perBox: round.perBox, emoji: round.emoji,
+  initNestActivity(el, {
+    total: round.total, numNests: round.numNests, perNest: round.perNest, item: round.item,
+    successText: (t, n, p) => `🐲 ${n} nests × ${p} eggs = ${t}! That's ${n} × ${p} = ${t}.`,
     onComplete: (successEl) => {
       const btn = document.createElement('button');
       btn.className = 'btn green';
       btn.style.marginTop = '10px';
       btn.style.display = 'block';
       if(buildRoundIdx < buildRounds.length - 1){
-        btn.textContent = 'Try another →';
+        btn.textContent = 'Next clutch of eggs →';
         btn.onclick = () => { buildRoundIdx++; loadBuildRound(); };
       } else {
-        btn.textContent = "Great work — I'm ready for the quiz below!";
+        btn.textContent = "Great work — I'm ready for Hatchery Practice!";
         btn.onclick = () => { btn.remove(); };
       }
       successEl.appendChild(btn);
@@ -116,16 +138,14 @@ loadBuildRound();
   for(let c=1;c<=10;c++) html += `<th>${c}</th>`;
   html += '</tr>';
   for(let r=1;r<=10;r++){
-    html += `<tr><th style="text-align:right;padding-right:8px">${r}&times;</th>`;
-    for(let c=1;c<=10;c++){
-      html += `<td style="padding:3px 6px;border:1px solid #e4e9f2">${r*c}</td>`;
-    }
+    html += `<tr><th style="text-align:right">${r}&times;</th>`;
+    for(let c=1;c<=10;c++) html += `<td>${r*c}</td>`;
     html += '</tr>';
   }
   t.innerHTML = html;
 })();
 
-// Part 1: tables 1-10, 4 questions each = 40 questions
+// Part 1: tables 1-10, 4 questions each = 40 questions (t nests × a/t eggs)
 const tableQuestions = [
   {t:1, q:'1 × 3', a:3,  choices:[3,2,4,5]},
   {t:1, q:'1 × 7', a:7,  choices:[7,6,8,9]},
@@ -190,7 +210,8 @@ const matchingPairs = [
   {expr:'9 × 4', product:36},
 ];
 
-// Part 3: missing number (8) + word problems (6) = 14 questions
+// Part 3: missing number (8) + dragon adventures (6) = 14 questions.
+// Adventures draw `nests` groups of `per` items so the picture matches the story.
 const laterQuestions = [
   {section:'Missing Number', q:'3 × ? = 21', a:7, choices:[7,6,8,5]},
   {section:'Missing Number', q:'? × 4 = 28', a:7, choices:[7,6,8,9]},
@@ -200,12 +221,18 @@ const laterQuestions = [
   {section:'Missing Number', q:'? × 7 = 63', a:9, choices:[9,8,10,7]},
   {section:'Missing Number', q:'8 × ? = 32', a:4, choices:[4,3,5,6]},
   {section:'Missing Number', q:'? × 9 = 45', a:5, choices:[5,4,6,7]},
-  {section:'Word Problems', q:'🖍️ Each box holds 6 crayons. How many crayons are in 4 boxes?', a:24, choices:[24,20,28,18]},
-  {section:'Word Problems', q:'🕷️ A spider has 8 legs. How many legs do 5 spiders have?', a:40, choices:[40,32,48,35]},
-  {section:'Word Problems', q:'🪑 There are 7 rows of chairs with 6 chairs in each row. How many chairs are there in total?', a:42, choices:[42,36,48,35]},
-  {section:'Word Problems', q:'📖 Amara reads 9 pages every day. How many pages does she read in 5 days?', a:45, choices:[45,40,50,36]},
-  {section:'Word Problems', q:'✨ A pack of stickers has 4 sheets, and each sheet has 8 stickers. How many stickers are in the pack?', a:32, choices:[32,28,36,24]},
-  {section:'Word Problems', q:'📚 3 shelves each hold 9 books. How many books are there in total?', a:27, choices:[27,24,30,18]},
+  {section:'Word Problems', q:'🥚 Each nest in the Hatchery holds <b>6 dragon eggs</b>. How many eggs are in <b>4 nests</b>?',
+    a:24, choices:[24,20,28,18], nests:4, per:6, item:'storm', label:'Nest'},
+  {section:'Word Problems', q:'🔥 Each dragon breathes <b>8 fireballs</b>. How many fireballs do <b>5 dragons</b> breathe?',
+    a:40, choices:[40,32,48,35], nests:5, per:8, item:'🔥', label:'Dragon'},
+  {section:'Word Problems', q:'🧝 The Dragon Riders line up in <b>7 rows</b> with <b>6 riders</b> in each row. How many riders are there?',
+    a:42, choices:[42,36,48,35], nests:7, per:6, item:'🧝', label:'Row'},
+  {section:'Word Problems', q:'🐟 A baby dragon eats <b>9 fish</b> every day. How many fish does it eat in <b>5 days</b>?',
+    a:45, choices:[45,40,50,36], nests:5, per:9, item:'🐟', label:'Day'},
+  {section:'Word Problems', q:'💎 The dragon hoard has <b>4 treasure chests</b> with <b>8 fire gems</b> in each. How many gems are there?',
+    a:32, choices:[32,28,36,24], nests:4, per:8, item:'💎', label:'Chest'},
+  {section:'Word Problems', q:'🪙 <b>3 caves</b> each hold <b>9 gold coins</b>. How many coins are there in total?',
+    a:27, choices:[27,24,30,18], nests:3, per:9, item:'🪙', label:'Cave'},
 ];
 
 const LESSON_KEY = 'lesson1';
@@ -228,27 +255,43 @@ function shuffle(arr){
 
 function updateHeader(){
   document.getElementById('qcount').textContent = `Progress: ${done} / ${TOTAL}`;
-  document.getElementById('scorecount').textContent = `Score: ${score}`;
+  document.getElementById('scorecount').textContent = `🔥 Score: ${score}`;
 }
 
-function renderTableQuestion(){
-  answered = false;
-  const item = tableQuestions[idx];
-  document.getElementById('sectionLabel').textContent = `The ${item.t}s Table`;
-  const tableDemo = document.getElementById('tableDemo');
-  tableDemo.style.display = 'inline-grid';
-  renderArrayGrid(tableDemo, item.t, item.a / item.t, TABLE_EMOJI[item.t - 1]);
-  document.getElementById('qtext').textContent = `${item.q} = ?`;
+// Shrink the items a little for big clutches so the picture stays on screen.
+function eggSizeFor(total){
+  return total > 60 ? '26px' : total > 40 ? '30px' : total > 24 ? '34px' : '40px';
+}
+
+function resetChoices(onPick){
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className = 'qfeedback';
   document.getElementById('nextBtn').style.display = 'none';
   const choicesEl = document.getElementById('choices');
   choicesEl.innerHTML = '';
+  return choicesEl;
+}
+
+function renderTableQuestion(){
+  answered = false;
+  const item = tableQuestions[idx];
+  const per = item.a / item.t;
+  document.getElementById('sectionLabel').textContent = `🥚 The ${item.t}s Table`;
+  const story = document.getElementById('qstory');
+  story.className = 'qstory';
+  story.innerHTML = `🐉 <b>${item.t} nest${item.t===1?'':'s'}</b> with <b>${per} eggs</b> in each. How many eggs altogether?`;
+  const demo = document.getElementById('tableDemo');
+  demo.style.display = '';
+  demo.classList.remove('hatch');
+  renderNests(demo, item.t, per, EGG_ORDER[(item.t - 1) % EGG_ORDER.length]);
+  demo.style.setProperty('--egg', eggSizeFor(item.a));
+  document.getElementById('qtext').textContent = `${item.q} = ?`;
+  const choicesEl = resetChoices();
   shuffle(item.choices).forEach(c=>{
     const btn = document.createElement('button');
     btn.className = 'choice';
     btn.textContent = c;
-    btn.onclick = () => selectAnswer(c, btn, item.a, item.q);
+    btn.onclick = () => selectAnswer(c, btn, item.a);
     choicesEl.appendChild(btn);
   });
   updateHeader();
@@ -257,45 +300,52 @@ function renderTableQuestion(){
 function renderLaterQuestion(){
   answered = false;
   const item = laterQuestions[idx];
-  document.getElementById('sectionLabel').textContent = item.section === 'Missing Number' ? '🧩 Missing Number' : '📖 Word Problems';
-  document.getElementById('tableDemo').style.display = 'none';
+  const isWord = item.section === 'Word Problems';
+  document.getElementById('sectionLabel').textContent = isWord ? '🗺️ Dragon Adventures' : '🔍 Missing Number';
+  const story = document.getElementById('qstory');
+  const demo = document.getElementById('tableDemo');
+  demo.classList.remove('hatch');
   const qtextEl = document.getElementById('qtext');
-  if(item.section === 'Missing Number'){
-    qtextEl.innerHTML = item.q.replace('?', '<span class="mbox">?</span>') + ' <span style="color:var(--sub);font-weight:500">— what goes in the box?</span>';
+  if(isWord){
+    story.className = 'qstory adventure';
+    story.innerHTML = item.q;
+    demo.style.display = '';
+    renderNests(demo, item.nests, item.per, item.item, item.label);
+    demo.style.setProperty('--egg', eggSizeFor(item.a));
+    qtextEl.textContent = '';
   } else {
-    qtextEl.textContent = item.q;
+    story.className = 'qstory';
+    story.innerHTML = '🐲 A dragon smudged one number on the Hatchery scroll. What goes in the box?';
+    demo.style.display = 'none';
+    qtextEl.innerHTML = item.q.replace('?', '<span class="mbox">?</span>');
   }
-  document.getElementById('feedback').textContent = '';
-  document.getElementById('feedback').className = 'qfeedback';
-  document.getElementById('nextBtn').style.display = 'none';
-  const choicesEl = document.getElementById('choices');
-  choicesEl.innerHTML = '';
+  const choicesEl = resetChoices();
   shuffle(item.choices).forEach(c=>{
     const btn = document.createElement('button');
     btn.className = 'choice';
     btn.textContent = c;
-    btn.onclick = () => selectAnswer(c, btn, item.a, item.section === 'Word Problems' ? item.q : `${item.q} → ${item.a}`);
+    btn.onclick = () => selectAnswer(c, btn, item.a);
     choicesEl.appendChild(btn);
   });
   updateHeader();
 }
 
-function selectAnswer(value, btn, correctAnswer, label){
+function selectAnswer(value, btn, correctAnswer){
   if(answered) return;
   answered = true;
   const feedback = document.getElementById('feedback');
-  const allBtns = document.querySelectorAll('#choices .choice');
-  allBtns.forEach(b=>{
+  document.querySelectorAll('#choices .choice').forEach(b=>{
     if(parseInt(b.textContent,10) === correctAnswer) b.classList.add('correct');
   });
   if(value === correctAnswer){
     score++;
     btn.classList.add('correct');
-    feedback.textContent = 'Correct! The answer is ' + correctAnswer + '.';
+    document.getElementById('tableDemo').classList.add('hatch');
+    feedback.textContent = `🐲 Correct! The answer is ${correctAnswer}. Dragon power!`;
     feedback.className = 'qfeedback ok';
   } else {
     btn.classList.add('wrong');
-    feedback.textContent = 'Not quite — the answer is ' + correctAnswer + '. Check the table above if you need to.';
+    feedback.textContent = `Not quite — the answer is ${correctAnswer}. Check the times table above if you need to.`;
     feedback.className = 'qfeedback no';
   }
   done++;
@@ -309,16 +359,10 @@ function selectAnswer(value, btn, correctAnswer, label){
 function nextQuestion(){
   idx++;
   if(phase === 'tables'){
-    if(idx >= tableQuestions.length){
-      startMatching();
-      return;
-    }
+    if(idx >= tableQuestions.length){ startMatching(); return; }
     renderTableQuestion();
   } else if(phase === 'later'){
-    if(idx >= laterQuestions.length){
-      finish();
-      return;
-    }
+    if(idx >= laterQuestions.length){ finish(); return; }
     renderLaterQuestion();
   }
 }
@@ -355,7 +399,7 @@ function startMatching(){
     b.onclick = () => pickProduct(b, pair.product);
     prodCol.appendChild(b);
   });
-  document.getElementById('matchStatus').textContent = `Pairs matched: 0 / ${matchingPairs.length}`;
+  document.getElementById('matchStatus').textContent = `Runes matched: 0 / ${matchingPairs.length}`;
 }
 
 function pickExpr(btn, productValue){
@@ -381,9 +425,9 @@ function pickProduct(btn, productValue){
     score++;
     done++;
     updateHeader();
-    document.getElementById('matchStatus').textContent = `Pairs matched: ${matchSolved} / ${matchingPairs.length}`;
+    document.getElementById('matchStatus').textContent = `Runes matched: ${matchSolved} / ${matchingPairs.length}`;
     if(matchSolved >= matchingPairs.length){
-      document.getElementById('matchStatus').textContent = 'All matched! Nice work.';
+      document.getElementById('matchStatus').textContent = '🐲 All runes matched! The dragons roar with joy.';
       setTimeout(startLater, 700);
     }
   } else {
@@ -392,7 +436,7 @@ function pickProduct(btn, productValue){
   }
 }
 
-// --- Part 3 (missing number + word problems) ---
+// --- Part 3 (missing number + dragon adventures) ---
 function startLater(){
   phase = 'later';
   idx = 0;
@@ -407,10 +451,14 @@ function finish(){
   document.getElementById('matchBlock').style.display = 'none';
   document.getElementById('qcount').textContent = 'Done!';
   const rec = mathSave(LESSON_KEY, score, TOTAL);
+  const rank = score === TOTAL ? '🏆 Dragon Master — a perfect Hatchery!'
+             : score >= 45    ? '🐉 Dragon Rider — the Hatchery is in good hands!'
+             :                  '🥚 Egg Keeper — practise the tables and try again!';
   const banner = document.getElementById('doneBanner');
   banner.style.display = 'block';
-  banner.innerHTML = `You scored ${score} / ${TOTAL} (best so far: ${rec.best} / ${TOTAL}).<br>
-    <a class="btn green" style="margin-top:10px" href="lesson2-division-basics.html">Continue to Lesson 2: What Is Division? →</a>`;
+  banner.innerHTML = `<span class="rank">${rank}</span>
+    You scored ${score} / ${TOTAL} (best so far: ${rec.best} / ${TOTAL}).<br>
+    <a class="btn green" style="margin-top:10px" href="lesson2-division-basics.html">Continue to Lesson 2: Dragon Egg Division →</a>`;
 }
 
 renderTableQuestion();

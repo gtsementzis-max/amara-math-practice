@@ -77,7 +77,8 @@ function renderNests(el, numNests, perNest, item, labelPrefix){
 // holding `perNest` each. A full nest shakes and refuses. When the pool is empty,
 // opts.successText(total, numNests, perNest) is shown and opts.onComplete(successEl) fires.
 function initNestActivity(container, opts){
-  const { total, numNests, perNest, successText, onComplete } = opts;
+  const { total, numNests, perNest, onComplete } = opts;
+  const successText = opts.successText || ((t, n, p) => `🐲 ${n} nests × ${p} eggs = ${t}! That's ${n} × ${p} = ${t}.`);
   const item = opts.item || opts.type;
   const labelPrefix = opts.labelPrefix || 'Nest';
   let pool = total;

@@ -66,6 +66,7 @@ body{background:#f6f1ff}
 .egg-pool{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;min-height:62px;--egg:48px}
 
 /* quiz */
+.section-label{background:#f3ecff;color:#6d28d9}
 .qcard{border-color:#e6dcff;background:#fff}
 .qcard .nests{--egg:40px;gap:14px}
 .qstory{font-size:1.05rem;margin:4px 0 6px}

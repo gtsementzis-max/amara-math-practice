@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Dragon Scroll — Amara's Math Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="dragon.css">
+<style>
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.two-col .example{margin:0}
+.two-col .example h3{margin:0 0 6px;font-size:1.05rem;color:#9a3412}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}}
+.caption{font-size:.95rem;font-weight:700;color:var(--sub);margin:0 0 6px}
+/* D / M / S / B step badges (dragon palette) */
+.step-badge{
+  display:inline-block;font-weight:800;font-size:.8rem;
+  letter-spacing:.03em;text-transform:uppercase;border-radius:99px;padding:4px 14px;
+}
+.step-d{background:#f3ecff;color:#6d28d9}
+.step-m{background:#e6fbfa;color:#0f766e}
+.step-s{background:#fdeaea;color:#b91c1c}
+.step-b{background:#fff7e6;color:#b45309}
+.rule-row{display:flex;align-items:flex-start;gap:12px;margin:14px 0}
+.rule-row .step-badge{flex:0 0 auto;margin-top:2px;white-space:nowrap}
+.rule-row p{margin:0;flex:1}
+.demo-expr{
+  text-align:center;font-size:1.6rem;font-weight:800;color:var(--ink);
+  background:#f3ecff;border:1px solid #dccbff;border-radius:14px;padding:14px 12px;margin:10px 0;
+}
+.demo-step{
+  background:#fff;border:1px solid #e6dcff;border-radius:12px;
+  padding:10px 14px;margin:8px 0;font-size:.98rem;
+}
+.demo-step .step-badge{margin-right:8px}
+.demo-step.final{background:#e8f9ee;border-color:#bdeecb;color:#15803d;font-weight:700}
+.demo-pic{min-height:40px}
+/* we-do scroll activity */
+.scroll-q{font-weight:700;font-size:1.05rem;margin:10px 0 8px}
+.scroll-q .step-badge{margin-right:8px}
+.scroll-hint{color:#b45309;font-weight:700;font-size:.95rem;margin:0 0 8px}
+.scroll-pic{display:inline-block;border-radius:12px;padding:4px 10px;transition:box-shadow .2s}
+.scroll-pic.flash{box-shadow:0 0 0 4px rgba(34,197,94,.45);background:#f0fdf4}
+.choice.shake{animation:nestshake .4s;border-color:var(--red)}
+.qkind{
+  display:inline-block;background:#fff4e5;color:#c2410c;border:1px solid #f8d5a3;
+  font-weight:800;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;
+  border-radius:99px;padding:3px 12px;margin-bottom:8px;
+}
+.qstory.adventure{font-size:1.2rem;font-weight:700;line-height:1.45}
+/* six-ways recap */
+.six-row{border-top:1px dashed #dccbff;padding:12px 0 6px}
+.six-row h3{margin:0 0 4px;font-size:1.05rem;color:#6d28d9}
+.six-row p{margin:0 0 6px}
+.six-row .nests{margin:10px 0;gap:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav"><a class="back" href="index.html">&larr; Back to Math Practice</a></div>
+
+  <div class="dragon-hero">
+    <div class="big">📜</div>
+    <div class="txt">
+      <span class="badge">Lesson 7 · Long division</span>
+      <h1>The Dragon Scroll</h1>
+      <p>Every Dragon Master keeps a scroll — the fastest way to split any hoard, however big. It is the Big 7 ladder Amara already knows, written neatly: biggest chunk first, one place value at a time, four steps that repeat.</p>
+    </div>
+  </div>
+
+  <!-- Card 1: ladder vs scroll -->
+  <div class="card">
+    <h2><span class="ico">🪜</span> From the ladder to the scroll</h2>
+    <div class="two-col">
+      <div class="example">
+        <h3>Big 7 ladder (Lesson 6)</h3>
+        <p class="caption">72 &divide; 3, chunk by chunk</p>
+        <div id="ladder1"></div>
+      </div>
+      <div class="example">
+        <h3>The scroll</h3>
+        <p class="caption">72 &divide; 3, one place value at a time</p>
+        <div id="scroll1"></div>
+      </div>
+    </div>
+    <div class="explain">
+      Same 72 &divide; 3, same chunks (20 then 4), same answer <b>24</b>. The scroll just takes the <b>biggest chunk first</b> — the tens — then the ones.
+    </div>
+  </div>
+
+  <!-- Card 2: the four steps -->
+  <div class="card">
+    <h2><span class="ico">🐉</span> The four steps: Dragons Munch Sweet Berries</h2>
+    <div class="rule-row">
+      <span class="step-badge step-d">D &middot; Divide</span>
+      <p>How many times does the divisor go into the number you are looking at? Write that digit on top.</p>
+    </div>
+    <div class="rule-row">
+      <span class="step-badge step-m">M &middot; Multiply</span>
+      <p>Multiply that digit by the divisor. Write the answer underneath.</p>
+    </div>
+    <div class="rule-row">
+      <span class="step-badge step-s">S &middot; Subtract</span>
+      <p>Subtract to see what is left. It must be <b>SMALLER</b> than the divisor — if not, your D digit was too small.</p>
+    </div>
+    <div class="rule-row">
+      <span class="step-badge step-b">B &middot; Bring down</span>
+      <p>Bring down the next digit and start again at D.</p>
+    </div>
+    <p class="note">The classic mnemonic is <b>Does McDonald's Sell Burgers</b>. The dragon version is <b>Dragons Munch Sweet Berries</b> — same four steps.</p>
+  </div>
+
+  <!-- Card 3: I do — watch the scroll unroll -->
+  <div class="card">
+    <h2><span class="ico">📜</span> Watch the scroll unroll</h2>
+    <p class="note" style="margin-top:-4px">Tap through each step. Watch which digit gets written and where — Divide, Multiply, Subtract, Bring down, again and again.</p>
+    <div class="section-label" id="scrollProgress">Example 1 of 4</div>
+    <div class="demo-expr" id="scrollExpr"></div>
+    <div class="demo-pic" id="scrollPic"></div>
+    <div id="scrollSteps"></div>
+    <div style="text-align:right;margin-top:10px">
+      <button class="btn" id="scrollBtn">Show next step</button>
+    </div>
+  </div>
+
+  <!-- Card 4: We do — your turn at the scroll -->
+  <div class="card">
+    <h2><span class="ico">✍️</span> Your turn at the scroll</h2>
+    <p class="note" style="margin-top:-4px">Now you write the scroll. For each step, pick the right number — every correct pick writes it onto the scroll for you.</p>
+    <div id="scrollActivity"></div>
+  </div>
+
+  <!-- Card 5: You do (scored) -->
+  <div class="card">
+    <h2><span class="ico" id="section-ico">📜</span> <span id="section-title">Scroll Trials</span></h2>
+    <p class="note" id="section-note" style="margin-top:-4px"></p>
+    <div class="progress-strip">
+      <span id="qcount">Progress: 1 / 15</span>
+      <span id="scorecount">🔥 Score: 0</span>
+    </div>
+    <div class="qcard">
+      <div id="qkind"></div>
+      <div class="qstory" id="qstory"></div>
+      <div id="qDemo"></div>
+      <div class="qtext" id="qtext"></div>
+      <div class="choices" id="choices"></div>
+      <div class="qfeedback" id="feedback"></div>
+    </div>
+    <div style="text-align:right">
+      <button class="btn" id="nextBtn" style="display:none" onclick="nextQuestion()">Next &rarr;</button>
+    </div>
+    <div class="done-banner" id="doneBanner"></div>
+  </div>
+
+  <!-- Card 6: six ways to see division (recap) -->
+  <div class="card">
+    <h2><span class="ico">🧭</span> Six ways to see division</h2>
+    <div class="explain">
+      You now know <b>SIX</b> ways to solve the same division. Here is <b>52 &divide; 4</b> done every way — they all agree.
+    </div>
+    <div class="six-row">
+      <h3>1. Equal groups</h3>
+      <p>Share 52 coins into 4 chests: <b>13</b> in each.</p>
+      <div id="six1"></div>
+    </div>
+    <div class="six-row">
+      <h3>2. Sharing or grouping</h3>
+      <p><b>Sharing:</b> 52 shared into 4 chests &rarr; 13 each.</p>
+      <p><b>Grouping:</b> how many 4s fit in 52? &rarr; 13 groups.</p>
+      <p class="note">Same answer, two questions.</p>
+    </div>
+    <div class="six-row">
+      <h3>3. Array and box</h3>
+      <p>4 rows of 13 = 52, so the missing side is <b>13</b>.</p>
+      <div id="six3a"></div>
+      <div id="six3b"></div>
+    </div>
+    <div class="six-row">
+      <h3>4. Number line</h3>
+      <p>Hop back by 4 from 52: <b>13</b> hops, land on 0.</p>
+      <div id="six4"></div>
+    </div>
+    <div class="six-row">
+      <h3>5. Big 7 ladder</h3>
+      <p>Take 10 groups (40), then 3 groups (12): <b>13</b>.</p>
+      <div id="six5"></div>
+    </div>
+    <div class="six-row">
+      <h3>6. The scroll</h3>
+      <p>Divide, Multiply, Subtract, Bring down.</p>
+      <div id="six6"></div>
+    </div>
+    <p class="note">All six say <b>52 &divide; 4 = 13</b>. Use the one that makes sense to you — a Dragon Master knows them all.</p>
+  </div>
+
+  <footer class="foot">Amara's Math Practice — practice runs entirely on this device.</footer>
+</div>
+
+<script src="common.js"></script>
+<script src="dragon.js"></script>
+<script>
+const STEP_LABEL = {D:'D — Divide', M:'M — Multiply', S:'S — Subtract', B:'B — Bring down'};
+function stepBadge(kind){ return `<span class="step-badge step-${kind.toLowerCase()}">${STEP_LABEL[kind]}</span>`; }
+
+// ---------- Card 1: ladder vs scroll ----------
+renderChunkLadder(document.getElementById('ladder1'), 72, 3, [{groups:20},{groups:4}], {revealed:2});
+renderLongDivision(document.getElementById('scroll1'), 72, 3, {revealed:99});
+
+// ---------- shared click-through reveal engine (same pattern as Lesson 6) ----------
+// cfg: {examples, ids:{progress,expr,pic,steps,btn}, stepsOf(ex), renderPic(ex, stepIdx, el), stepCard(ex, i), finalNote(ex)}
+function makeRevealDemo(cfg){
+  let exIdx = 0, stepIdx = 0;
+  const el = id => document.getElementById(id);
+  function render(){
+    const ex = cfg.examples[exIdx];
+    const n = cfg.stepsOf(ex);
+    el(cfg.ids.progress).textContent = `Example ${exIdx+1} of ${cfg.examples.length}`;
+    el(cfg.ids.expr).textContent = stepIdx >= n ? `${ex.t} ÷ ${ex.d} = ${ex.answer}` : `${ex.t} ÷ ${ex.d} = ?`;
+    cfg.renderPic(ex, stepIdx, el(cfg.ids.pic));
+    let html = '';
+    for(let i=0; i<stepIdx; i++) html += cfg.stepCard(ex, i);
+    if(stepIdx >= n) html += `<div class="demo-step final">${cfg.finalNote(ex)}</div>`;
+    el(cfg.ids.steps).innerHTML = html;
+    const btn = el(cfg.ids.btn);
+    btn.disabled = false;
+    if(stepIdx < n) btn.textContent = 'Show next step';
+    else if(exIdx < cfg.examples.length - 1) btn.textContent = 'Next example →';
+    else { btn.textContent = 'Demo complete!'; btn.disabled = true; }
+  }
+  el(cfg.ids.btn).onclick = () => {
+    const n = cfg.stepsOf(cfg.examples[exIdx]);
+    if(stepIdx < n) stepIdx++;
+    else if(exIdx < cfg.examples.length - 1){ exIdx++; stepIdx = 0; }
+    render();
+  };
+  render();
+}
+
+// ---------- Card 3: watch the scroll unroll ----------
+const scratch = document.createElement('div');
+const scrollExamples = [
+  {t:72,  d:3, note:'Tens first (2 on top), then ones (4 on top). Nothing left — 72 ÷ 3 = 24, the same answer the ladder gave.'},
+  {t:96,  d:4, note:'4 into 9 is 2 (that is 20 groups), then 4 into 16 is 4. 24 again.'},
+  {t:85,  d:4, note:'The last subtraction leaves 1. 1 is smaller than 4 and there is nothing left to bring down — that is the remainder. 85 ÷ 4 = 21 R1.'},
+  {t:258, d:6, note:'2 was too small, so we started with 25. The scroll works exactly the same with three digits — it just repeats one more time.'},
+];
+scrollExamples.forEach(ex => {
+  ex.steps = renderLongDivision(scratch, ex.t, ex.d, {revealed:0});
+  ex.answer = ex.steps.answer;
+});
+makeRevealDemo({
+  examples: scrollExamples,
+  ids:{progress:'scrollProgress', expr:'scrollExpr', pic:'scrollPic', steps:'scrollSteps', btn:'scrollBtn'},
+  stepsOf: ex => ex.steps.length + 1,
+  renderPic(ex, step, el){
+    renderLongDivision(el, ex.t, ex.d, {revealed: Math.min(step, ex.steps.length)});
+  },
+  stepCard(ex, i){
+    const s = ex.steps[i];
+    if(!s) return '';
+    let extra = '';
+    if(s.kind === 'S' && s.final){
+      extra = s.diff > 0
+        ? ` — ${s.diff} is smaller than ${ex.d} and there is nothing left to bring down: that is the remainder.`
+        : ' — nothing left, and no more digits to bring down.';
+    }
+    if(s.kind === 'D' && s.digit === 0) extra = ` — ${ex.d} does not fit even once, so we write a 0.`;
+    return `<div class="demo-step">${stepBadge(s.kind)}${s.text}${extra}</div>`;
+  },
+  finalNote(ex){
+    return `<b>${ex.t} ÷ ${ex.d} = ${ex.answer}</b>. ${ex.note}`;
+  },
+});
+
+// ---------- Card 4: We do — your turn at the scroll ----------
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+// Two near distractors for a step, in priority order, never equal to the answer or each other.
+function scrollDistractors(step, divisor){
+  const a = step.answer;
+  let cands;
+  if(step.kind === 'D') cands = [a+1, a-1, a+2, a-2, a+3].filter(v => v >= 0 && v <= 9);
+  else if(step.kind === 'M') cands = [a+divisor, a-divisor, a+2*divisor, a-2*divisor, a+1].filter(v => v >= 0);
+  else if(step.kind === 'S') cands = [a+1, a-1, a+2, a+3].filter(v => v >= 0);
+  else cands = [step.next, a+1, a-1, a+10, a+2].filter(v => v >= 0);
+  const out = [];
+  cands.forEach(v => { if(v !== a && !out.includes(v) && out.length < 2) out.push(v); });
+  let fill = a + 4;
+  while(out.length < 2){ if(fill !== a && !out.includes(fill)) out.push(fill); fill++; }
+  return out;
+}
+
+function initScrollActivity(container, opts){
+  const { dividend, divisor, onComplete } = opts;
+  container.innerHTML = `
+    <div class="build-wrap">
+      <div class="qtext">${dividend} ÷ ${divisor}</div>
+      <div class="scroll-pic" data-role="pic"></div>
+      <div class="scroll-q" data-role="q"></div>
+      <div class="scroll-hint" data-role="hint"></div>
+      <div class="choices" data-role="choices"></div>
+      <div class="build-status" data-role="status"></div>
+      <div class="build-success" data-role="success"></div>
+    </div>`;
+  const picEl = container.querySelector('[data-role="pic"]');
+  const qEl = container.querySelector('[data-role="q"]');
+  const hintEl = container.querySelector('[data-role="hint"]');
+  const choicesEl = container.querySelector('[data-role="choices"]');
+  const statusEl = container.querySelector('[data-role="status"]');
+  const successEl = container.querySelector('[data-role="success"]');
+  const steps = renderLongDivision(picEl, dividend, divisor, {revealed:0});
+  let revealed = 0, locked = false;
+
+  function ask(){
+    const s = steps[revealed];
+    qEl.innerHTML = `${stepBadge(s.kind)}${s.q}`;
+    hintEl.textContent = (s.kind === 'D' && s.digit === 0)
+      ? `${divisor} does not fit into ${s.current} even once — write a 0 and bring down the next digit.`
+      : '';
+    statusEl.textContent = '';
+    choicesEl.innerHTML = '';
+    shuffle([s.answer].concat(scrollDistractors(s, divisor))).forEach(v => {
+      const btn = document.createElement('button');
+      btn.className = 'choice';
+      btn.textContent = v;
+      btn.onclick = () => pick(v, btn);
+      choicesEl.appendChild(btn);
+    });
+  }
+  function pick(v, btn){
+    if(locked) return;
+    const s = steps[revealed];
+    if(v !== s.answer){
+      btn.classList.add('wrong', 'shake');
+      statusEl.textContent = 'Try again';
+      setTimeout(() => btn.classList.remove('shake'), 400);
+      return;
+    }
+    locked = true;
+    btn.classList.add('correct');
+    revealed++;
+    renderLongDivision(picEl, dividend, divisor, {revealed});
+    picEl.classList.add('flash');
+    setTimeout(() => {
+      picEl.classList.remove('flash');
+      locked = false;
+      if(revealed < steps.length){ ask(); return; }
+      qEl.innerHTML = '';
+      hintEl.textContent = '';
+      choicesEl.innerHTML = '';
+      successEl.style.display = 'block';
+      successEl.textContent = `✅ ${dividend} ÷ ${divisor} = ${steps.answer}`;
+      if(onComplete) onComplete(successEl);
+    }, 450);
+  }
+  ask();
+}
+
+const scrollRounds = [
+  {dividend:84,  divisor:4},
+  {dividend:91,  divisor:7},
+  {dividend:258, divisor:6},
+  {dividend:439, divisor:4},
+];
+let scrollRoundIdx = 0;
+function loadScrollRound(){
+  const el = document.getElementById('scrollActivity');
+  const round = scrollRounds[scrollRoundIdx];
+  initScrollActivity(el, {
+    dividend: round.dividend, divisor: round.divisor,
+    onComplete: (successEl) => {
+      const btn = document.createElement('button');
+      btn.className = 'btn green';
+      btn.style.marginTop = '10px';
+      btn.style.display = 'block';
+      if(scrollRoundIdx < scrollRounds.length - 1){
+        btn.textContent = 'Next scroll →';
+        btn.onclick = () => { scrollRoundIdx++; loadScrollRound(); };
+      } else {
+        btn.textContent = "I'm ready for the Scroll Trials!";
+        btn.onclick = () => { btn.remove(); };
+      }
+      successEl.appendChild(btn);
+    }
+  });
+}
+loadScrollRound();
+
+// ---------- Card 5: You do — the quiz ----------
+// t = dividend, d = divisor, qt = quotient, r = remainder (t = qt × d + r, r < d); choices[0] is the answer.
+const questions = [
+  // Part A: two-digit scrolls
+  {part:'A', t:84, d:4, qt:21, r:0, choices:['21','22','24','20']},
+  {part:'A', t:75, d:5, qt:15, r:0, choices:['15','14','16','25']},
+  {part:'A', t:96, d:3, qt:32, r:0, choices:['32','31','33','23']},
+  {part:'A', t:91, d:7, qt:13, r:0, choices:['13','12','14','11']},
+  {part:'A', t:87, d:4, qt:21, r:3, choices:['21 R3','22 R1','21 R2','20 R7']},
+  {part:'A', t:59, d:5, qt:11, r:4, choices:['11 R4','12 R1','10 R9','11 R3']},
+  // Part B: three-digit scrolls
+  {part:'B', t:258, d:6, qt:43,  r:0, choices:['43','42','44','34']},
+  {part:'B', t:336, d:8, qt:42,  r:0, choices:['42','41','44','24']},
+  {part:'B', t:476, d:7, qt:68,  r:0, choices:['68','67','69','86']},
+  {part:'B', t:615, d:5, qt:123, r:0, choices:['123','122','132','113']},
+  {part:'B', t:439, d:4, qt:109, r:3, choices:['109 R3','108 R7','110 R1','19 R3']},
+  // Part C: scroll adventures (word problems)
+  {part:'C', kind:'Sharing',  t:144, d:6, qt:24, r:0, choices:['24','23','25','26'],
+    q:'🥚 <b>144 dragon eggs</b> are shared equally between <b>6 hatcheries</b>. How many eggs in each?'},
+  {part:'C', kind:'Grouping', t:182, d:7, qt:26, r:0, choices:['26','25','27','24'],
+    q:'🧝 <b>182 dragon riders</b> line up in rows of <b>7</b>. How many rows?'},
+  {part:'C', kind:'Sharing',  t:315, d:9, qt:35, r:0, choices:['35','34','36','45'],
+    q:'🪙 <b>315 gold coins</b> are shared equally into <b>9 chests</b>. How many in each chest?'},
+  {part:'C', kind:'Grouping', t:250, d:8, qt:31, r:2, choices:['31 R2','32 R2','31 R1','30 R10'],
+    q:'🐟 <b>250 fish</b>, and each dragon eats <b>8</b>. How many dragons can be fed, and how many fish are left?'},
+];
+
+let idx = 0, score = 0, answered = false;
+const LESSON_KEY = 'lesson7', TOTAL = questions.length;
+
+const SECTIONS = {
+  A:{ico:'📜', title:'Part A — Two-digit scrolls',
+     note:'Unroll the scroll one step at a time: <b>Divide, Multiply, Subtract, Bring down</b>. Say the remainder if there is one.'},
+  B:{ico:'🐉', title:'Part B — Three-digit scrolls',
+     note:'Three digits now. If the first digit is too small, start with the first <b>two</b>. And when the divisor does not fit, <b>write a 0</b> on top!'},
+  C:{ico:'🗺️', title:'Part C — Scroll Adventures',
+     note:'First say whether it is <b>Sharing</b> (how many in each) or <b>Grouping</b> (how many groups). Then unroll the scroll.'},
+};
+
+function answerOf(item){ return item.r ? `${item.qt} R${item.r}` : `${item.qt}`; }
+function checkExplain(item){
+  return `${item.d} × ${item.qt} = ${item.d * item.qt}${item.r ? `, with ${item.r} left over` : ''}`;
+}
+
+function renderQuestion(){
+  answered = false;
+  const item = questions[idx];
+  const sec = SECTIONS[item.part];
+  document.getElementById('qcount').textContent = `Progress: ${idx+1} / ${TOTAL}`;
+  document.getElementById('scorecount').textContent = `🔥 Score: ${score}`;
+  document.getElementById('section-ico').textContent = sec.ico;
+  document.getElementById('section-title').textContent = sec.title;
+  document.getElementById('section-note').innerHTML = sec.note;
+
+  const kindEl = document.getElementById('qkind');
+  kindEl.innerHTML = item.part === 'C' ? `<span class="qkind">${item.kind}</span>` : '';
+
+  const story = document.getElementById('qstory');
+  story.className = 'qstory' + (item.part === 'C' ? ' adventure' : '');
+  story.innerHTML = item.part === 'C' ? item.q : 'Dragons Munch Sweet Berries — unroll the scroll.';
+
+  const demo = document.getElementById('qDemo');
+  demo.removeAttribute('style');
+  renderLongDivision(demo, item.t, item.d, {revealed:0});
+
+  document.getElementById('qtext').textContent = item.part === 'C' ? '' : `${item.t} ÷ ${item.d} = ?`;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'qfeedback';
+  document.getElementById('nextBtn').style.display = 'none';
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  shuffle(item.choices).forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c;
+    btn.onclick = () => selectAnswer(c, btn);
+    choicesEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(value, btn){
+  if(answered) return;
+  answered = true;
+  const item = questions[idx];
+  const correct = answerOf(item);
+  const feedback = document.getElementById('feedback');
+  document.querySelectorAll('#choices .choice').forEach(b=>{
+    if(b.textContent === correct) b.classList.add('correct');
+  });
+  if(value === correct){
+    score++;
+    btn.classList.add('correct');
+    renderLongDivision(document.getElementById('qDemo'), item.t, item.d, {revealed:99});
+    feedback.textContent = `🐲 Correct! ${item.t} ÷ ${item.d} = ${correct} — ${checkExplain(item)}. Dragon power!`;
+    feedback.className = 'qfeedback ok';
+  } else {
+    btn.classList.add('wrong');
+    feedback.textContent = `Not quite — ${checkExplain(item)}, so ${item.t} ÷ ${item.d} = ${correct}. Unroll the scroll step by step: Dragons Munch Sweet Berries.`;
+    feedback.className = 'qfeedback no';
+  }
+  document.getElementById('scorecount').textContent = `🔥 Score: ${score}`;
+  document.getElementById('nextBtn').style.display = 'inline-block';
+  document.getElementById('nextBtn').textContent = (idx === TOTAL-1) ? 'Finish' : 'Next →';
+}
+
+function nextQuestion(){
+  idx++;
+  if(idx >= TOTAL){ finish(); return; }
+  renderQuestion();
+}
+
+function finish(){
+  document.querySelector('.qcard').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('qcount').textContent = 'Done!';
+  const rec = mathSave(LESSON_KEY, score, TOTAL);
+  const rank = score === TOTAL ? '🏆 Dragon Master of the Scroll — every hoard is yours!'
+             : score >= 11    ? '📜 Scroll Keeper — the four steps are in your claws!'
+             :                  '🐣 Scroll Apprentice — Dragons Munch Sweet Berries, one step at a time. Try again!';
+  const banner = document.getElementById('doneBanner');
+  banner.style.display = 'block';
+  let msg = `<span class="rank">${rank}</span>You scored ${score} / ${TOTAL} (best so far: ${rec.best} / ${TOTAL}).`;
+  if(rec.best === TOTAL) msg += `<br>You've got it! 🎉`;
+  else msg += `<br>Nice work — you can always come back and try again.`;
+  msg += `<br><a class="btn green" style="margin-top:10px" href="index.html">Back to Math Practice →</a>`;
+  banner.innerHTML = msg;
+}
+
+renderQuestion();
+
+// ---------- Card 6: six ways to see 52 ÷ 4 ----------
+const six1 = document.getElementById('six1');
+renderNestsWithLeftover(six1, 4, 13, '🪙', 'Chest', 0);
+six1.style.setProperty('--egg', '22px');
+renderArrayGrid(document.getElementById('six3a'), 4, 13, '🪙');
+renderAreaBox(document.getElementById('six3b'), 4, [{part:40, groups:10},{part:12, groups:3}], {revealed:2, sumLine:true});
+renderNumberLineHops(document.getElementById('six4'), 52, 4);
+renderChunkLadder(document.getElementById('six5'), 52, 4, [{groups:10},{groups:3}], {revealed:2});
+renderLongDivision(document.getElementById('six6'), 52, 4, {revealed:99});
+</script>
+</body>
+</html>

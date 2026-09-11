@@ -321,3 +321,105 @@ function initChunkActivity(container, opts){
   });
   render();
 }
+
+
+// Standard long division on the "scroll": quotient digits on top, `divisor ⟌ dividend`
+// (the bracket is CSS borders on the dividend cells), then the work rows underneath.
+// Computes the algorithm itself as a list of micro-steps {kind:'D'|'M'|'S'|'B', text, q, answer, ...}:
+//   D  How many times does the divisor go into the current number? Writes the quotient digit
+//      (a 0 is written too). If the first digit is smaller than the divisor, the first current
+//      number is the first TWO digits and step.note says so.
+//   M  digit × divisor = product, written under the current number.
+//   S  current − product = diff: subtraction line + difference. The final S is flagged
+//      step.final; its diff is the remainder (an "R<r>" tag goes on top when r > 0).
+//   B  Bring down the next digit → new current number.
+// `text` is the full statement, `q` the same as a question, `answer` the number asked for.
+// opts.revealed = how many micro-steps to draw (0 = just the bracket with dividend and divisor).
+// The cells written by the most recent revealed step get the `now` highlight (skipped when
+// opts.revealed exceeds the step count, so a fully worked scroll shows no highlight).
+// Returns the steps array with .quotient, .remainder and .answer ('109 R3') attached.
+function renderLongDivision(el, dividend, divisor, opts){
+  opts = opts || {};
+  const digits = String(dividend).split('').map(Number);
+  const n = digits.length;
+  const steps = [], writes = [], quotDigits = [];
+  const col = i => i + 1;   // dividend digit index → grid column (column 0 holds the divisor)
+  const put = (row, c, text, cls) => writes.push({step: steps.length - 1, row, c, text, cls});
+  let current = digits[0], pos = 0, note = '', cycle = 0;
+  if(current < divisor && n > 1){
+    current = current * 10 + digits[1];
+    pos = 1;
+    note = `${digits[0]} is too small, so use ${current}. `;
+  }
+  while(true){
+    // D — divide
+    const digit = Math.floor(current / divisor);
+    steps.push({kind:'D', current, digit, answer:digit, note,
+      q:`${note}How many times does ${divisor} go into ${current}?`,
+      text:`${note}How many times does ${divisor} go into ${current}? ${digit}`});
+    put(0, col(pos), digit, 'quot');
+    quotDigits.push(digit);
+    note = '';
+    // M — multiply
+    const product = digit * divisor;
+    const prodRow = 2 + cycle * 2, diffRow = prodRow + 1;
+    const start = pos - String(current).length + 1;
+    const pStr = String(product), pStart = pos - pStr.length + 1;
+    steps.push({kind:'M', digit, product, answer:product,
+      q:`${digit} × ${divisor} = ?`, text:`${digit} × ${divisor} = ${product}`});
+    put(prodRow, col(pStart) - 1, '−', 'prod');
+    for(let i = 0; i < pStr.length; i++) put(prodRow, col(pStart + i), pStr[i], 'prod');
+    // S — subtract
+    const diff = current - product, last = pos >= n - 1;
+    steps.push({kind:'S', current, product, diff, answer:diff, final:last,
+      q:`${current} − ${product} = ?`, text:`${current} − ${product} = ${diff}`});
+    const dStr = String(diff);
+    for(let c = start; c <= pos; c++){
+      const k = c - (pos - dStr.length + 1);
+      put(diffRow, col(c), k >= 0 ? dStr[k] : '', 'subline' + (last && diff > 0 ? ' rem' : ''));
+    }
+    if(last){
+      if(diff > 0) put(0, n + 1, `R${diff}`, 'rem');
+      current = diff;
+      break;
+    }
+    // B — bring down
+    pos++;
+    const next = digits[pos], newCurrent = diff * 10 + next;
+    steps.push({kind:'B', prev:diff, next, newCurrent, answer:newCurrent,
+      q:`Bring down the ${next}. What number are we looking at now?`,
+      text:`Bring down the ${next} → ${newCurrent}`});
+    put(diffRow, col(pos), next, 'bring');
+    current = newCurrent;
+    cycle++;
+  }
+  const remainder = current, quotient = parseInt(quotDigits.join(''), 10);
+  steps.quotient = quotient;
+  steps.remainder = remainder;
+  steps.answer = remainder ? `${quotient} R${remainder}` : `${quotient}`;
+
+  // draw the grid: only the rows something revealed has written to (at least quotient + dividend)
+  const total = steps.length;
+  const revealed = opts.revealed == null ? total : Math.min(opts.revealed, total);
+  const highlight = (opts.revealed != null && opts.revealed <= total) ? revealed - 1 : -1;
+  const cols = n + 1 + (remainder > 0 ? 1 : 0);
+  let rows = 2;
+  writes.forEach(w => { if(w.step < revealed) rows = Math.max(rows, w.row + 1); });
+  const grid = [];
+  for(let r = 0; r < rows; r++){
+    grid.push([]);
+    for(let c = 0; c < cols; c++) grid[r].push({text:'', cls:''});
+  }
+  grid[1][0] = {text: divisor, cls:'divisor'};
+  digits.forEach((d, i) => { grid[1][col(i)] = {text: d, cls: i === 0 ? 'bracket' : 'bracket-top'}; });
+  writes.forEach(w => {
+    if(w.step >= revealed) return;
+    grid[w.row][w.c] = {text: w.text, cls: w.cls + (w.step === highlight ? ' now' : '')};
+  });
+  let s = '';
+  grid.forEach(row => row.forEach(c => { s += `<div class="cell${c.cls ? ' ' + c.cls : ''}">${c.text}</div>`; }));
+  el.className = 'longdiv';
+  el.style.gridTemplateColumns = `repeat(${cols}, auto)`;
+  el.innerHTML = s;
+  return steps;
+}

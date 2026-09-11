@@ -9,6 +9,7 @@
   --indigo:#6d28d9;
   --orange:#ea580c;
   --gold:#ca8a04;
+  --crimson:#be123c;
   --amber:#f59e0b;
   --green:#22c55e;
   --red:#ef4444;
@@ -209,3 +210,16 @@ footer.foot{text-align:center;color:var(--sub);font-size:.85rem;margin-top:30px}
 .chunk-btn{margin:4px}
 .chunk-btn:disabled{opacity:.5;cursor:default}
 .chunk-btn.shake{animation:nestshake .4s;background:var(--red)}
+
+/* standard long division "scroll" (renderLongDivision) */
+.longdiv{display:inline-grid;font-family:'Quicksand',monospace;font-weight:800;font-size:1.35rem;gap:2px 0;margin:12px 0}
+.longdiv .cell{min-width:1.1em;text-align:center;padding:2px 4px}
+.longdiv .quot{color:var(--purple)}
+.longdiv .divisor{padding-right:6px}
+.longdiv .bracket{border-left:3px solid var(--ink);border-top:3px solid var(--ink)}
+.longdiv .bracket-top{border-top:3px solid var(--ink)}
+.longdiv .prod{color:var(--teal)}
+.longdiv .subline{border-top:2px solid var(--ink)}
+.longdiv .bring{color:var(--amber)}
+.longdiv .rem{color:#b45309}
+.longdiv .now{background:#fff4e5;border-radius:6px}

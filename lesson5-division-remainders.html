@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Leftover Dragon Eggs — Amara's Math Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="dragon.css">
+<style>
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.two-col .example{margin:0}
+.two-col .example h3{margin:0 0 6px;font-size:1.05rem;color:#9a3412}
+.two-col .nests{--egg:30px;gap:12px;margin:10px 0}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}}
+.demo-nests{--egg:38px}
+.eq{text-align:center;font-size:1.3rem;font-weight:800;margin:10px 0}
+.stepper-label{font-size:.85rem;font-weight:700;color:var(--sub);text-align:center;margin-bottom:4px}
+.stepper-row .sym{font-size:1.4rem;font-weight:800;color:var(--sub)}
+.qkind{
+  display:inline-block;background:#fff4e5;color:#c2410c;border:1px solid #f8d5a3;
+  font-weight:800;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;
+  border-radius:99px;padding:3px 12px;margin-bottom:8px;
+}
+.qstory.adventure{font-size:1.2rem;font-weight:700;line-height:1.45}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav"><a class="back" href="index.html">&larr; Back to Math Practice</a></div>
+
+  <div class="dragon-hero">
+    <div class="big">🥚</div>
+    <div class="txt">
+      <span class="badge">Lesson 5 · Division with remainders</span>
+      <h1>The Leftover Dragon Eggs</h1>
+      <p>Mama Dragon has more eggs than fit evenly in her nests. The eggs that do not fit are the <i>remainder</i> — and today Amara learns to count them.</p>
+    </div>
+  </div>
+
+  <!-- Card 1: I do -->
+  <div class="card">
+    <h2><span class="ico">🥚</span> What is a remainder?</h2>
+    <div class="explain">
+      <b>7 &divide; 3</b> means share 7 eggs into 3 nests. Each nest gets 2 eggs, and 1 egg is left over.
+      We write <b>7 &divide; 3 = 2 R1</b> and say <i>2 remainder 1</i>.
+    </div>
+    <div id="demo1" class="demo-nests"></div>
+    <p class="note">The remainder is always <b>SMALLER</b> than the number of nests — if it were bigger, you could give every nest one more egg!</p>
+  </div>
+
+  <!-- Card 2: share vs group -->
+  <div class="card">
+    <h2><span class="ico">⚖️</span> Two ways to divide: share or group</h2>
+    <div class="two-col">
+      <div class="example">
+        <h3>Sharing</h3>
+        <p style="margin:0">13 eggs shared into <b>4 nests</b>. How many in each nest?</p>
+        <div id="demo-share"></div>
+        <p style="margin:0"><b>3 in each nest, 1 left over.</b> 13 &divide; 4 = 3 R1.</p>
+      </div>
+      <div class="example">
+        <h3>Grouping</h3>
+        <p style="margin:0">13 eggs, put <b>4 in each nest</b>. How many nests can you fill?</p>
+        <div id="demo-group"></div>
+        <p style="margin:0"><b>3 full nests, 1 left over.</b> 13 &divide; 4 = 3 R1.</p>
+      </div>
+    </div>
+    <p class="note">Same answer, different question — <b>sharing</b> asks <i>how many in each</i>, <b>grouping</b> asks <i>how many groups</i>.</p>
+  </div>
+
+  <!-- Card 3: number line -->
+  <div class="card">
+    <h2><span class="ico">🐾</span> Hop back on the number line</h2>
+    <div class="explain">
+      Another way: start at the total and hop back by the nest size until you cannot hop any more.
+      Count the hops — that is the answer. Where you land is the remainder.
+    </div>
+    <div id="demo-line"></div>
+    <p>14 &divide; 4: hop back 4 three times (14 &rarr; 10 &rarr; 6 &rarr; 2). 3 hops, landed on 2. <b>14 &divide; 4 = 3 R2</b>.</p>
+
+    <h2 style="font-size:1.1rem;margin-top:22px"><span class="ico">🎯</span> Try it yourself</h2>
+    <div class="stepper-row">
+      <div>
+        <div class="stepper-label">Total</div>
+        <div class="stepper">
+          <button class="btn ghost" onclick="changeTry('total',-1)">&minus;</button>
+          <span id="tryTotal">14</span>
+          <button class="btn ghost" onclick="changeTry('total',1)">+</button>
+        </div>
+      </div>
+      <div class="sym">&divide;</div>
+      <div>
+        <div class="stepper-label">Hop size</div>
+        <div class="stepper">
+          <button class="btn ghost" onclick="changeTry('step',-1)">&minus;</button>
+          <span id="tryStep">4</span>
+          <button class="btn ghost" onclick="changeTry('step',1)">+</button>
+        </div>
+      </div>
+    </div>
+    <p style="text-align:center;margin:0"><button class="btn" onclick="drawTry()">Draw the hops</button></p>
+    <div id="tryLine"></div>
+    <div class="example eq" id="tryEquation">14 &divide; 4 = 3 R2</div>
+  </div>
+
+  <!-- Card 4: We do -->
+  <div class="card">
+    <h2><span class="ico">🐲</span> Now you try: fill the nests, count the leftovers</h2>
+    <p class="note" style="margin-top:-4px">Tap a nest to place an egg. When every nest is full, the eggs still waiting are the <b>remainder</b>.</p>
+    <div id="buildActivity"></div>
+  </div>
+
+  <!-- Card 5: You do (scored) -->
+  <div class="card">
+    <h2><span class="ico" id="section-ico">🥚</span> <span id="section-title">Leftover Trials</span></h2>
+    <p class="note" id="section-note" style="margin-top:-4px"></p>
+    <div class="progress-strip">
+      <span id="qcount">Progress: 1 / 15</span>
+      <span id="scorecount">🔥 Score: 0</span>
+    </div>
+    <div class="qcard">
+      <div id="qkind"></div>
+      <div class="qstory" id="qstory"></div>
+      <div id="qDemo"></div>
+      <div class="qtext" id="qtext"></div>
+      <div class="choices" id="choices"></div>
+      <div class="qfeedback" id="feedback"></div>
+    </div>
+    <div style="text-align:right">
+      <button class="btn" id="nextBtn" style="display:none" onclick="nextQuestion()">Next &rarr;</button>
+    </div>
+    <div class="done-banner" id="doneBanner"></div>
+  </div>
+</div>
+
+<script src="common.js"></script>
+<script src="dragon.js"></script>
+<script>
+// ---------- "I do": pictures ----------
+renderNestsWithLeftover(document.getElementById('demo1'), 3, 2, 'ember', 'Nest', 1);
+renderNestsWithLeftover(document.getElementById('demo-share'), 4, 3, 'forest', 'Nest', 1);
+renderNestsWithLeftover(document.getElementById('demo-group'), 3, 4, 'storm', 'Nest', 1);
+renderNumberLineHops(document.getElementById('demo-line'), 14, 4);
+
+// ---------- number-line stepper ----------
+let tryTotal = 14, tryStep = 4;
+function changeTry(which, delta){
+  if(which === 'total') tryTotal = Math.min(24, Math.max(6, tryTotal + delta));
+  else tryStep = Math.min(6, Math.max(2, tryStep + delta));
+  document.getElementById('tryTotal').textContent = tryTotal;
+  document.getElementById('tryStep').textContent = tryStep;
+}
+function drawTry(){
+  const res = renderNumberLineHops(document.getElementById('tryLine'), tryTotal, tryStep);
+  document.getElementById('tryEquation').textContent = `${tryTotal} ÷ ${tryStep} = ${res.hops} R${res.remainder}`;
+}
+drawTry();
+
+// ---------- "We do": fill the nests, count the leftovers ----------
+const buildRounds = [
+  {total:7,  numNests:3, perNest:2, item:'shadow'},
+  {total:11, numNests:4, perNest:2, item:'gold'},
+  {total:14, numNests:3, perNest:4, item:'ember'},
+  {total:17, numNests:5, perNest:3, item:'forest'},
+];
+let buildRoundIdx = 0;
+function loadBuildRound(){
+  const el = document.getElementById('buildActivity');
+  const round = buildRounds[buildRoundIdx];
+  initRemainderActivity(el, {
+    total: round.total, numNests: round.numNests, perNest: round.perNest, item: round.item,
+    onComplete: (successEl) => {
+      const btn = document.createElement('button');
+      btn.className = 'btn green';
+      btn.style.marginTop = '10px';
+      btn.style.display = 'block';
+      if(buildRoundIdx < buildRounds.length - 1){
+        btn.textContent = 'Next clutch →';
+        btn.onclick = () => { buildRoundIdx++; loadBuildRound(); };
+      } else {
+        btn.textContent = "I'm ready for the Leftover Trials!";
+        btn.onclick = () => { btn.remove(); };
+      }
+      successEl.appendChild(btn);
+    }
+  });
+}
+loadBuildRound();
+
+// ---------- "You do": the quiz ----------
+// t = total, d = divisor, qt = quotient, r = remainder (t = qt × d + r, r < d).
+// nests/per/item/label draw the picture: nests full groups of `per`, plus `r` in the Left-over box.
+// Part B draws a hop-back number line instead of nests.
+const questions = [
+  // Part A: leftover eggs (sharing: nests = divisor, per = quotient)
+  {part:'A', t:7,  d:3, qt:2, r:1, nests:3, per:2, item:'ember',  label:'Nest', choices:['2 R1','3 R1','2 R2','1 R4']},
+  {part:'A', t:9,  d:4, qt:2, r:1, nests:4, per:2, item:'forest', label:'Nest', choices:['2 R1','2 R2','3 R0','1 R5']},
+  {part:'A', t:11, d:2, qt:5, r:1, nests:2, per:5, item:'storm',  label:'Nest', choices:['5 R1','4 R3','5 R0','6 R1']},
+  {part:'A', t:13, d:5, qt:2, r:3, nests:5, per:2, item:'shadow', label:'Nest', choices:['2 R3','3 R2','2 R2','1 R8']},
+  {part:'A', t:17, d:4, qt:4, r:1, nests:4, per:4, item:'gold',   label:'Nest', choices:['4 R1','3 R5','4 R2','5 R1']},
+  {part:'A', t:20, d:6, qt:3, r:2, nests:6, per:3, item:'ember',  label:'Nest', choices:['3 R2','2 R8','4 R0','3 R3']},
+  // Part B: hop-back number line (hops = quotient, hop size = divisor)
+  {part:'B', t:10, d:3, qt:3, r:1, choices:['3 R1','2 R4','3 R2','4 R0']},
+  {part:'B', t:15, d:4, qt:3, r:3, choices:['3 R3','4 R1','3 R2','2 R7']},
+  {part:'B', t:19, d:5, qt:3, r:4, choices:['3 R4','4 R1','3 R3','2 R9']},
+  {part:'B', t:23, d:6, qt:3, r:5, choices:['3 R5','4 R1','3 R4','2 R11']},
+  // Part C: share or group? (word problems)
+  {part:'C', kind:'Sharing',  t:14, d:4, qt:3, r:2, nests:4, per:3, item:'storm', label:'Nest', choices:['3 R2','4 R0','2 R6','3 R1'],
+    q:'🥚 Mama Dragon shares <b>14 eggs</b> equally into <b>4 nests</b>. How many in each nest, and how many are left over?'},
+  {part:'C', kind:'Grouping', t:17, d:5, qt:3, r:2, nests:3, per:5, item:'💎', label:'Chest', choices:['3 R2','4 R1','3 R1','2 R7'],
+    q:'💎 There are <b>17 fire gems</b>. Each chest holds <b>5 gems</b>. How many full chests, and how many gems are left over?'},
+  {part:'C', kind:'Sharing',  t:22, d:5, qt:4, r:2, nests:5, per:4, item:'🐟', label:'Dragon', choices:['4 R2','5 R0','4 R3','3 R7'],
+    q:'🐟 <b>22 fish</b> are shared equally between <b>5 dragons</b>. How many fish does each dragon get, and how many are left over?'},
+  {part:'C', kind:'Grouping', t:26, d:6, qt:4, r:2, nests:4, per:6, item:'🧝', label:'Row', choices:['4 R2','5 R1','4 R1','3 R8'],
+    q:'🧝 <b>26 dragon riders</b> line up in rows of <b>6</b>. How many full rows, and how many riders are left over?'},
+  {part:'C', kind:'Sharing',  t:31, d:4, qt:7, r:3, nests:4, per:7, item:'🪙', label:'Cave', choices:['7 R3','8 R1','7 R2','6 R7'],
+    q:'🪙 <b>31 gold coins</b> are shared equally into <b>4 caves</b>. How many coins in each cave, and how many are left over?'},
+];
+
+let idx = 0, score = 0, answered = false;
+const LESSON_KEY = 'lesson5', TOTAL = questions.length;
+
+const SECTIONS = {
+  A:{ico:'🥚', title:'Part A — Leftover Eggs',
+     note:'Share the eggs out evenly. The eggs that do not fit go in the <b>Left over</b> box — that is the remainder.'},
+  B:{ico:'🐾', title:'Part B — Hop-back Number Line',
+     note:'Start at the total and hop back by the hop size. Count the hops — the number you land on is the remainder.'},
+  C:{ico:'🗺️', title:'Part C — Share or Group?',
+     note:'First say whether it is <b>Sharing</b> (how many in each) or <b>Grouping</b> (how many groups). Then divide — and do not forget the leftovers!'},
+};
+
+function answerOf(item){ return `${item.qt} R${item.r}`; }
+function eggSizeFor(total){ return total > 40 ? '30px' : total > 24 ? '34px' : '40px'; }
+function groupWord(item){
+  if(item.part === 'B') return 'hops';
+  return (item.label || 'Nest').toLowerCase() + 's';
+}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function renderQuestion(){
+  answered = false;
+  const item = questions[idx];
+  const sec = SECTIONS[item.part];
+  document.getElementById('qcount').textContent = `Progress: ${idx+1} / ${TOTAL}`;
+  document.getElementById('scorecount').textContent = `🔥 Score: ${score}`;
+  document.getElementById('section-ico').textContent = sec.ico;
+  document.getElementById('section-title').textContent = sec.title;
+  document.getElementById('section-note').innerHTML = sec.note;
+
+  const kindEl = document.getElementById('qkind');
+  kindEl.innerHTML = item.part === 'C' ? `<span class="qkind">${item.kind}</span>` : '';
+
+  const story = document.getElementById('qstory');
+  story.className = 'qstory' + (item.part === 'C' ? ' adventure' : '');
+  if(item.part === 'A'){
+    story.innerHTML = `🐉 Mama Dragon shares <b>${item.t} eggs</b> into <b>${item.d} nests</b>. How many in each nest, and how many are left over?`;
+  } else if(item.part === 'B'){
+    story.innerHTML = `🐾 Start at <b>${item.t}</b> and hop back by <b>${item.d}</b> until you cannot hop any more. How many hops, and where do you land?`;
+  } else {
+    story.innerHTML = item.q;
+  }
+
+  const demo = document.getElementById('qDemo');
+  demo.classList.remove('hatch');
+  if(item.part === 'B'){
+    demo.className = '';
+    demo.style.removeProperty('--egg');
+    renderNumberLineHops(demo, item.t, item.d);
+  } else {
+    renderNestsWithLeftover(demo, item.nests, item.per, item.item, item.part === 'A' ? '' : item.label, item.r);
+    demo.style.setProperty('--egg', eggSizeFor(item.t));
+  }
+
+  document.getElementById('qtext').textContent = item.part === 'C' ? '' : `${item.t} ÷ ${item.d} = ?`;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'qfeedback';
+  document.getElementById('nextBtn').style.display = 'none';
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  shuffle(item.choices).forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c;
+    btn.onclick = () => selectAnswer(c, btn);
+    choicesEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(value, btn){
+  if(answered) return;
+  answered = true;
+  const item = questions[idx];
+  const correct = answerOf(item);
+  const feedback = document.getElementById('feedback');
+  document.querySelectorAll('#choices .choice').forEach(b=>{
+    if(b.textContent === correct) b.classList.add('correct');
+  });
+  const n = item.part === 'B' ? item.qt : item.nests;
+  const p = item.part === 'B' ? item.d : item.per;
+  if(value === correct){
+    score++;
+    btn.classList.add('correct');
+    document.getElementById('qDemo').classList.add('hatch');
+    feedback.textContent = `🐲 Correct! ${item.t} ÷ ${item.d} = ${correct} — ${n} ${groupWord(item)} × ${p} = ${n*p}, and ${item.r} left over. Dragon power!`;
+    feedback.className = 'qfeedback ok';
+  } else {
+    btn.classList.add('wrong');
+    feedback.textContent = `Not quite — ${n} ${groupWord(item)} × ${p} = ${n*p}, and ${item.t} − ${n*p} = ${item.r} left over, so ${item.t} ÷ ${item.d} = ${correct}.`;
+    feedback.className = 'qfeedback no';
+  }
+  document.getElementById('scorecount').textContent = `🔥 Score: ${score}`;
+  document.getElementById('nextBtn').style.display = 'inline-block';
+  document.getElementById('nextBtn').textContent = (idx === TOTAL-1) ? 'Finish' : 'Next →';
+}
+
+function nextQuestion(){
+  idx++;
+  if(idx >= TOTAL){ finish(); return; }
+  renderQuestion();
+}
+
+function finish(){
+  document.querySelector('.qcard').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('qcount').textContent = 'Done!';
+  const rec = mathSave(LESSON_KEY, score, TOTAL);
+  const rank = score === TOTAL ? '🏆 Remainder Master — not one egg out of place!'
+             : score >= 11    ? '🐉 Dragon Rider — the leftovers are counted!'
+             :                  '🥚 Egg Keeper — hop back on the number line and try again!';
+  const banner = document.getElementById('doneBanner');
+  banner.style.display = 'block';
+  let msg = `<span class="rank">${rank}</span>You scored ${score} / ${TOTAL} (best so far: ${rec.best} / ${TOTAL}).`;
+  if(rec.best === TOTAL) msg += `<br>You've got it! 🎉`;
+  else msg += `<br>Nice work — you can always come back and try again.`;
+  msg += `<br><a class="btn green" style="margin-top:10px" href="index.html">Back to Math Practice →</a>`;
+  banner.innerHTML = msg;
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

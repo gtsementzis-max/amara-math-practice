@@ -78,3 +78,16 @@ body{background:#f6f1ff}
 .qfeedback{font-size:1rem}
 .done-banner{font-size:1.05rem}
 .done-banner .rank{font-size:1.4rem;display:block;margin-bottom:6px}
+
+/* remainder: the dashed amber "Left over" box drawn after the nests */
+.leftover-box{
+  position:relative;display:grid;justify-content:center;align-content:center;gap:5px;
+  min-width:110px;min-height:84px;padding:18px 16px 22px;
+  background:#fff7e6;border:3px dashed #d97706;border-radius:22px;
+}
+.leftover-box .tag{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:#d97706;color:#fff;font-size:.74rem;font-weight:800;border-radius:99px;padding:2px 11px;white-space:nowrap;
+}
+/* the tap-into-nests pool once every nest is full: what is left is the remainder */
+.egg-pool.leftover{background:#fff7e6;border:3px dashed #d97706;border-radius:16px;padding:10px 12px}

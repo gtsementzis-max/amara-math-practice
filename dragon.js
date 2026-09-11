@@ -136,3 +136,87 @@ function initNestActivity(container, opts){
   renderPool();
   renderAll();
 }
+
+// numNests full nests plus, if leftover > 0, one dashed "Left over" box holding the items
+// that did not fit — the picture of a division with a remainder (total = numNests × perNest + leftover).
+function renderNestsWithLeftover(el, numNests, perNest, item, labelPrefix, leftover){
+  renderNests(el, numNests, perNest, item, labelPrefix);
+  if(leftover > 0){
+    const box = document.createElement('div');
+    box.className = 'leftover-box';
+    box.style.gridTemplateColumns = `repeat(${nestCols(leftover)}, auto)`;
+    box.innerHTML = '<span class="tag">Left over</span>' + itemHTML(item).repeat(leftover);
+    el.appendChild(box);
+  }
+}
+
+// "We do" step for division WITH a remainder: a pool of `total` items (more than the nests can
+// hold) the learner taps into `numNests` nests of `perNest`. The round is complete when every
+// nest is full; whatever is still in the pool is the remainder — the pool is relabelled
+// "Left over: r egg(s)", gets the class `leftover`, then opts.successText(total, numNests,
+// perNest, remainder) is shown and opts.onComplete(successEl) fires.
+function initRemainderActivity(container, opts){
+  const { total, numNests, perNest, onComplete } = opts;
+  const successText = opts.successText ||
+    ((t, n, p, r) => `🐲 ${n} nests × ${p} eggs = ${n*p}, with ${r} left over. ${t} ÷ ${n} = ${p} R${r}!`);
+  const item = opts.item || opts.type;
+  const labelPrefix = opts.labelPrefix || 'Nest';
+  let pool = total, done = false;
+  const counts = new Array(numNests).fill(0);
+
+  container.innerHTML = `
+    <div class="build-wrap">
+      <div class="build-status" data-role="pool-label"></div>
+      <div class="egg-pool" data-role="pool"></div>
+      <div class="nests" data-role="nests"></div>
+      <div class="build-status" data-role="status"></div>
+      <div class="build-success" data-role="success"></div>
+    </div>`;
+  const poolLabel = container.querySelector('[data-role="pool-label"]');
+  const poolEl = container.querySelector('[data-role="pool"]');
+  const nestsEl = container.querySelector('[data-role="nests"]');
+  const statusEl = container.querySelector('[data-role="status"]');
+  const successEl = container.querySelector('[data-role="success"]');
+
+  function renderPool(){
+    poolLabel.textContent = done
+      ? `Left over: ${pool} egg${pool===1?'':'s'}`
+      : (pool > 0 ? `${pool} egg${pool===1?'':'s'} left. Tap a nest to place one:` : '');
+    poolEl.innerHTML = itemHTML(item).repeat(pool);
+  }
+  function renderAll(){
+    nestsEl.innerHTML = '';
+    for(let b=0; b<numNests; b++){
+      const nest = makeNest(perNest, counts[b], item, `${labelPrefix} ${b+1}`);
+      nest.classList.add('tappable');
+      if(counts[b] >= perNest) nest.classList.add('full');
+      nest.onclick = () => tap(b, nest);
+      nestsEl.appendChild(nest);
+    }
+  }
+  function tap(b, nestEl){
+    if(done || pool <= 0) return;
+    if(counts[b] >= perNest){
+      nestEl.classList.add('shake');
+      statusEl.textContent = 'That nest is full! The dragon says no more eggs — try another nest.';
+      setTimeout(()=>nestEl.classList.remove('shake'), 400);
+      return;
+    }
+    counts[b]++;
+    pool--;
+    statusEl.textContent = '';
+    if(counts.every(c => c === perNest)){
+      done = true;
+      poolEl.classList.add('leftover');
+    }
+    renderPool();
+    renderAll();
+    if(done){
+      successEl.style.display = 'block';
+      successEl.textContent = successText(total, numNests, perNest, pool);
+      if(onComplete) onComplete(successEl);
+    }
+  }
+  renderPool();
+  renderAll();
+}

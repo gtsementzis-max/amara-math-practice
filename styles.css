@@ -8,6 +8,7 @@
   --purple:#8b5cf6;
   --indigo:#6d28d9;
   --orange:#ea580c;
+  --gold:#ca8a04;
   --amber:#f59e0b;
   --green:#22c55e;
   --red:#ef4444;
@@ -175,3 +176,36 @@ footer.foot{text-align:center;color:var(--sub);font-size:.85rem;margin-top:30px}
 
 /* number line with hop arcs (renderNumberLineHops) */
 .numline{width:100%;height:auto;margin:10px 0}
+
+/* area/box model for big-number division (renderAreaBox) */
+.areabox{display:flex;align-items:stretch;gap:0;margin:12px 0;flex-wrap:wrap}
+.areabox .div{
+  background:var(--purple);color:#fff;font-weight:800;font-size:1.25rem;
+  display:flex;align-items:center;justify-content:center;
+  min-width:48px;padding:10px 12px;border-radius:12px 0 0 12px;margin-top:30px;
+}
+.areabox .box{
+  border:3px solid var(--purple);min-width:84px;padding:10px 12px;text-align:center;
+  font-weight:800;font-size:1.25rem;background:#fff;position:relative;margin-top:30px;
+}
+.areabox .box + .box{border-left:none}
+.areabox .box .top{position:absolute;top:-30px;left:0;right:0;font-size:1rem;color:var(--purple)}
+.areabox .rem{
+  align-self:center;margin:30px 0 0 10px;background:var(--amber);color:#fff;
+  font-weight:800;font-size:.85rem;border-radius:99px;padding:3px 10px;
+}
+.areabox .sum{width:100%;font-weight:800;margin-top:34px;color:var(--purple);font-size:1.1rem}
+
+/* partial-quotients ("Big 7") ladder (renderChunkLadder) */
+.ladder{display:grid;grid-template-columns:auto auto;gap:4px 18px;font-weight:700;font-size:1.15rem;justify-content:start;margin:12px 0}
+.ladder .num{text-align:right;min-width:70px}
+.ladder .sub{color:var(--red)}
+.ladder .note{color:var(--sub);font-size:.95rem;align-self:center}
+.ladder .line{border-top:2px solid var(--ink)}
+.ladder .total{color:var(--purple)}
+
+/* chunk-taking buttons (initChunkActivity) */
+.chunk-btns{display:flex;flex-wrap:wrap;margin:6px 0}
+.chunk-btn{margin:4px}
+.chunk-btn:disabled{opacity:.5;cursor:default}
+.chunk-btn.shake{animation:nestshake .4s;background:var(--red)}

@@ -199,3 +199,125 @@ function renderNumberLineHops(el, total, step){
   el.innerHTML = s;
   return { hops, remainder };
 }
+
+// Area/box model for big-number division (the "split box"). A left cell shows the
+// divisor; then one box per chunk {part, groups} — `part` inside, `groups` on top.
+// opts.revealed = how many boxes are revealed (unrevealed show "?" in both spots);
+// opts.hideTop = true shows "?" on top of every box (parts still visible);
+// opts.remainder > 0 adds an amber "R<n>" tag; opts.sumLine appends "20 + 4 = 24"
+// under the boxes once every box is revealed.
+function renderAreaBox(el, divisor, chunks, opts){
+  opts = opts || {};
+  const revealed = opts.revealed == null ? chunks.length : opts.revealed;
+  let s = `<div class="div">${divisor}</div>`;
+  chunks.forEach((c, i) => {
+    const shown = i < revealed;
+    const top = (!shown || opts.hideTop) ? '?' : c.groups;
+    s += `<div class="box"><span class="top">${top}</span>${shown ? c.part : '?'}</div>`;
+  });
+  if(opts.remainder > 0) s += `<div class="rem">R${opts.remainder}</div>`;
+  if(opts.sumLine && revealed >= chunks.length && !opts.hideTop){
+    const total = chunks.reduce((a, c) => a + c.groups, 0);
+    s += `<div class="sum">${chunks.map(c => c.groups).join(' + ')} = ${total}</div>`;
+  }
+  el.className = 'areabox';
+  el.innerHTML = s;
+}
+
+// Partial-quotients ("Big 7") ladder: the dividend, then for each chunk {groups} a
+// "− groups×divisor" row noted "<groups> groups" and the running remainder, then the
+// total groups (and "R<r>" if anything is left). opts.revealed = how many chunk rows
+// to show; opts.hideTotal = true replaces the total with "?". Returns {groups, remainder}.
+function renderChunkLadder(el, dividend, divisor, chunks, opts){
+  opts = opts || {};
+  const revealed = opts.revealed == null ? chunks.length : opts.revealed;
+  let remaining = dividend, groupsTotal = 0;
+  let s = `<div class="num">${dividend}</div><div class="note">${dividend} ÷ ${divisor}</div>`;
+  chunks.forEach((c, i) => {
+    if(i >= revealed) return;
+    const g = c.groups == null ? c : c.groups;
+    remaining -= g * divisor;
+    groupsTotal += g;
+    s += `<div class="num sub">− ${g * divisor}</div><div class="note">${g} ${g === 1 ? 'group' : 'groups'}</div>`;
+    s += `<div class="num line">${remaining}</div><div class="note">left</div>`;
+  });
+  if(revealed >= chunks.length){
+    const tot = opts.hideTotal ? '?' : groupsTotal;
+    s += `<div class="num total">${tot}</div><div class="note total">groups total</div>`;
+    if(remaining > 0) s += `<div class="num total">R${remaining}</div><div class="note">left over</div>`;
+  }
+  el.className = 'ladder';
+  el.innerHTML = s;
+  return { groups: groupsTotal, remainder: remaining };
+}
+
+// "Raid the hoard" tap activity for partial quotients: one button per chunk size
+// (Take 10 groups (−40) ...). A chunk that fits is subtracted and added to the ladder;
+// one that does not fit shakes. When fewer than `divisor` items remain the round is
+// done: opts.successText(dividend, divisor, groups, remainder) is shown, then
+// opts.onComplete(successEl) fires.
+function initChunkActivity(container, opts){
+  const { dividend, divisor, onComplete } = opts;
+  const chunkSizes = opts.chunks || [10, 5, 2, 1];
+  const item = opts.item || '🪙';
+  const successText = opts.successText || ((d, v, g, r) => `🐉 ${d} ÷ ${v} = ${g}${r ? ` R${r}` : ''}! You took the chunks your own way — every path works.`);
+  let remaining = dividend, groups = 0;
+  const taken = [];
+
+  container.innerHTML = `
+    <div class="build-wrap">
+      <div class="qtext" data-role="problem">${dividend} ÷ ${divisor}</div>
+      <div class="build-status" data-role="pool-label"></div>
+      <div class="chunk-btns" data-role="btns"></div>
+      <div class="build-status" data-role="status"></div>
+      <div data-role="ladder"></div>
+      <div class="build-status" data-role="groups"></div>
+      <div class="build-success" data-role="success"></div>
+    </div>
+  `;
+  const poolLabel = container.querySelector('[data-role="pool-label"]');
+  const btnsEl = container.querySelector('[data-role="btns"]');
+  const statusEl = container.querySelector('[data-role="status"]');
+  const ladderEl = container.querySelector('[data-role="ladder"]');
+  const groupsEl = container.querySelector('[data-role="groups"]');
+  const successEl = container.querySelector('[data-role="success"]');
+  const buttons = [];
+
+  function render(){
+    poolLabel.innerHTML = `${item} Coins left in the hoard: <b style="font-size:1.6rem">${remaining}</b>`;
+    groupsEl.textContent = `Groups so far: ${groups}`;
+    if(taken.length) renderChunkLadder(ladderEl, dividend, divisor, taken, {revealed: taken.length});
+    else ladderEl.innerHTML = '';
+  }
+
+  function take(g, btn){
+    if(remaining < divisor) return;
+    if(g * divisor > remaining){
+      btn.classList.add('shake');
+      statusEl.textContent = 'Too big — the hoard does not have that many coins left!';
+      setTimeout(() => btn.classList.remove('shake'), 400);
+      return;
+    }
+    remaining -= g * divisor;
+    groups += g;
+    taken.push({groups: g});
+    statusEl.textContent = '';
+    render();
+    if(remaining < divisor){
+      buttons.forEach(b => b.disabled = true);
+      successEl.style.display = 'block';
+      successEl.textContent = successText(dividend, divisor, groups, remaining);
+      if(onComplete) onComplete(successEl);
+    }
+  }
+
+  chunkSizes.forEach(g => {
+    const btn = document.createElement('button');
+    btn.className = 'btn chunk-btn';
+    btn.textContent = `Take ${g} ${g === 1 ? 'group' : 'groups'} (−${g * divisor})`;
+    btn.onclick = () => take(g, btn);
+    btnsEl.appendChild(btn);
+    buttons.push(btn);
+  });
+  render();
+}

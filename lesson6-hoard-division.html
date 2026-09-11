@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Dragon Hoard Vault — Amara's Math Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="dragon.css">
+<style>
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.two-col .example{margin:0}
+.two-col .example h3{margin:0 0 6px;font-size:1.05rem;color:#9a3412}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}}
+.caption{font-size:.95rem;font-weight:700;color:var(--sub);margin:0 0 6px}
+.demo-expr{
+  text-align:center;font-size:1.6rem;font-weight:800;color:var(--ink);
+  background:#f3ecff;border:1px solid #dccbff;border-radius:14px;padding:14px 12px;margin:10px 0;
+}
+.demo-step{
+  background:#fff;border:1px solid #e6dcff;border-radius:12px;
+  padding:10px 14px;margin:8px 0;font-size:.98rem;
+}
+.demo-step .step-badge{
+  display:inline-block;background:#f3ecff;color:#6d28d9;font-weight:800;font-size:.78rem;
+  letter-spacing:.04em;text-transform:uppercase;border-radius:99px;padding:3px 10px;margin-right:8px;
+}
+.demo-step.final{background:#e8f9ee;border-color:#bdeecb;color:#15803d;font-weight:700}
+.demo-pic{min-height:40px}
+.qkind{
+  display:inline-block;background:#fff4e5;color:#c2410c;border:1px solid #f8d5a3;
+  font-weight:800;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;
+  border-radius:99px;padding:3px 12px;margin-bottom:8px;
+}
+.qstory.adventure{font-size:1.2rem;font-weight:700;line-height:1.45}
+#qDemo.array-grid{margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav"><a class="back" href="index.html">&larr; Back to Math Practice</a></div>
+
+  <div class="dragon-hero">
+    <div class="big">💰</div>
+    <div class="txt">
+      <span class="badge">Lesson 6 · Big-number division</span>
+      <h1>The Dragon Hoard Vault</h1>
+      <p>The hoard has too many coins to share one by one. Today Amara learns three ways to split big numbers fast — the rectangle, the box, and the Big 7 ladder — all built from the division she already knows.</p>
+    </div>
+  </div>
+
+  <!-- Card 1: arrays / area model opener -->
+  <div class="card">
+    <h2><span class="ico">🪙</span> Arrays: find the missing side</h2>
+    <div class="explain">
+      <b>12 coins in 3 rows</b> make a rectangle with 4 in each row. 3 &times; 4 = 12, so <b>12 &divide; 3 = 4</b>.
+      Division finds the <b>MISSING SIDE</b> of the rectangle.
+    </div>
+    <div class="two-col">
+      <div class="example">
+        <h3>12 &divide; 3</h3>
+        <p class="caption">3 rows &hellip; ? in each row &rarr; <b>4</b></p>
+        <div id="array1"></div>
+      </div>
+      <div class="example">
+        <h3>18 &divide; 6</h3>
+        <p class="caption">6 rows &hellip; ? in each row &rarr; <b>3</b></p>
+        <div id="array2"></div>
+      </div>
+    </div>
+    <p class="note">Now imagine the rectangle as a <b>BOX</b>: 3 on the side, 12 inside, ? on top. When the number is big we split the box into friendly pieces — that is the next card.</p>
+    <div id="box1"></div>
+  </div>
+
+  <!-- Card 2: I do — split the box -->
+  <div class="card">
+    <h2><span class="ico">📦</span> Split the box</h2>
+    <p class="note" style="margin-top:-4px">Tap through each step. We cut the big number into friendly pieces the divisor can handle, then add up what goes on top.</p>
+    <div class="section-label" id="boxProgress">Example 1 of 3</div>
+    <div class="demo-expr" id="boxExpr"></div>
+    <div class="demo-pic" id="boxPic"></div>
+    <div id="boxSteps"></div>
+    <div style="text-align:right;margin-top:10px">
+      <button class="btn" id="boxBtn">Show next step</button>
+    </div>
+  </div>
+
+  <!-- Card 3: I do — Big 7 ladder -->
+  <div class="card">
+    <h2><span class="ico">🐉</span> The Big 7 ladder (partial quotients)</h2>
+    <p class="note" style="margin-top:-4px">Same boxes, written as a ladder: subtract a chunk you know, write how many groups it was, and keep going until you cannot subtract any more. Add up the groups.</p>
+    <div class="section-label" id="ladderProgress">Example 1 of 3</div>
+    <div class="demo-expr" id="ladderExpr"></div>
+    <div class="demo-pic" id="ladderPic"></div>
+    <div id="ladderSteps"></div>
+    <div style="text-align:right;margin-top:10px">
+      <button class="btn" id="ladderBtn">Show next step</button>
+    </div>
+  </div>
+
+  <!-- Card 4: We do — raid the hoard -->
+  <div class="card">
+    <h2><span class="ico">🏴‍☠️</span> Raid the hoard: take your own chunks</h2>
+    <p class="note" style="margin-top:-4px">Tap a chunk to take that many groups out of the hoard. Take 10s, 5s, 2s or 1s in any order you like — if a chunk is too big, the hoard will tell you. When fewer coins are left than the divisor, you are done.</p>
+    <div id="chunkActivity"></div>
+  </div>
+
+  <!-- Card 5: You do (scored) -->
+  <div class="card">
+    <h2><span class="ico" id="section-ico">🪙</span> <span id="section-title">Vault Trials</span></h2>
+    <p class="note" id="section-note" style="margin-top:-4px"></p>
+    <div class="progress-strip">
+      <span id="qcount">Progress: 1 / 15</span>
+      <span id="scorecount">🔥 Score: 0</span>
+    </div>
+    <div class="qcard">
+      <div id="qkind"></div>
+      <div class="qstory" id="qstory"></div>
+      <div id="qDemo"></div>
+      <div class="qtext" id="qtext"></div>
+      <div class="choices" id="choices"></div>
+      <div class="qfeedback" id="feedback"></div>
+    </div>
+    <div style="text-align:right">
+      <button class="btn" id="nextBtn" style="display:none" onclick="nextQuestion()">Next &rarr;</button>
+    </div>
+    <div class="done-banner" id="doneBanner"></div>
+  </div>
+
+  <footer class="foot">Amara's Math Practice — practice runs entirely on this device.</footer>
+</div>
+
+<script src="common.js"></script>
+<script src="dragon.js"></script>
+<script>
+// ---------- Card 1: arrays + the single box ----------
+renderArrayGrid(document.getElementById('array1'), 3, 4, '🪙');
+renderArrayGrid(document.getElementById('array2'), 6, 3, '🪙');
+renderAreaBox(document.getElementById('box1'), 3, [{part:12, groups:4}], {revealed:1});
+
+// ---------- shared click-through reveal engine (like Lesson 4's demo) ----------
+// cfg: {examples, ids:{progress,expr,pic,steps,btn}, stepsOf(ex), renderPic(ex, stepIdx, el), stepCard(ex, i), finalNote(ex)}
+function makeRevealDemo(cfg){
+  let exIdx = 0, stepIdx = 0;
+  const el = id => document.getElementById(id);
+  function render(){
+    const ex = cfg.examples[exIdx];
+    const n = cfg.stepsOf(ex);
+    el(cfg.ids.progress).textContent = `Example ${exIdx+1} of ${cfg.examples.length}`;
+    el(cfg.ids.expr).textContent = stepIdx >= n ? `${ex.t} ÷ ${ex.d} = ${ex.answer}` : `${ex.t} ÷ ${ex.d} = ?`;
+    cfg.renderPic(ex, stepIdx, el(cfg.ids.pic));
+    let html = '';
+    for(let i=0; i<stepIdx; i++) html += cfg.stepCard(ex, i);
+    if(stepIdx >= n) html += `<div class="demo-step final">${cfg.finalNote(ex)}</div>`;
+    el(cfg.ids.steps).innerHTML = html;
+    const btn = el(cfg.ids.btn);
+    btn.disabled = false;
+    if(stepIdx < n) btn.textContent = 'Show next step';
+    else if(exIdx < cfg.examples.length - 1) btn.textContent = 'Next example →';
+    else { btn.textContent = 'Demo complete!'; btn.disabled = true; }
+  }
+  el(cfg.ids.btn).onclick = () => {
+    const n = cfg.stepsOf(cfg.examples[exIdx]);
+    if(stepIdx < n) stepIdx++;
+    else if(exIdx < cfg.examples.length - 1){ exIdx++; stepIdx = 0; }
+    render();
+  };
+  render();
+}
+
+// ---------- Card 2: split the box ----------
+// Each chunk: part inside the box, groups on top, why = why the chunk is friendly.
+const boxExamples = [
+  {t:72, d:3, r:0, answer:'24', chunks:[
+    {part:60, groups:20, why:'Split 72 = 60 + 12. 60 is 3 × 20 — a tens chunk that fits, so 20 goes on top.'},
+    {part:12, groups:4,  why:'12 is 3 × 4 — a fact Amara knows, so 4 goes on top.'},
+  ]},
+  {t:96, d:4, r:0, answer:'24', chunks:[
+    {part:80, groups:20, why:'Split 96 = 80 + 16. 80 is 4 × 20 — a tens chunk that fits, so 20 goes on top.'},
+    {part:16, groups:4,  why:'16 is 4 × 4 — a known fact, so 4 goes on top.'},
+  ]},
+  {t:85, d:4, r:1, answer:'21 R1', chunks:[
+    {part:80, groups:20, why:'Split 85 = 80 + 4 + 1 left over. 80 is 4 × 20 — a tens chunk that fits, so 20 goes on top.'},
+    {part:4,  groups:1,  why:'4 is 4 × 1, so 1 goes on top. The last 1 coin cannot make a box — that is the remainder.'},
+  ]},
+];
+makeRevealDemo({
+  examples: boxExamples,
+  ids:{progress:'boxProgress', expr:'boxExpr', pic:'boxPic', steps:'boxSteps', btn:'boxBtn'},
+  stepsOf: ex => ex.chunks.length + 1,
+  renderPic(ex, step, el){
+    const shown = Math.min(step, ex.chunks.length);
+    renderAreaBox(el, ex.d, ex.chunks, {
+      revealed: shown,
+      remainder: shown >= ex.chunks.length ? ex.r : 0,
+      sumLine: step > ex.chunks.length,
+    });
+  },
+  stepCard(ex, i){
+    if(i < ex.chunks.length){
+      const c = ex.chunks[i];
+      return `<div class="demo-step"><span class="step-badge">Box ${i+1}</span>${c.why} &rarr; <b>${ex.d} × ${c.groups} = ${c.part}</b></div>`;
+    }
+    return '';
+  },
+  finalNote(ex){
+    const tops = ex.chunks.map(c => c.groups);
+    const sum = tops.reduce((a,b)=>a+b, 0);
+    return `Top: ${tops.join(' + ')} = <b>${sum}</b>${ex.r ? `, with ${ex.r} left over` : ''}. So <b>${ex.t} ÷ ${ex.d} = ${ex.answer}</b>.`;
+  },
+});
+
+// ---------- Card 3: Big 7 ladder ----------
+const ladderExamples = [
+  {t:72, d:3, r:0, answer:'24', chunks:[10,10,4],
+   note:'We took the same 24 as the box — just in smaller, safer chunks. You can take 10s, 5s, 2s or 1s: any chunk that fits is allowed.'},
+  {t:96, d:4, r:0, answer:'24', chunks:[10,10,4],
+   note:'Two chunks of 10 and one chunk of 4: 10 + 10 + 4 = 24, the same answer the box gave.'},
+  {t:85, d:4, r:1, answer:'21 R1', chunks:[10,10,1],
+   note:'10 + 10 + 1 = 21 groups, and 1 coin is left over — smaller than 4, so we stop. 85 ÷ 4 = 21 R1.'},
+];
+function ladderRunning(ex, upto){
+  let rem = ex.t;
+  for(let i=0; i<=upto; i++) rem -= ex.chunks[i] * ex.d;
+  return rem;
+}
+makeRevealDemo({
+  examples: ladderExamples,
+  ids:{progress:'ladderProgress', expr:'ladderExpr', pic:'ladderPic', steps:'ladderSteps', btn:'ladderBtn'},
+  stepsOf: ex => ex.chunks.length,
+  renderPic(ex, step, el){
+    renderChunkLadder(el, ex.t, ex.d, ex.chunks.map(g => ({groups:g})), {revealed: step});
+  },
+  stepCard(ex, i){
+    const g = ex.chunks[i];
+    return `<div class="demo-step"><span class="step-badge">Chunk ${i+1}</span>Take <b>${g} ${g === 1 ? 'group' : 'groups'}</b> of ${ex.d}: subtract ${g*ex.d} &rarr; <b>${ladderRunning(ex, i)}</b> left</div>`;
+  },
+  finalNote(ex){
+    return `${ex.chunks.join(' + ')} = <b>${ex.chunks.reduce((a,b)=>a+b,0)}</b>${ex.r ? ` R${ex.r}` : ''}. ${ex.note}`;
+  },
+});
+
+// ---------- Card 4: We do — raid the hoard ----------
+const chunkRounds = [
+  {dividend:84, divisor:4},
+  {dividend:65, divisor:5},
+  {dividend:93, divisor:3},
+  {dividend:78, divisor:6},
+  {dividend:59, divisor:4},
+];
+let chunkRoundIdx = 0;
+function loadChunkRound(){
+  const el = document.getElementById('chunkActivity');
+  const round = chunkRounds[chunkRoundIdx];
+  initChunkActivity(el, {
+    dividend: round.dividend, divisor: round.divisor, chunks:[10,5,2,1], item:'🪙',
+    onComplete: (successEl) => {
+      const btn = document.createElement('button');
+      btn.className = 'btn green';
+      btn.style.marginTop = '10px';
+      btn.style.display = 'block';
+      if(chunkRoundIdx < chunkRounds.length - 1){
+        btn.textContent = 'Next hoard →';
+        btn.onclick = () => { chunkRoundIdx++; loadChunkRound(); };
+      } else {
+        btn.textContent = "I'm ready for the Vault Trials!";
+        btn.onclick = () => { btn.remove(); };
+      }
+      successEl.appendChild(btn);
+    }
+  });
+}
+loadChunkRound();
+
+// ---------- Card 5: You do — the quiz ----------
+// t = dividend, d = divisor, qt = quotient, r = remainder (t = qt × d + r, r < d).
+// chunks = the groups per friendly piece (parts are chunks × d); choices[0] is the answer.
+const questions = [
+  // Part A: missing side (array of d rows × qt columns)
+  {part:'A', t:12, d:3, qt:4, r:0, chunks:[4], choices:['4','3','6','9']},
+  {part:'A', t:18, d:6, qt:3, r:0, chunks:[3], choices:['3','4','2','12']},
+  {part:'A', t:20, d:4, qt:5, r:0, chunks:[5], choices:['5','4','6','16']},
+  {part:'A', t:24, d:8, qt:3, r:0, chunks:[3], choices:['3','4','2','16']},
+  // Part B: split the box (tops hidden)
+  {part:'B', t:72, d:3, qt:24, r:0, chunks:[20,4],  choices:['24','22','26','21']},
+  {part:'B', t:96, d:4, qt:24, r:0, chunks:[20,4],  choices:['24','26','23','21']},
+  {part:'B', t:65, d:5, qt:13, r:0, chunks:[10,3],  choices:['13','12','15','11']},
+  {part:'B', t:84, d:6, qt:14, r:0, chunks:[10,4],  choices:['14','12','16','13']},
+  // Part C: Big 7 ladder (total hidden)
+  {part:'C', t:91,  d:7, qt:13, r:0, chunks:[10,3],   choices:['13','12','14','11']},
+  {part:'C', t:112, d:8, qt:14, r:0, chunks:[10,4],   choices:['14','12','16','13']},
+  {part:'C', t:135, d:5, qt:27, r:0, chunks:[20,5,2], choices:['27','25','23','29']},
+  {part:'C', t:87,  d:4, qt:21, r:3, chunks:[20,1],   choices:['21 R3','22 R1','20 R7','21 R1']},
+  // Part D: hoard adventures (word problems)
+  {part:'D', kind:'Sharing',  t:76,  d:4, qt:19, r:0, chunks:[10,9], choices:['19','18','21','17'],
+    q:'💰 The hoard has <b>76 gold coins</b> to share equally into <b>4 chests</b>. How many coins in each chest?'},
+  {part:'D', kind:'Grouping', t:90,  d:6, qt:15, r:0, chunks:[10,5], choices:['15','14','16','12'],
+    q:'💎 There are <b>90 fire gems</b>. Each pouch holds <b>6 gems</b>. How many pouches can you fill?'},
+  {part:'D', kind:'Sharing',  t:132, d:6, qt:22, r:0, chunks:[20,2], choices:['22','21','24','20'],
+    q:'🐟 <b>132 fish</b> are shared equally between <b>6 dragons</b>. How many fish does each dragon get?'},
+];
+
+let idx = 0, score = 0, answered = false;
+const LESSON_KEY = 'lesson6', TOTAL = questions.length;
+
+const SECTIONS = {
+  A:{ico:'🪙', title:'Part A — Missing Side',
+     note:'The coins make a rectangle. You know the total and one side — find the <b>missing side</b>.'},
+  B:{ico:'📦', title:'Part B — Split the Box',
+     note:'Each piece inside the box is the divisor times something. Work out each top number, then <b>add the tops</b>.'},
+  C:{ico:'🐉', title:'Part C — Big 7 Chunks',
+     note:'Read the ladder: each chunk is a number of groups. <b>Add the groups</b> — and say the remainder if there is one.'},
+  D:{ico:'🗺️', title:'Part D — Hoard Adventures',
+     note:'First say whether it is <b>Sharing</b> (how many in each) or <b>Grouping</b> (how many groups). Then split the big number into friendly chunks.'},
+};
+
+function answerOf(item){ return item.r ? `${item.qt} R${item.r}` : `${item.qt}`; }
+function boxChunks(item){ return item.chunks.map(g => ({part: g * item.d, groups: g})); }
+function chunkExplain(item){
+  const facts = item.chunks.map(g => `${item.d} × ${g} = ${g * item.d}`).join(' and ');
+  const sum = item.chunks.length > 1 ? `${item.chunks.join(' + ')} = ${item.qt}` : `that is ${item.qt}`;
+  return `${facts}, ${sum}${item.r ? `, with ${item.r} left over` : ''}`;
+}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function renderQuestion(){
+  answered = false;
+  const item = questions[idx];
+  const sec = SECTIONS[item.part];
+  document.getElementById('qcount').textContent = `Progress: ${idx+1} / ${TOTAL}`;
+  document.getElementById('scorecount').textContent = `🔥 Score: ${score}`;
+  document.getElementById('section-ico').textContent = sec.ico;
+  document.getElementById('section-title').textContent = sec.title;
+  document.getElementById('section-note').innerHTML = sec.note;
+
+  const kindEl = document.getElementById('qkind');
+  kindEl.innerHTML = item.part === 'D' ? `<span class="qkind">${item.kind}</span>` : '';
+
+  const story = document.getElementById('qstory');
+  story.className = 'qstory' + (item.part === 'D' ? ' adventure' : '');
+  if(item.part === 'A'){
+    story.innerHTML = `The coins make <b>${item.d} rows</b>. How many in each row?`;
+  } else if(item.part === 'B'){
+    story.innerHTML = `The box is split into friendly pieces. What goes on top in total?`;
+  } else if(item.part === 'C'){
+    story.innerHTML = `Add up the groups on the ladder.`;
+  } else {
+    story.innerHTML = item.q;
+  }
+
+  const demo = document.getElementById('qDemo');
+  demo.classList.remove('hatch');
+  demo.removeAttribute('style');
+  if(item.part === 'A'){
+    renderArrayGrid(demo, item.d, item.qt, '🪙');
+  } else if(item.part === 'C'){
+    renderChunkLadder(demo, item.t, item.d, item.chunks.map(g => ({groups:g})), {revealed: item.chunks.length, hideTotal:true});
+  } else {
+    renderAreaBox(demo, item.d, boxChunks(item), {revealed: item.chunks.length, hideTop:true, remainder: item.r});
+  }
+
+  document.getElementById('qtext').textContent = item.part === 'D' ? '' : `${item.t} ÷ ${item.d} = ?`;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'qfeedback';
+  document.getElementById('nextBtn').style.display = 'none';
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  shuffle(item.choices).forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c;
+    btn.onclick = () => selectAnswer(c, btn);
+    choicesEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(value, btn){
+  if(answered) return;
+  answered = true;
+  const item = questions[idx];
+  const correct = answerOf(item);
+  const feedback = document.getElementById('feedback');
+  document.querySelectorAll('#choices .choice').forEach(b=>{
+    if(b.textContent === correct) b.classList.add('correct');
+  });
+  if(value === correct){
+    score++;
+    btn.classList.add('correct');
+    document.getElementById('qDemo').classList.add('hatch');
+    if(item.part !== 'A') renderAreaBox(document.getElementById('qDemo'), item.d, boxChunks(item), {revealed: item.chunks.length, remainder: item.r, sumLine: item.chunks.length > 1});
+    feedback.textContent = `🐲 Correct! ${item.t} ÷ ${item.d} = ${correct} — ${chunkExplain(item)}. Dragon power!`;
+    feedback.className = 'qfeedback ok';
+  } else {
+    btn.classList.add('wrong');
+    feedback.textContent = `Not quite — ${chunkExplain(item)}, so ${item.t} ÷ ${item.d} = ${correct}.`;
+    feedback.className = 'qfeedback no';
+  }
+  document.getElementById('scorecount').textContent = `🔥 Score: ${score}`;
+  document.getElementById('nextBtn').style.display = 'inline-block';
+  document.getElementById('nextBtn').textContent = (idx === TOTAL-1) ? 'Finish' : 'Next →';
+}
+
+function nextQuestion(){
+  idx++;
+  if(idx >= TOTAL){ finish(); return; }
+  renderQuestion();
+}
+
+function finish(){
+  document.querySelector('.qcard').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('qcount').textContent = 'Done!';
+  const rec = mathSave(LESSON_KEY, score, TOTAL);
+  const rank = score === TOTAL ? '🏆 Vault Master — the whole hoard, split perfectly!'
+             : score >= 11    ? '🐉 Treasure Keeper — the chunks are yours!'
+             :                  '🪙 Coin Counter — try smaller chunks and go again!';
+  const banner = document.getElementById('doneBanner');
+  banner.style.display = 'block';
+  let msg = `<span class="rank">${rank}</span>You scored ${score} / ${TOTAL} (best so far: ${rec.best} / ${TOTAL}).`;
+  if(rec.best === TOTAL) msg += `<br>You've got it! 🎉`;
+  else msg += `<br>Nice work — you can always come back and try again.`;
+  msg += `<br><a class="btn green" style="margin-top:10px" href="index.html">Back to Math Practice →</a>`;
+  banner.innerHTML = msg;
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

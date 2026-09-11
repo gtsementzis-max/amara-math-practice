@@ -11,7 +11,7 @@
 <body>
 <div class="wrap">
   <h1>🧮 Amara's Math Practice</h1>
-  <p class="sub">Addition basics → multiplication review → understanding division → order of operations → division with remainders. Go through the lessons in order — each one builds on the last.</p>
+  <p class="sub">Addition basics → multiplication review → understanding division → order of operations → division with remainders → big-number division. Go through the lessons in order — each one builds on the last.</p>
 
   <a class="lesson card" href="lesson0-addition-blocks.html" style="text-decoration:none">
     <div class="lesson-num" style="background:var(--amber)">0</div>
@@ -73,6 +73,16 @@
     </div>
   </a>
 
+  <a class="lesson card" href="lesson6-hoard-division.html" style="text-decoration:none">
+    <div class="lesson-num" style="background:var(--gold)">6</div>
+    <div class="lesson-body">
+      <h3>The Dragon Hoard Vault</h3>
+      <p>Big-number division: the missing side, the split box, and Big 7 chunks.</p>
+      <div class="bar-track"><div class="bar-fill" id="bar-lesson6" style="background:var(--gold)"></div></div>
+      <div class="bar-label" id="label-lesson6">0 / 15</div>
+    </div>
+  </a>
+
   <p style="text-align:center;margin-top:24px">
     <button class="btn ghost" onclick="if(confirm('Reset all progress?')){mathReset();location.reload();}">Reset all progress</button>
   </p>
@@ -91,6 +101,7 @@ function refreshBars(){
     {key:'lesson3', total:15},
     {key:'lesson4', total:16},
     {key:'lesson5', total:15},
+    {key:'lesson6', total:15},
   ];
   lessons.forEach(l=>{
     const rec = data[l.key];

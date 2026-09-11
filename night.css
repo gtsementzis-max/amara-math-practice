@@ -1,0 +1,67 @@
+/* ===== Night Potion theme for Lesson 4 (order of operations / PEMDAS) =====
+   Load AFTER styles.css. Only recolours/extends the base theme; page-specific
+   bits stay in the lesson's own <style>. Modeled on dragon.css's structure. */
+body{background:#f7f3ff}
+.card{border-color:#ddd0f7}
+.card h2{display:flex;align-items:center;gap:10px;margin-top:0}
+.card h2 .ico{font-size:1.9rem;line-height:1}
+.explain{background:#f5f0ff;border-color:#ddd0f7}
+.explain b{color:#6d28d9}
+.example{background:#fff4e5;border-color:#f8d5a3;font-size:1.05rem}
+.note{color:var(--sub);font-size:.95rem;margin:6px 0 0}
+.qcard{border-color:#ddd0f7}
+
+/* hero banner */
+.night-hero{
+  background:linear-gradient(135deg,#1e1b3a 0%,#3b1f6b 55%,#6d28d9 100%);
+  color:#fff;border-radius:22px;padding:22px 24px;margin-bottom:20px;
+  display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  box-shadow:0 8px 24px rgba(30,27,58,.32);
+}
+.night-hero .big{font-size:clamp(4rem,14vw,6.5rem);line-height:1;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
+.night-hero .txt{flex:1;min-width:220px}
+.night-hero .badge{display:inline-block;background:rgba(255,255,255,.18);border-radius:99px;padding:3px 12px;font-size:.78rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px}
+.night-hero h1{color:#fff;font-size:clamp(1.5rem,5vw,2.1rem);margin:0 0 6px}
+.night-hero p{margin:0;color:#ede4ff;font-size:1rem}
+
+/* story strip (big emoji + paragraph), same shape as dragon's .story */
+.story{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.story .big{font-size:clamp(3rem,10vw,4.5rem);line-height:1}
+.story p{flex:1;min-width:220px;margin:0;font-size:1.05rem}
+
+/* PEMDAS step badges: four distinct pill colors, sized like .section-label */
+.step-badge{
+  display:inline-block;font-weight:800;font-size:.8rem;
+  letter-spacing:.03em;text-transform:uppercase;border-radius:99px;padding:4px 14px;
+}
+.step-p{background:#f3ecff;color:#6d28d9}
+.step-e{background:#fff7e6;color:#b45309}
+.step-md{background:#e6fbfa;color:#0f766e}
+.step-as{background:#fff0f5;color:#be185d}
+
+/* potion vial: rounded-bottom shape with a narrower neck and colored liquid */
+.potion-vial{
+  --liquid:#8b5cf6;
+  display:inline-block;position:relative;width:30px;height:44px;
+  margin:0 4px;vertical-align:middle;
+}
+.potion-vial .neck{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:12px;height:12px;background:#e9e2fb;border:2px solid #b9a3ec;border-radius:3px 3px 0 0;
+}
+.potion-vial .body{
+  position:absolute;top:10px;left:0;width:100%;height:34px;
+  background:#f5f0ff;border:2px solid #b9a3ec;border-radius:6px 6px 16px 16px;
+  overflow:hidden;
+}
+.potion-vial .liquid{
+  position:absolute;bottom:0;left:0;width:100%;height:60%;
+  background:var(--liquid);
+}
+
+/* quiz section labels, matched to violet theme */
+.section-label{background:#f3ecff;color:#6d28d9}
+
+/* shake feedback for a wrong tap-to-pick choice (guided-practice activity) */
+.choice.shake{animation:choiceshake .4s;border-color:var(--red)}
+@keyframes choiceshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}

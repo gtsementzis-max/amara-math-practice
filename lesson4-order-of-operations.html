@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Midnight Potion Order — Amara's Math Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="night.css">
+<style>
+.rule-row{display:flex;align-items:flex-start;gap:12px;margin:14px 0}
+.rule-row .step-badge{flex:0 0 auto;margin-top:2px;white-space:nowrap}
+.rule-row p{margin:0;flex:1}
+.demo-expr{
+  text-align:center;font-size:1.6rem;font-weight:800;color:var(--ink);
+  background:#f5f0ff;border:1px solid #ddd0f7;border-radius:14px;padding:16px 12px;margin:10px 0;
+}
+.demo-step{
+  background:#fff;border:1px solid var(--line);border-radius:12px;
+  padding:10px 14px;margin:8px 0;font-size:.98rem;
+}
+.demo-step .step-badge{margin-right:8px}
+#demoProgress{margin-bottom:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav"><a class="back" href="index.html">&larr; Back to Math Practice</a></div>
+
+  <div class="night-hero">
+    <div class="big">🧪</div>
+    <div class="txt">
+      <span class="badge">Lesson 4 · Order of operations (PEMDAS)</span>
+      <h1>The Midnight Potion Order</h1>
+      <p>Every midnight potion must be brewed by adding its ingredients in the <b>exact</b> right order, or it fizzles into swamp sludge. Math expressions work the same way — there's an exact order for solving them, called <b>PEMDAS</b>.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="ico">🔮</span> The Four Potion Rules
+      <span class="potion-vial" style="--liquid:#8b5cf6"><span class="neck"></span><span class="body"><span class="liquid"></span></span></span>
+    </h2>
+    <div class="explain">
+      <b>Please Excuse My Dear Aunt Sally</b> — that's the old memory spell for the order: <b>P</b>arentheses, <b>E</b>xponents, <b>M</b>ultiply/<b>D</b>ivide, <b>A</b>dd/<b>S</b>ubtract.
+    </div>
+    <div class="rule-row">
+      <span class="step-badge step-p">P &middot; Parentheses</span>
+      <p>Solve everything inside the ( ) first — cast the circle before anything else.</p>
+    </div>
+    <div class="rule-row">
+      <span class="step-badge step-e">E &middot; Exponents</span>
+      <p>Solve any power next. For example, 3&sup2; means 3 &times; 3 = 9 — charge the crystal.</p>
+    </div>
+    <div class="rule-row">
+      <span class="step-badge step-md">MD &middot; Multiply &amp; Divide</span>
+      <p>Next, working left to right, do every &times; and &divide; in the order they appear — swirl the potion. &times; and &divide; are the same rank, so whichever comes first (left to right) goes first.</p>
+    </div>
+    <div class="rule-row">
+      <span class="step-badge step-as">AS &middot; Add &amp; Subtract</span>
+      <p>Last, working left to right, do every + and &minus; — the final stir. + and &minus; are the same rank too, so left to right wins.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="ico">🌙</span> Watch a potion brew</h2>
+    <p class="note">Tap through each step to see a potion (an expression) get simplified, one PEMDAS move at a time.</p>
+    <div class="section-label" id="demoProgress">Example 1 of 3</div>
+    <div class="demo-expr" id="demoExpr"></div>
+    <div id="demoSteps"></div>
+    <div style="text-align:right;margin-top:10px">
+      <button class="btn" id="demoBtn">Show next step</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="ico">🌟</span> Which move goes first?</h2>
+    <p class="note">Tap the correct "first move" for each potion below. Get it wrong and you can just try again.</p>
+    <div class="progress-strip"><span id="roundCount">Round 1 of 5</span></div>
+    <div class="qcard" id="roundCard">
+      <div class="qtext" id="roundExpr"></div>
+      <div class="choices" id="roundChoices"></div>
+      <div class="qfeedback" id="roundFeedback"></div>
+    </div>
+    <div style="text-align:right">
+      <button class="btn" id="roundNextBtn" style="display:none">Next round &rarr;</button>
+    </div>
+    <div class="done-banner" id="practiceDone"></div>
+  </div>
+
+  <div class="card" id="quizCard">
+    <h2><span class="ico">🧪</span> Midnight Potion Practice
+      <span class="potion-vial" style="--liquid:#0f766e"><span class="neck"></span><span class="body"><span class="liquid"></span></span></span>
+    </h2>
+    <div id="quizSectionLabel" class="section-label">🔮 Parentheses Power</div>
+    <div class="progress-strip">
+      <span id="qcount">Question 1 of 16</span>
+      <span id="scorecount">🧪 Score: 0</span>
+    </div>
+    <div class="qcard">
+      <div class="qtext" id="qtext"></div>
+      <div class="choices" id="choices"></div>
+      <div class="qfeedback" id="feedback"></div>
+    </div>
+    <div style="text-align:right">
+      <button class="btn" id="nextBtn" style="display:none" onclick="nextQuizQuestion()">Next &rarr;</button>
+    </div>
+    <div class="done-banner" id="doneBanner"></div>
+  </div>
+
+  <footer class="foot">Amara's Math Practice — practice runs entirely on this device.</footer>
+</div>
+
+<script src="common.js"></script>
+<script>
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+/* ===================== Card 2: worked-example demo ===================== */
+const examples = [
+  {
+    expr: '3 + (4 - 1) × 2',
+    steps: [
+      {badge:'step-p',  label:'P',  detail:'(4 &minus; 1) = 3',            after:'3 + 3 × 2'},
+      {badge:'step-md', label:'MD', detail:'3 × 2 = 6',                after:'3 + 6'},
+      {badge:'step-as', label:'AS', detail:'3 + 6 = 9',                    after:'9', final:true},
+    ]
+  },
+  {
+    expr: '(2 + 3)² - 5',
+    steps: [
+      {badge:'step-p',  label:'P',  detail:'(2 + 3) = 5',                  after:'5² - 5'},
+      {badge:'step-e',  label:'E',  detail:'5² = 25',                 after:'25 - 5'},
+      {badge:'step-as', label:'AS', detail:'25 &minus; 5 = 20',            after:'20', final:true},
+    ]
+  },
+  {
+    expr: '6 + 2 × 3² - 4',
+    steps: [
+      {badge:'step-e',  label:'E',  detail:'3² = 9',                                    after:'6 + 2 × 9 - 4'},
+      {badge:'step-md', label:'MD', detail:'2 × 9 = 18',                                 after:'6 + 18 - 4'},
+      {badge:'step-as', label:'AS', detail:'left to right: 6 + 18 = 24, then 24 &minus; 4 = 20', after:'20', final:true},
+    ]
+  },
+];
+const stepBadgeText = {'step-p':'P — Parentheses','step-e':'E — Exponents','step-md':'MD — Multiply & Divide','step-as':'AS — Add & Subtract'};
+
+let demoIdx = 0, stepIdx = 0;
+function renderDemo(){
+  const ex = examples[demoIdx];
+  document.getElementById('demoProgress').textContent = `Example ${demoIdx+1} of ${examples.length}`;
+  document.getElementById('demoExpr').textContent = stepIdx === 0 ? ex.expr : ex.steps[stepIdx-1].after;
+  const stepsEl = document.getElementById('demoSteps');
+  stepsEl.innerHTML = ex.steps.slice(0, stepIdx).map(s =>
+    `<div class="demo-step"><span class="step-badge ${s.badge}">${stepBadgeText[s.badge]}</span>${s.detail} &rarr; <b>${s.after}</b></div>`
+  ).join('');
+  const btn = document.getElementById('demoBtn');
+  btn.disabled = false;
+  if(stepIdx < ex.steps.length){
+    btn.textContent = 'Show next step';
+  } else if(demoIdx < examples.length - 1){
+    btn.textContent = 'Next example →';
+  } else {
+    btn.textContent = 'Demo complete!';
+    btn.disabled = true;
+  }
+}
+function demoNext(){
+  const ex = examples[demoIdx];
+  if(stepIdx < ex.steps.length){
+    stepIdx++;
+  } else if(demoIdx < examples.length - 1){
+    demoIdx++;
+    stepIdx = 0;
+  }
+  renderDemo();
+}
+document.getElementById('demoBtn').onclick = demoNext;
+renderDemo();
+
+/* ===================== Card 3: guided "which move first" practice ===================== */
+const rounds = [
+  {expr:'5 + (3 × 2)',      choices:['3 × 2 — inside the parentheses','5 + 3','the whole expression at once'],
+    confirm:'Yes! Parentheses always go first.'},
+  {expr:'4² + 1',           choices:['4² — the exponent','4 + 1','the whole expression at once'],
+    confirm:'Right — exponents come before addition.'},
+  {expr:'6 × 2 + 3',        choices:['6 × 2 — multiply first','2 + 3','6 + 2'],
+    confirm:'Yes — multiply before you add.'},
+  {expr:'(7 - 4) × 2²', choices:['7 - 4 — parentheses beat exponents','2² — the exponent','4 × 2'],
+    confirm:'Correct — parentheses outrank exponents.'},
+  {expr:'9 - 3 + 2',             choices:['9 - 3 — same rank, so go left to right','3 + 2','9 - 2'],
+    confirm:'Exactly — add/subtract tie, so left to right wins.'},
+];
+
+let roundIdx = 0, roundAnswered = false;
+function renderRound(){
+  roundAnswered = false;
+  const r = rounds[roundIdx];
+  document.getElementById('roundCount').textContent = `Round ${roundIdx+1} of ${rounds.length}`;
+  document.getElementById('roundExpr').textContent = r.expr;
+  document.getElementById('roundFeedback').textContent = '';
+  document.getElementById('roundFeedback').className = 'qfeedback';
+  document.getElementById('roundNextBtn').style.display = 'none';
+  const choicesEl = document.getElementById('roundChoices');
+  choicesEl.innerHTML = '';
+  shuffle(r.choices.map((text,i)=>({text, correct:i===0}))).forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c.text;
+    btn.onclick = () => selectRound(c.correct, btn, r);
+    choicesEl.appendChild(btn);
+  });
+}
+function selectRound(correct, btn, r){
+  if(roundAnswered) return;
+  if(correct){
+    roundAnswered = true;
+    btn.classList.add('correct');
+    document.getElementById('roundFeedback').textContent = r.confirm;
+    document.getElementById('roundFeedback').className = 'qfeedback ok';
+    const nb = document.getElementById('roundNextBtn');
+    nb.style.display = 'inline-block';
+    nb.textContent = (roundIdx === rounds.length-1) ? 'Finish practice' : 'Next round →';
+  } else {
+    btn.classList.add('wrong','shake');
+    setTimeout(()=>btn.classList.remove('shake'), 400);
+  }
+}
+function nextRound(){
+  roundIdx++;
+  if(roundIdx >= rounds.length){
+    document.getElementById('roundCard').style.display = 'none';
+    document.getElementById('roundNextBtn').style.display = 'none';
+    document.getElementById('roundCount').textContent = 'Done!';
+    const done = document.getElementById('practiceDone');
+    done.style.display = 'block';
+    done.textContent = "Great work — let's practice for real!";
+    return;
+  }
+  renderRound();
+}
+document.getElementById('roundNextBtn').onclick = nextRound;
+renderRound();
+
+/* ===================== Card 4: scored quiz ===================== */
+const SECTIONS = {
+  paren: {icon:'🔮', title:'Parentheses Power'},
+  power: {icon:'⚡',       title:'Power Crystals'},
+  full:  {icon:'🌙', title:'Full Spell Order'},
+  word:  {icon:'🧪', title:'Coven Word Problems'},
+};
+
+const questions = [
+  // Parentheses Power
+  {section:'paren', q:'3 × (2 + 4) = ?', choices:[18,10,24,9], a:18},
+  {section:'paren', q:'(8 - 3) × 2 = ?', choices:[10,2,13,16], a:10},
+  {section:'paren', q:'20 - (4 + 6) = ?', choices:[10,22,30,4], a:10},
+  {section:'paren', q:'(5 + 1) × (6 - 2) = ?', choices:[24,30,16,10], a:24},
+  // Power Crystals
+  {section:'power', q:'3² = ?', choices:[9,6,3,12], a:9},
+  {section:'power', q:'2³ = ?', choices:[8,6,4,9], a:8},
+  {section:'power', q:'5 + 2² = ?', choices:[9,49,14,10], a:9},
+  {section:'power', q:'(1 + 2)² = ?', choices:[9,5,4,6], a:9},
+  // Full Spell Order
+  {section:'full', q:'3 + 4 × 2 = ?', choices:[11,14,9,8], a:11},
+  {section:'full', q:'2 + 3 × (4 - 1) = ?', choices:[11,13,15,9], a:11},
+  {section:'full', q:'10 - 2 × 3 + 4 = ?', choices:[8,28,4,14], a:8},
+  {section:'full', q:'5 × 2 - 3 × 2 = ?', choices:[4,14,8,20], a:4},
+  {section:'full', q:'4 + (3 + 1)² ÷ 2 = ?', choices:[12,10,16,20], a:12},
+  // Coven Word Problems
+  {section:'word', q:'You place 3 moon petals in the cauldron, then double the total after adding 2 more petals: (3 + 2) × 2. How many petals are in the potion?', choices:[10,7,12,5], a:10},
+  {section:'word', q:"Two spell jars each hold 4 bat-wing charms. You use one full jar's charms plus 3 loose extra charms, then triple everything: (2 × 4 + 3) × 3. How many charms in total?", choices:[33,45,21,24], a:33},
+  {section:'word', q:'A vial starts with 5 drops of moonlight potion. You add 3 more vials of 2 drops each, then 1 drop spills out: 5 + 3 × 2 - 1. How many drops are left?', choices:[10,15,9,17], a:10},
+];
+
+let qIdx = 0, score = 0, answered = false;
+const LESSON_KEY = 'lesson4', TOTAL = questions.length;
+
+function renderQuiz(){
+  answered = false;
+  const item = questions[qIdx];
+  const sec = SECTIONS[item.section];
+  document.getElementById('qcount').textContent = `Question ${qIdx+1} of ${TOTAL}`;
+  document.getElementById('scorecount').textContent = `🧪 Score: ${score}`;
+  document.getElementById('quizSectionLabel').textContent = `${sec.icon} ${sec.title}`;
+  document.getElementById('qtext').textContent = item.q;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'qfeedback';
+  document.getElementById('nextBtn').style.display = 'none';
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  shuffle(item.choices).forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c;
+    btn.onclick = () => selectQuizAnswer(c, btn);
+    choicesEl.appendChild(btn);
+  });
+}
+function selectQuizAnswer(value, btn){
+  if(answered) return;
+  answered = true;
+  const item = questions[qIdx];
+  const feedback = document.getElementById('feedback');
+  document.querySelectorAll('#choices .choice').forEach(b=>{
+    if(parseFloat(b.textContent) === item.a) b.classList.add('correct');
+  });
+  if(value === item.a){
+    score++;
+    btn.classList.add('correct');
+    feedback.textContent = 'Correct! The potion holds. 🌙';
+    feedback.className = 'qfeedback ok';
+  } else {
+    btn.classList.add('wrong');
+    feedback.textContent = `Not quite — the answer is ${item.a}. Remember your Potion Rules!`;
+    feedback.className = 'qfeedback no';
+  }
+  document.getElementById('scorecount').textContent = `🧪 Score: ${score}`;
+  document.getElementById('nextBtn').style.display = 'inline-block';
+  document.getElementById('nextBtn').textContent = (qIdx === TOTAL-1) ? 'Finish' : 'Next →';
+}
+function nextQuizQuestion(){
+  qIdx++;
+  if(qIdx >= TOTAL){ finishQuiz(); return; }
+  renderQuiz();
+}
+function finishQuiz(){
+  document.querySelector('#quizCard .qcard').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('qcount').textContent = 'Done!';
+  const rec = mathSave(LESSON_KEY, score, TOTAL);
+  const rank = score === TOTAL ? '🧙 Potion Master — a flawless brew!'
+             : score >= 12    ? '🌙 Night Witch — a strong brew!'
+             :                  '🧪 Apprentice Brewer — review the Four Potion Rules and try again!';
+  const banner = document.getElementById('doneBanner');
+  banner.style.display = 'block';
+  let msg = `<span class="rank">${rank}</span>You scored ${score} / ${TOTAL} (best so far: ${rec.best} / ${TOTAL}).`;
+  if(rec.best === TOTAL) msg += `<br>Flawless brew — well done! 🎉`;
+  else msg += `<br>Nice work — you can always come back and try again.`;
+  msg += `<br><a class="btn green" style="margin-top:10px" href="index.html">Back to the hub →</a>`;
+  banner.innerHTML = msg;
+}
+
+renderQuiz();
+</script>
+</body>
+</html>

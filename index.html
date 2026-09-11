@@ -53,6 +53,16 @@
     </div>
   </a>
 
+  <a class="lesson card" href="lesson4-order-of-operations.html" style="text-decoration:none">
+    <div class="lesson-num" style="background:var(--indigo)">4</div>
+    <div class="lesson-body">
+      <h3>The Midnight Potion Order</h3>
+      <p>Brew potions in the exact right order: parentheses, exponents, multiply/divide, add/subtract — PEMDAS.</p>
+      <div class="bar-track"><div class="bar-fill" id="bar-lesson4" style="background:var(--indigo)"></div></div>
+      <div class="bar-label" id="label-lesson4">0 / 16</div>
+    </div>
+  </a>
+
   <p style="text-align:center;margin-top:24px">
     <button class="btn ghost" onclick="if(confirm('Reset all progress?')){mathReset();location.reload();}">Reset all progress</button>
   </p>
@@ -69,6 +79,7 @@ function refreshBars(){
     {key:'lesson1', total:62},
     {key:'lesson2', total:10},
     {key:'lesson3', total:15},
+    {key:'lesson4', total:16},
   ];
   lessons.forEach(l=>{
     const rec = data[l.key];

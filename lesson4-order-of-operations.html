@@ -22,6 +22,7 @@
 }
 .demo-step .step-badge{margin-right:8px}
 #demoProgress{margin-bottom:8px}
+.rule-reminder{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 </style>
 </head>
 <body>
@@ -33,13 +34,14 @@
     <div class="txt">
       <span class="badge">Lesson 4 · Order of operations (PEMDAS)</span>
       <h1>The Midnight Potion Order</h1>
-      <p>Every midnight potion must be brewed by adding its ingredients in the <b>exact</b> right order, or it fizzles into swamp sludge. Math expressions work the same way — there's an exact order for solving them, called <b>PEMDAS</b>.</p>
+      <p>Every midnight potion must be brewed by adding its ingredients in the <b>exact</b> right order, or it fizzles into swamp sludge. A math potion recipe works the same way — there's an exact order for solving it, called <b>PEMDAS</b>.</p>
     </div>
   </div>
 
   <div class="card">
     <h2><span class="ico">🔮</span> The Four Potion Rules
       <span class="potion-vial" style="--liquid:#8b5cf6"><span class="neck"></span><span class="body"><span class="liquid"></span></span></span>
+      <span class="stage watch">1 · Watch 👀</span>
     </h2>
     <div class="explain">
       <b>Please Excuse My Dear Aunt Sally</b> — that's the old memory spell for the order: <b>P</b>arentheses, <b>E</b>xponents, <b>M</b>ultiply/<b>D</b>ivide, <b>A</b>dd/<b>S</b>ubtract.
@@ -52,19 +54,22 @@
       <span class="step-badge step-e">E &middot; Exponents</span>
       <p>Solve any power next. For example, 3&sup2; means 3 &times; 3 = 9 — charge the crystal.</p>
     </div>
+    <div class="explain">
+      The little number up high is a <b>power</b>. It tells you how many times to multiply the big number by itself. 3&sup2; = 3 &times; 3 = 9. 2&sup3; = 2 &times; 2 &times; 2 = 8. Careful — 3&sup2; is NOT 3 &times; 2!
+    </div>
     <div class="rule-row">
       <span class="step-badge step-md">MD &middot; Multiply &amp; Divide</span>
-      <p>Next, working left to right, do every &times; and &divide; in the order they appear — swirl the potion. &times; and &divide; are the same rank, so whichever comes first (left to right) goes first.</p>
+      <p>Next do every &times; and &divide;, left to right — swirl the potion. &times; and &divide; are a tie, so whichever comes first goes first.</p>
     </div>
     <div class="rule-row">
       <span class="step-badge step-as">AS &middot; Add &amp; Subtract</span>
-      <p>Last, working left to right, do every + and &minus; — the final stir. + and &minus; are the same rank too, so left to right wins.</p>
+      <p>Last, working left to right, do every + and &minus; — the final stir. + and &minus; are a tie too, so left to right wins.</p>
     </div>
   </div>
 
   <div class="card">
-    <h2><span class="ico">🌙</span> Watch a potion brew</h2>
-    <p class="note">Tap through each step to see a potion (an expression) get simplified, one PEMDAS move at a time.</p>
+    <h2><span class="ico">🌙</span> Watch a potion brew <span class="stage watch">1 · Watch 👀</span></h2>
+    <p class="note">Tap through each step to see a potion recipe get simplified, one PEMDAS move at a time.</p>
     <div class="section-label" id="demoProgress">Example 1 of 3</div>
     <div class="demo-expr" id="demoExpr"></div>
     <div id="demoSteps"></div>
@@ -74,9 +79,9 @@
   </div>
 
   <div class="card">
-    <h2><span class="ico">🌟</span> Which move goes first?</h2>
+    <h2><span class="ico">🌟</span> Which move goes first? <span class="stage help">2 · Try with help 🤝 · not scored</span></h2>
     <p class="note">Tap the correct "first move" for each potion below. Get it wrong and you can just try again.</p>
-    <div class="progress-strip"><span id="roundCount">Round 1 of 5</span></div>
+    <div class="progress-strip"><span id="roundCount">Round 1 of 7</span></div>
     <div class="qcard" id="roundCard">
       <div class="qtext" id="roundExpr"></div>
       <div class="choices" id="roundChoices"></div>
@@ -91,10 +96,11 @@
   <div class="card" id="quizCard">
     <h2><span class="ico">🧪</span> Midnight Potion Practice
       <span class="potion-vial" style="--liquid:#0f766e"><span class="neck"></span><span class="body"><span class="liquid"></span></span></span>
+      <span class="stage own">3 · On your own 🏆 · this one counts</span>
     </h2>
     <div id="quizSectionLabel" class="section-label">🔮 Parentheses Power</div>
     <div class="progress-strip">
-      <span id="qcount">Question 1 of 16</span>
+      <span id="qcount">Question 1 of 19</span>
       <span id="scorecount">🧪 Score: 0</span>
     </div>
     <div class="qcard">
@@ -186,16 +192,20 @@ renderDemo();
 
 /* ===================== Card 3: guided "which move first" practice ===================== */
 const rounds = [
-  {expr:'5 + (3 × 2)',      choices:['3 × 2 — inside the parentheses','5 + 3','the whole expression at once'],
+  {expr:'5 + (3 × 2)',      choices:['3 × 2 — inside the parentheses','5 + 3','the whole potion recipe at once'],
     confirm:'Yes! Parentheses always go first.'},
-  {expr:'4² + 1',           choices:['4² — the exponent','4 + 1','the whole expression at once'],
+  {expr:'4² + 1',           choices:['4² — the exponent','4 + 1','the whole potion recipe at once'],
     confirm:'Right — exponents come before addition.'},
   {expr:'6 × 2 + 3',        choices:['6 × 2 — multiply first','2 + 3','6 + 2'],
     confirm:'Yes — multiply before you add.'},
   {expr:'(7 - 4) × 2²', choices:['7 - 4 — parentheses beat exponents','2² — the exponent','4 × 2'],
     confirm:'Correct — parentheses outrank exponents.'},
-  {expr:'9 - 3 + 2',             choices:['9 - 3 — same rank, so go left to right','3 + 2','9 - 2'],
+  {expr:'9 - 3 + 2',             choices:['9 - 3 — a tie, so go left to right','3 + 2','9 - 2'],
     confirm:'Exactly — add/subtract tie, so left to right wins.'},
+  {expr:'2³ + 1',                choices:['2³ — the power: 2 × 2 × 2','2 + 1','3 × 2'],
+    confirm:'Yes! The power first: 2 × 2 × 2 = 8, then 8 + 1 = 9.'},
+  {expr:'8 ÷ 2 + 1',             choices:['8 ÷ 2 — divide first','2 + 1','8 + 1'],
+    confirm:'Right — divide before you add: 8 ÷ 2 = 4, then 4 + 1 = 5.'},
 ];
 
 let roundIdx = 0, roundAnswered = false;
@@ -229,6 +239,8 @@ function selectRound(correct, btn, r){
     nb.textContent = (roundIdx === rounds.length-1) ? 'Finish practice' : 'Next round →';
   } else {
     btn.classList.add('wrong','shake');
+    document.getElementById('roundFeedback').textContent = 'Not that one. Check in order: ( ) first, then a little high number, then × ÷, then + −.';
+    document.getElementById('roundFeedback').className = 'qfeedback no';
     setTimeout(()=>btn.classList.remove('shake'), 400);
   }
 }
@@ -253,31 +265,50 @@ const SECTIONS = {
   paren: {icon:'🔮', title:'Parentheses Power'},
   power: {icon:'⚡',       title:'Power Crystals'},
   full:  {icon:'🌙', title:'Full Spell Order'},
-  word:  {icon:'🧪', title:'Coven Word Problems'},
+  word:  {icon:'🧪', title:'Cauldron Word Problems'},
+  mix:   {icon:'🔀', title:'Mix it up'},
 };
 
 const questions = [
   // Parentheses Power
-  {section:'paren', q:'3 × (2 + 4) = ?', choices:[18,10,24,9], a:18},
-  {section:'paren', q:'(8 - 3) × 2 = ?', choices:[10,2,13,16], a:10},
-  {section:'paren', q:'20 - (4 + 6) = ?', choices:[10,22,30,4], a:10},
-  {section:'paren', q:'(5 + 1) × (6 - 2) = ?', choices:[24,30,16,10], a:24},
+  {section:'paren', q:'3 × (2 + 4) = ?', choices:[18,10,24,9], a:18,
+    why:'Not quite. Parentheses first: 2 + 4 = 6. Then 3 × 6 = 18.'},
+  {section:'paren', q:'(8 - 3) × 2 = ?', choices:[10,2,13,16], a:10,
+    why:'Not quite. Parentheses first: 8 − 3 = 5. Then 5 × 2 = 10.'},
+  {section:'paren', q:'20 - (4 + 6) = ?', choices:[10,22,30,4], a:10,
+    why:'Not quite. Parentheses first: 4 + 6 = 10. Then 20 − 10 = 10.'},
+  {section:'paren', q:'(5 + 1) × (6 - 2) = ?', choices:[24,30,16,10], a:24,
+    why:'Not quite. Both parentheses first: 5 + 1 = 6 and 6 − 2 = 4. Then 6 × 4 = 24.'},
   // Power Crystals
-  {section:'power', q:'3² = ?', choices:[9,6,3,12], a:9},
-  {section:'power', q:'2³ = ?', choices:[8,6,4,9], a:8},
-  {section:'power', q:'5 + 2² = ?', choices:[9,49,14,10], a:9},
-  {section:'power', q:'(1 + 2)² = ?', choices:[9,5,4,6], a:9},
+  {section:'power', q:'3² = ?', choices:[9,6,3,12], a:9,
+    why:'Not quite. 3² means 3 × 3, not 3 × 2. 3 × 3 = 9.'},
+  {section:'power', q:'2³ = ?', choices:[8,6,4,9], a:8,
+    why:'Not quite. 2³ means 2 × 2 × 2. 2 × 2 = 4, then 4 × 2 = 8.'},
+  {section:'power', q:'5 + 2² = ?', choices:[9,49,14,10], a:9,
+    why:'Not quite. The power first: 2² = 4. Then 5 + 4 = 9.'},
+  {section:'power', q:'(1 + 2)² = ?', choices:[9,5,4,6], a:9,
+    why:'Not quite. Parentheses first: 1 + 2 = 3. Then the power: 3² = 3 × 3 = 9.'},
   // Full Spell Order
-  {section:'full', q:'3 + 4 × 2 = ?', choices:[11,14,9,8], a:11},
-  {section:'full', q:'2 + 3 × (4 - 1) = ?', choices:[11,13,15,9], a:11},
-  {section:'full', q:'10 - 2 × 3 + 4 = ?', choices:[8,28,4,14], a:8},
-  {section:'full', q:'5 × 2 - 3 × 2 = ?', choices:[4,14,8,20], a:4},
-  {section:'full', q:'4 + (3 + 1)² ÷ 2 = ?', choices:[12,10,16,20], a:12},
-  // Coven Word Problems
-  {section:'word', q:'You place 3 moon petals in the cauldron, then double the total after adding 2 more petals: (3 + 2) × 2. How many petals are in the potion?', choices:[10,7,12,5], a:10},
-  {section:'word', q:"Two spell jars each hold 4 bat-wing charms. You use one full jar's charms plus 3 loose extra charms, then triple everything: (2 × 4 + 3) × 3. How many charms in total?", choices:[33,45,21,24], a:33},
-  {section:'word', q:'A vial starts with 5 drops of moonlight potion. You add 3 more vials of 2 drops each, then 1 drop spills out: 5 + 3 × 2 - 1. How many drops are left?', choices:[10,15,9,17], a:10},
+  {section:'full', q:'3 + 4 × 2 = ?', choices:[11,14,9,8], a:11,
+    why:'Not quite. × first: 4 × 2 = 8. Then 3 + 8 = 11.'},
+  {section:'full', q:'2 + 3 × (4 - 1) = ?', choices:[11,13,15,9], a:11,
+    why:'Not quite. Parentheses first: 4 − 1 = 3. Then 3 × 3 = 9, and 2 + 9 = 11.'},
+  {section:'full', q:'10 - 2 × 3 + 4 = ?', choices:[8,28,4,14], a:8,
+    why:'Not quite. × first: 2 × 3 = 6. Then left to right: 10 − 6 = 4, 4 + 4 = 8.'},
+  {section:'full', q:'5 × 2 - 3 × 2 = ?', choices:[4,14,8,20], a:4,
+    why:'Not quite. Both × first: 5 × 2 = 10 and 3 × 2 = 6. Then 10 − 6 = 4.'},
+  {section:'full', q:'4 + (3 + 1)² ÷ 2 = ?', choices:[12,10,16,20], a:12,
+    why:'Not quite. Parentheses first: 3 + 1 = 4, then the power: 4² = 16. Then 16 ÷ 2 = 8, and 4 + 8 = 12.'},
+  // Cauldron Word Problems
+  {section:'word', q:'You drop in 3 moon petals, then 2 more. Then you double the whole potion: (3 + 2) × 2. How many petals?', choices:[10,7,12,5], a:10,
+    why:'Not quite. Parentheses first: 3 + 2 = 5. Then 5 × 2 = 10.'},
+  {section:'word', q:'Two spell jars each hold 4 bat-wing charms. You tip in both jars, add 3 loose charms, then triple the whole potion: (2 × 4 + 3) × 3. How many charms?', choices:[33,45,21,24], a:33,
+    why:'Not quite. Inside the parentheses, × first: 2 × 4 = 8, then 8 + 3 = 11. Then 11 × 3 = 33.'},
+  {section:'word', q:'A vial starts with 5 drops of moonlight potion. You add 3 more vials of 2 drops each, then 1 drop spills out: 5 + 3 × 2 - 1. How many drops are left?', choices:[10,15,9,17], a:10,
+    why:'Not quite. × first: 3 × 2 = 6. Then left to right: 5 + 6 = 11, 11 − 1 = 10.'},
 ];
+// 🔀 Mix it up: three questions from the first three parts again (same objects, so the answers match).
+[1, 6, 10].forEach(i => questions.push(Object.assign({}, questions[i], {mix:true})));
 
 let qIdx = 0, score = 0, answered = false;
 const LESSON_KEY = 'lesson4', TOTAL = questions.length;
@@ -285,7 +316,7 @@ const LESSON_KEY = 'lesson4', TOTAL = questions.length;
 function renderQuiz(){
   answered = false;
   const item = questions[qIdx];
-  const sec = SECTIONS[item.section];
+  const sec = SECTIONS[item.mix ? 'mix' : item.section];
   document.getElementById('qcount').textContent = `Question ${qIdx+1} of ${TOTAL}`;
   document.getElementById('scorecount').textContent = `🧪 Score: ${score}`;
   document.getElementById('quizSectionLabel').textContent = `${sec.icon} ${sec.title}`;
@@ -318,7 +349,13 @@ function selectQuizAnswer(value, btn){
     feedback.className = 'qfeedback ok';
   } else {
     btn.classList.add('wrong');
-    feedback.textContent = `Not quite — the answer is ${item.a}. Remember your Potion Rules!`;
+    feedback.innerHTML = `${item.why || `Not quite — the answer is ${item.a}. Remember your Potion Rules!`}
+      <div class="rule-reminder">
+        <span class="step-badge step-p">P &middot; Parentheses</span>
+        <span class="step-badge step-e">E &middot; Exponents</span>
+        <span class="step-badge step-md">MD &middot; Multiply &amp; Divide</span>
+        <span class="step-badge step-as">AS &middot; Add &amp; Subtract</span>
+      </div>`;
     feedback.className = 'qfeedback no';
   }
   document.getElementById('scorecount').textContent = `🧪 Score: ${score}`;
@@ -336,7 +373,7 @@ function finishQuiz(){
   document.getElementById('qcount').textContent = 'Done!';
   const rec = mathSave(LESSON_KEY, score, TOTAL);
   const rank = score === TOTAL ? '🧙 Potion Master — a flawless brew!'
-             : score >= 12    ? '🌙 Night Witch — a strong brew!'
+             : score >= 14    ? '🌙 Moon Brewer — a strong brew!'
              :                  '🧪 Apprentice Brewer — review the Four Potion Rules and try again!';
   const banner = document.getElementById('doneBanner');
   banner.style.display = 'block';

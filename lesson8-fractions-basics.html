@@ -9,14 +9,6 @@
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="dragon.css">
 <style>
-/* stage tags: Watch (I do) / Try with help (we do) / On your own (you do) */
-.stage{
-  display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
-  border-radius:99px;padding:4px 12px;margin-left:auto;white-space:nowrap;
-}
-.stage.watch{background:#f3ecff;color:#6d28d9}
-.stage.help{background:#fff4e5;color:#c2410c}
-.stage.own{background:#e8f9ee;color:#15803d}
 .caption{font-size:.95rem;font-weight:700;color:var(--sub);margin:0 0 4px}
 /* pie beside bar */
 .pic-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin:12px 0}
@@ -67,7 +59,7 @@
 
   <!-- Card 1: What is a fraction? (I do) -->
   <div class="card">
-    <h2><span class="ico">🥧</span> What is a fraction? <span class="stage watch">Watch</span></h2>
+    <h2><span class="ico">🥧</span> What is a fraction? <span class="stage watch">1 · Watch 👀</span></h2>
     <div class="pic-row">
       <div id="pie1"></div>
       <div class="bar" id="bar1"></div>
@@ -97,7 +89,7 @@
 
   <!-- Card 2: A fraction is a number on the line -->
   <div class="card">
-    <h2><span class="ico">📏</span> A fraction is a number on the line <span class="stage watch">Watch</span></h2>
+    <h2><span class="ico">📏</span> A fraction is a number on the line <span class="stage watch">1 · Watch 👀</span></h2>
     <div id="line1"></div>
     <div class="explain">
       <p>Cut the space between 0 and 1 into <b>4 equal jumps</b>. Each jump is <b>1/4</b>.</p>
@@ -112,7 +104,7 @@
 
   <!-- Card 3: Equivalent fractions -->
   <div class="card">
-    <h2><span class="ico">🪞</span> Same size, different name <span class="stage watch">Watch</span></h2>
+    <h2><span class="ico">🪞</span> Same size, different name <span class="stage watch">1 · Watch 👀</span></h2>
     <div class="stack">
       <div id="eq1a"></div>
       <div id="eq1b"></div>
@@ -132,7 +124,7 @@
 
   <!-- Card 4: Which is bigger? -->
   <div class="card">
-    <h2><span class="ico">⚖️</span> Which is bigger? <span class="stage watch">Watch</span></h2>
+    <h2><span class="ico">⚖️</span> Which is bigger? <span class="stage watch">1 · Watch 👀</span></h2>
     <div class="example">
       <h3>Same bottom number</h3>
       <div class="cmp"><div id="cmp1a"></div><div id="cmp1b"></div></div>
@@ -153,7 +145,7 @@
 
   <!-- Card 5: Feed the dragons (we do, not scored) -->
   <div class="card">
-    <h2><span class="ico">🐉</span> Feed the dragons <span class="stage help">Try with help</span></h2>
+    <h2><span class="ico">🐉</span> Feed the dragons <span class="stage help">2 · Try with help 🤝 · not scored</span></h2>
     <p class="note" style="margin-top:-4px">Your turn, with a hint each time. Shade the bar, then find the fraction on the line. Not scored — just practice.</p>
     <div class="section-label" id="feedProgress">Pie 1 of 4</div>
     <p class="feed-hint" id="feedHint"></p>
@@ -162,10 +154,10 @@
 
   <!-- Card 6: Feast Trials (you do, scored) -->
   <div class="card">
-    <h2><span class="ico" id="section-ico">🥧</span> <span id="section-title">Feast Trials</span> <span class="stage own">On your own</span></h2>
+    <h2><span class="ico" id="section-ico">🥧</span> <span id="section-title">Feast Trials</span> <span class="stage own">3 · On your own 🏆 · this one counts</span></h2>
     <p class="note" id="section-note" style="margin-top:-4px"></p>
     <div class="progress-strip">
-      <span id="qcount">Progress: 1 / 16</span>
+      <span id="qcount">Progress: 1 / 19</span>
       <span id="scorecount">🔥 Score: 0</span>
     </div>
     <div class="qcard">
@@ -299,6 +291,8 @@ const questions = [
   {part:'D', a:[5,8], b:[3,4], answer:'3/4', choices:['3/4','5/8','they are equal'],
     why:'Rename 3/4 as 6/8. 6/8 is more than 5/8 — so 3/4 is bigger.'},
 ];
+// 🔀 Mix it up: three questions from Parts A, B and C again (same objects, so the answers match).
+[1, 6, 9].forEach(i => questions.push(Object.assign({}, questions[i], {mix:true})));
 
 let idx = 0, score = 0, answered = false;
 const LESSON_KEY = 'lesson8', TOTAL = questions.length;
@@ -312,12 +306,14 @@ const SECTIONS = {
      note:'Same size, new name. <b>Multiply the top and the bottom by the same number.</b>'},
   D:{ico:'⚖️', title:'Part D — Which is bigger?',
      note:'Look at both bars. Which shaded part is <b>longer</b>? Say why.'},
+  mix:{ico:'🔀', title:'Mix it up',
+     note:'Three questions from earlier — you have seen these before. Show what you remember!'},
 };
 
 function renderQuestion(){
   answered = false;
   const item = questions[idx];
-  const sec = SECTIONS[item.part];
+  const sec = SECTIONS[item.mix ? 'mix' : item.part];
   $('qcount').textContent = `Progress: ${idx+1} / ${TOTAL}`;
   $('scorecount').textContent = `🔥 Score: ${score}`;
   $('section-ico').textContent = sec.ico;
@@ -421,7 +417,7 @@ function finish(){
   $('qcount').textContent = 'Done!';
   const rec = mathSave(LESSON_KEY, score, TOTAL);
   const rank = score === TOTAL ? '🏆 Feast Master — every slice counted!'
-             : score >= 12    ? '🥧 Pie Sharer — fair shares all round!'
+             : score >= 14    ? '🥧 Pie Sharer — fair shares all round!'
              :                  '🐣 Slice Apprentice — equal parts, count the slices, try again!';
   const banner = $('doneBanner');
   banner.style.display = 'block';

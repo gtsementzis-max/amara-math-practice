@@ -66,13 +66,13 @@
     <div class="txt">
       <span class="badge">Lesson 7 · Long division</span>
       <h1>The Dragon Scroll</h1>
-      <p>Every Dragon Master keeps a scroll — the fastest way to split any hoard, however big. It is the Big 7 ladder Amara already knows, written neatly: biggest chunk first, one place value at a time, four steps that repeat.</p>
+      <p>Every Dragon Master keeps a scroll — the fastest way to split any hoard, however big. It is the Big 7 ladder Amara already knows, written neatly: biggest chunk first, tens first, then ones, four steps that repeat.</p>
     </div>
   </div>
 
   <!-- Card 1: ladder vs scroll -->
   <div class="card">
-    <h2><span class="ico">🪜</span> From the ladder to the scroll</h2>
+    <h2><span class="ico">🪜</span> From the ladder to the scroll <span class="stage watch">1 · Watch 👀</span></h2>
     <div class="two-col">
       <div class="example">
         <h3>Big 7 ladder (Lesson 6)</h3>
@@ -81,7 +81,7 @@
       </div>
       <div class="example">
         <h3>The scroll</h3>
-        <p class="caption">72 &divide; 3, one place value at a time</p>
+        <p class="caption">72 &divide; 3, tens first, then ones</p>
         <div id="scroll1"></div>
       </div>
     </div>
@@ -92,7 +92,7 @@
 
   <!-- Card 2: the four steps -->
   <div class="card">
-    <h2><span class="ico">🐉</span> The four steps: Dragons Munch Sweet Berries</h2>
+    <h2><span class="ico">🐉</span> The four steps: Dragons Munch Sweet Berries <span class="stage watch">1 · Watch 👀</span></h2>
     <div class="rule-row">
       <span class="step-badge step-d">D &middot; Divide</span>
       <p>How many times does the divisor go into the number you are looking at? Write that digit on top.</p>
@@ -109,12 +109,12 @@
       <span class="step-badge step-b">B &middot; Bring down</span>
       <p>Bring down the next digit and start again at D.</p>
     </div>
-    <p class="note">The classic mnemonic is <b>Does McDonald's Sell Burgers</b>. The dragon version is <b>Dragons Munch Sweet Berries</b> — same four steps.</p>
+    <p class="note"><b>Dragons Munch Sweet Berries</b> — say it to remember the four steps in order.</p>
   </div>
 
   <!-- Card 3: I do — watch the scroll unroll -->
   <div class="card">
-    <h2><span class="ico">📜</span> Watch the scroll unroll</h2>
+    <h2><span class="ico">📜</span> Watch the scroll unroll <span class="stage watch">1 · Watch 👀</span></h2>
     <p class="note" style="margin-top:-4px">Tap through each step. Watch which digit gets written and where — Divide, Multiply, Subtract, Bring down, again and again.</p>
     <div class="section-label" id="scrollProgress">Example 1 of 4</div>
     <div class="demo-expr" id="scrollExpr"></div>
@@ -127,17 +127,17 @@
 
   <!-- Card 4: We do — your turn at the scroll -->
   <div class="card">
-    <h2><span class="ico">✍️</span> Your turn at the scroll</h2>
+    <h2><span class="ico">✍️</span> Your turn at the scroll <span class="stage help">2 · Try with help 🤝 · not scored</span></h2>
     <p class="note" style="margin-top:-4px">Now you write the scroll. For each step, pick the right number — every correct pick writes it onto the scroll for you.</p>
     <div id="scrollActivity"></div>
   </div>
 
   <!-- Card 5: You do (scored) -->
   <div class="card">
-    <h2><span class="ico" id="section-ico">📜</span> <span id="section-title">Scroll Trials</span></h2>
+    <h2><span class="ico" id="section-ico">📜</span> <span id="section-title">Scroll Trials</span> <span class="stage own">3 · On your own 🏆 · this one counts</span></h2>
     <p class="note" id="section-note" style="margin-top:-4px"></p>
     <div class="progress-strip">
-      <span id="qcount">Progress: 1 / 15</span>
+      <span id="qcount">Progress: 1 / 18</span>
       <span id="scorecount">🔥 Score: 0</span>
     </div>
     <div class="qcard">
@@ -156,7 +156,7 @@
 
   <!-- Card 6: six ways to see division (recap) -->
   <div class="card">
-    <h2><span class="ico">🧭</span> Six ways to see division</h2>
+    <h2><span class="ico">🧭</span> Six ways to see division <span class="stage watch">1 · Watch 👀</span></h2>
     <div class="explain">
       You now know <b>SIX</b> ways to solve the same division. Here is <b>52 &divide; 4</b> done every way — they all agree.
     </div>
@@ -317,10 +317,17 @@ function initScrollActivity(container, opts){
   const statusEl = container.querySelector('[data-role="status"]');
   const successEl = container.querySelector('[data-role="success"]');
   const steps = renderLongDivision(picEl, dividend, divisor, {revealed:0});
-  let revealed = 0, locked = false;
+  let revealed = 0, locked = false, misses = 0;
 
+  function stepHint(s){
+    if(s.kind === 'D') return `Count up in ${divisor}s: ${divisor}, ${2*divisor}, ${3*divisor}… how many before you pass ${s.current}?`;
+    if(s.kind === 'M') return `Multiply the top digit by the divisor: ${s.digit} × ${divisor}.`;
+    if(s.kind === 'S') return 'Take the bottom number away from the one above it.';
+    return 'Write the next digit after the number that is left.';
+  }
   function ask(){
     const s = steps[revealed];
+    misses = 0;
     qEl.innerHTML = `${stepBadge(s.kind)}${s.q}`;
     hintEl.textContent = (s.kind === 'D' && s.digit === 0)
       ? `${divisor} does not fit into ${s.current} even once — write a 0 and bring down the next digit.`
@@ -339,8 +346,10 @@ function initScrollActivity(container, opts){
     if(locked) return;
     const s = steps[revealed];
     if(v !== s.answer){
+      misses++;
       btn.classList.add('wrong', 'shake');
       statusEl.textContent = 'Try again';
+      if(misses >= 2) hintEl.textContent = stepHint(s);
       setTimeout(() => btn.classList.remove('shake'), 400);
       return;
     }
@@ -368,28 +377,44 @@ const scrollRounds = [
   {dividend:84,  divisor:4},
   {dividend:91,  divisor:7},
   {dividend:258, divisor:6},
-  {dividend:439, divisor:4},
 ];
+const bonusRound = {dividend:439, divisor:4};   // optional: has a 0 in the answer
 let scrollRoundIdx = 0;
+function makeBtn(text, onclick){
+  const btn = document.createElement('button');
+  btn.className = 'btn green';
+  btn.style.marginTop = '10px';
+  btn.style.display = 'block';
+  btn.textContent = text;
+  btn.onclick = onclick;
+  return btn;
+}
+function readyBtn(){
+  const btn = makeBtn("I'm ready for the Scroll Trials!", () => { btn.remove(); });
+  return btn;
+}
 function loadScrollRound(){
   const el = document.getElementById('scrollActivity');
   const round = scrollRounds[scrollRoundIdx];
   initScrollActivity(el, {
     dividend: round.dividend, divisor: round.divisor,
     onComplete: (successEl) => {
-      const btn = document.createElement('button');
-      btn.className = 'btn green';
-      btn.style.marginTop = '10px';
-      btn.style.display = 'block';
       if(scrollRoundIdx < scrollRounds.length - 1){
-        btn.textContent = 'Next scroll →';
-        btn.onclick = () => { scrollRoundIdx++; loadScrollRound(); };
+        successEl.appendChild(makeBtn('Next scroll →', () => { scrollRoundIdx++; loadScrollRound(); }));
       } else {
-        btn.textContent = "I'm ready for the Scroll Trials!";
-        btn.onclick = () => { btn.remove(); };
+        const bonus = makeBtn('Bonus scroll (has a tricky 0) →', () => { loadBonusRound(); });
+        bonus.className = 'btn';
+        successEl.appendChild(bonus);
+        successEl.appendChild(readyBtn());
       }
-      successEl.appendChild(btn);
     }
+  });
+}
+function loadBonusRound(){
+  const el = document.getElementById('scrollActivity');
+  initScrollActivity(el, {
+    dividend: bonusRound.dividend, divisor: bonusRound.divisor,
+    onComplete: (successEl) => { successEl.appendChild(readyBtn()); }
   });
 }
 loadScrollRound();
@@ -420,6 +445,8 @@ const questions = [
   {part:'C', kind:'Grouping', t:250, d:8, qt:31, r:2, choices:['31 R2','32 R2','31 R1','30 R10'],
     q:'🐟 <b>250 fish</b>, and each dragon eats <b>8</b>. How many dragons can be fed, and how many fish are left?'},
 ];
+// 🔀 Mix it up: three questions from Parts A, B and C again (same objects, so the answers match).
+[3, 7, 12].forEach(i => questions.push(Object.assign({}, questions[i], {mix:true})));
 
 let idx = 0, score = 0, answered = false;
 const LESSON_KEY = 'lesson7', TOTAL = questions.length;
@@ -431,6 +458,8 @@ const SECTIONS = {
      note:'Three digits now. If the first digit is too small, start with the first <b>two</b>. And when the divisor does not fit, <b>write a 0</b> on top!'},
   C:{ico:'🗺️', title:'Part C — Scroll Adventures',
      note:'First say whether it is <b>Sharing</b> (how many in each) or <b>Grouping</b> (how many groups). Then unroll the scroll.'},
+  mix:{ico:'🔀', title:'Mix it up',
+     note:'Three questions from earlier — you have seen these before. Show what you remember!'},
 };
 
 function answerOf(item){ return item.r ? `${item.qt} R${item.r}` : `${item.qt}`; }
@@ -441,7 +470,7 @@ function checkExplain(item){
 function renderQuestion(){
   answered = false;
   const item = questions[idx];
-  const sec = SECTIONS[item.part];
+  const sec = SECTIONS[item.mix ? 'mix' : item.part];
   document.getElementById('qcount').textContent = `Progress: ${idx+1} / ${TOTAL}`;
   document.getElementById('scorecount').textContent = `🔥 Score: ${score}`;
   document.getElementById('section-ico').textContent = sec.ico;
@@ -491,7 +520,8 @@ function selectAnswer(value, btn){
     feedback.className = 'qfeedback ok';
   } else {
     btn.classList.add('wrong');
-    feedback.textContent = `Not quite — ${checkExplain(item)}, so ${item.t} ÷ ${item.d} = ${correct}. Unroll the scroll step by step: Dragons Munch Sweet Berries.`;
+    renderLongDivision(document.getElementById('qDemo'), item.t, item.d, {revealed:99});
+    feedback.textContent = `Not quite. Look at the scroll: ${checkExplain(item)} → ${correct}. Try the next one step by step.`;
     feedback.className = 'qfeedback no';
   }
   document.getElementById('scorecount').textContent = `🔥 Score: ${score}`;
@@ -511,7 +541,7 @@ function finish(){
   document.getElementById('qcount').textContent = 'Done!';
   const rec = mathSave(LESSON_KEY, score, TOTAL);
   const rank = score === TOTAL ? '🏆 Dragon Master of the Scroll — every hoard is yours!'
-             : score >= 11    ? '📜 Scroll Keeper — the four steps are in your claws!'
+             : score >= 13    ? '📜 Scroll Keeper — the four steps are in your claws!'
              :                  '🐣 Scroll Apprentice — Dragons Munch Sweet Berries, one step at a time. Try again!';
   const banner = document.getElementById('doneBanner');
   banner.style.display = 'block';

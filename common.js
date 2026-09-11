@@ -171,16 +171,16 @@ function renderAdditionBlocks(el, a, b){
 // point gets an "R<remainder>" badge. Returns {hops, remainder}.
 function renderNumberLineHops(el, total, step){
   const hops = Math.floor(total / step), remainder = total % step;
-  const W = 720, H = 135, padL = 30, padR = 30, baseY = 86;
+  const W = 720, H = 140, padL = 30, padR = 30, baseY = 86;
   const unit = (W - padL - padR) / total;
   const x = v => Math.round((padL + v * unit) * 10) / 10;
-  const labelEvery = total <= 24 ? 1 : 2;
+  const labelEvery = total <= 24 ? 1 : 4;
   let s = `<svg class="numline" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Number line from 0 to ${total}, hopping back by ${step}">`;
   s += `<line x1="${padL-10}" y1="${baseY}" x2="${W-padR+10}" y2="${baseY}" stroke="#5c6b84" stroke-width="2"/>`;
   for(let v=0; v<=total; v++){
     s += `<line x1="${x(v)}" y1="${baseY-6}" x2="${x(v)}" y2="${baseY+6}" stroke="#5c6b84" stroke-width="1.5"/>`;
     if(v % labelEvery === 0 || v === total){
-      s += `<text x="${x(v)}" y="${baseY+22}" font-size="12" font-weight="700" text-anchor="middle" fill="#5c6b84" font-family="inherit">${v}</text>`;
+      s += `<text x="${x(v)}" y="${baseY+24}" font-size="16" font-weight="700" text-anchor="middle" fill="#5c6b84" font-family="inherit">${v}</text>`;
     }
   }
   const arcH = 42;
@@ -193,8 +193,8 @@ function renderNumberLineHops(el, total, step){
   }
   const rx = x(remainder);
   s += `<circle cx="${rx}" cy="${baseY}" r="7" fill="var(--amber,#f59e0b)" stroke="#fff" stroke-width="2"/>`;
-  s += `<rect x="${rx-20}" y="${baseY+28}" width="40" height="20" rx="10" fill="var(--amber,#f59e0b)"/>`;
-  s += `<text x="${rx}" y="${baseY+42}" font-size="12" font-weight="800" text-anchor="middle" fill="#fff" font-family="inherit">R${remainder}</text>`;
+  s += `<rect x="${rx-22}" y="${baseY+30}" width="44" height="22" rx="11" fill="var(--amber,#f59e0b)"/>`;
+  s += `<text x="${rx}" y="${baseY+46}" font-size="16" font-weight="800" text-anchor="middle" fill="#fff" font-family="inherit">R${remainder}</text>`;
   s += '</svg>';
   el.innerHTML = s;
   return { hops, remainder };

@@ -24,6 +24,7 @@
   border-radius:99px;padding:3px 12px;margin-bottom:8px;
 }
 .qstory.adventure{font-size:1.2rem;font-weight:700;line-height:1.45}
+.choice.shake{animation:nestshake .4s;border-color:var(--red)}
 </style>
 </head>
 <body>
@@ -41,7 +42,7 @@
 
   <!-- Card 1: I do -->
   <div class="card">
-    <h2><span class="ico">🥚</span> What is a remainder?</h2>
+    <h2><span class="ico">🥚</span> What is a remainder? <span class="stage watch">1 · Watch 👀</span></h2>
     <div class="explain">
       <b>7 &divide; 3</b> means share 7 eggs into 3 nests. Each nest gets 2 eggs, and 1 egg is left over.
       We write <b>7 &divide; 3 = 2 R1</b> and say <i>2 remainder 1</i>.
@@ -52,7 +53,7 @@
 
   <!-- Card 2: share vs group -->
   <div class="card">
-    <h2><span class="ico">⚖️</span> Two ways to divide: share or group</h2>
+    <h2><span class="ico">⚖️</span> Two ways to divide: share or group <span class="stage watch">1 · Watch 👀</span></h2>
     <div class="two-col">
       <div class="example">
         <h3>Sharing</h3>
@@ -72,7 +73,7 @@
 
   <!-- Card 3: number line -->
   <div class="card">
-    <h2><span class="ico">🐾</span> Hop back on the number line</h2>
+    <h2><span class="ico">🐾</span> Hop back on the number line <span class="stage watch">1 · Watch 👀</span></h2>
     <div class="explain">
       Another way: start at the total and hop back by the nest size until you cannot hop any more.
       Count the hops — that is the answer. Where you land is the remainder.
@@ -80,7 +81,7 @@
     <div id="demo-line"></div>
     <p>14 &divide; 4: hop back 4 three times (14 &rarr; 10 &rarr; 6 &rarr; 2). 3 hops, landed on 2. <b>14 &divide; 4 = 3 R2</b>.</p>
 
-    <h2 style="font-size:1.1rem;margin-top:22px"><span class="ico">🎯</span> Try it yourself</h2>
+    <h2 style="font-size:1.1rem;margin-top:22px"><span class="ico">🎯</span> Try it yourself <span class="stage help">2 · Try with help 🤝 · not scored</span></h2>
     <div class="stepper-row">
       <div>
         <div class="stepper-label">Total</div>
@@ -107,17 +108,17 @@
 
   <!-- Card 4: We do -->
   <div class="card">
-    <h2><span class="ico">🐲</span> Now you try: fill the nests, count the leftovers</h2>
+    <h2><span class="ico">🐲</span> Now you try: fill the nests, count the leftovers <span class="stage help">2 · Try with help 🤝 · not scored</span></h2>
     <p class="note" style="margin-top:-4px">Tap a nest to place an egg. When every nest is full, the eggs still waiting are the <b>remainder</b>.</p>
     <div id="buildActivity"></div>
   </div>
 
   <!-- Card 5: You do (scored) -->
   <div class="card">
-    <h2><span class="ico" id="section-ico">🥚</span> <span id="section-title">Leftover Trials</span></h2>
+    <h2><span class="ico" id="section-ico">🥚</span> <span id="section-title">Leftover Trials</span> <span class="stage own">3 · On your own 🏆 · this one counts</span></h2>
     <p class="note" id="section-note" style="margin-top:-4px"></p>
     <div class="progress-strip">
-      <span id="qcount">Progress: 1 / 15</span>
+      <span id="qcount">Progress: 1 / 18</span>
       <span id="scorecount">🔥 Score: 0</span>
     </div>
     <div class="qcard">
@@ -180,14 +181,64 @@ function loadBuildRound(){
         btn.textContent = 'Next clutch →';
         btn.onclick = () => { buildRoundIdx++; loadBuildRound(); };
       } else {
-        btn.textContent = "I'm ready for the Leftover Trials!";
-        btn.onclick = () => { btn.remove(); };
+        btn.textContent = 'Next: hop on the number line →';
+        btn.onclick = () => { loadLineRound(); };
       }
       successEl.appendChild(btn);
     }
   });
 }
 loadBuildRound();
+
+// ---------- "We do", last round: read a hop-back number line ----------
+function loadLineRound(){
+  const el = document.getElementById('buildActivity');
+  el.innerHTML = `
+    <div class="build-wrap">
+      <div class="qtext">Hop back by 3 from 10. How many hops, and where do you land?</div>
+      <div data-role="line"></div>
+      <div class="choices" data-role="choices"></div>
+      <div class="qfeedback" data-role="fb"></div>
+      <div class="build-success" data-role="success"></div>
+    </div>`;
+  const lineEl = el.querySelector('[data-role="line"]');
+  const choicesEl = el.querySelector('[data-role="choices"]');
+  const fbEl = el.querySelector('[data-role="fb"]');
+  const successEl = el.querySelector('[data-role="success"]');
+  let done = false;
+  const choices = ['3 hops, land on 1', '2 hops, land on 4', '3 hops, land on 0'];
+  shuffle(choices.map((text, i) => ({text, correct: i === 0}))).forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c.text;
+    btn.onclick = () => {
+      if(done) return;
+      if(c.correct){
+        done = true;
+        btn.classList.add('correct');
+        renderNumberLineHops(lineEl, 10, 3);
+        fbEl.textContent = '🐲 Yes! 10 → 7 → 4 → 1. 3 hops, and you land on 1: 10 ÷ 3 = 3 R1.';
+        fbEl.className = 'qfeedback ok';
+        successEl.style.display = 'block';
+        successEl.textContent = '✅ 10 ÷ 3 = 3 R1';
+        const nb = document.createElement('button');
+        nb.className = 'btn green';
+        nb.style.marginTop = '10px';
+        nb.style.display = 'block';
+        nb.textContent = "I'm ready for the Leftover Trials!";
+        nb.onclick = () => { nb.remove(); };
+        successEl.appendChild(nb);
+      } else {
+        btn.classList.add('wrong', 'shake');
+        renderNumberLineHops(lineEl, 10, 3);
+        fbEl.textContent = 'Count the hops on the line — each hop is 3.';
+        fbEl.className = 'qfeedback no';
+        setTimeout(() => btn.classList.remove('shake'), 400);
+      }
+    };
+    choicesEl.appendChild(btn);
+  });
+}
 
 // ---------- "You do": the quiz ----------
 // t = total, d = divisor, qt = quotient, r = remainder (t = qt × d + r, r < d).
@@ -218,6 +269,8 @@ const questions = [
   {part:'C', kind:'Sharing',  t:31, d:4, qt:7, r:3, nests:4, per:7, item:'🪙', label:'Cave', choices:['7 R3','8 R1','7 R2','6 R7'],
     q:'🪙 <b>31 gold coins</b> are shared equally into <b>4 caves</b>. How many coins in each cave, and how many are left over?'},
 ];
+// 🔀 Mix it up: three questions from Parts A, B and C again (same objects, so the answers match).
+[3, 7, 11].forEach(i => questions.push(Object.assign({}, questions[i], {mix:true})));
 
 let idx = 0, score = 0, answered = false;
 const LESSON_KEY = 'lesson5', TOTAL = questions.length;
@@ -229,6 +282,8 @@ const SECTIONS = {
      note:'Start at the total and hop back by the hop size. Count the hops — the number you land on is the remainder.'},
   C:{ico:'🗺️', title:'Part C — Share or Group?',
      note:'First say whether it is <b>Sharing</b> (how many in each) or <b>Grouping</b> (how many groups). Then divide — and do not forget the leftovers!'},
+  mix:{ico:'🔀', title:'Mix it up',
+     note:'Three questions from earlier — you have seen these before. Show what you remember!'},
 };
 
 function answerOf(item){ return `${item.qt} R${item.r}`; }
@@ -250,7 +305,7 @@ function shuffle(arr){
 function renderQuestion(){
   answered = false;
   const item = questions[idx];
-  const sec = SECTIONS[item.part];
+  const sec = SECTIONS[item.mix ? 'mix' : item.part];
   document.getElementById('qcount').textContent = `Progress: ${idx+1} / ${TOTAL}`;
   document.getElementById('scorecount').textContent = `🔥 Score: ${score}`;
   document.getElementById('section-ico').textContent = sec.ico;
@@ -335,7 +390,7 @@ function finish(){
   document.getElementById('qcount').textContent = 'Done!';
   const rec = mathSave(LESSON_KEY, score, TOTAL);
   const rank = score === TOTAL ? '🏆 Remainder Master — not one egg out of place!'
-             : score >= 11    ? '🐉 Dragon Rider — the leftovers are counted!'
+             : score >= 13    ? '🐉 Dragon Rider — the leftovers are counted!'
              :                  '🥚 Egg Keeper — hop back on the number line and try again!';
   const banner = document.getElementById('doneBanner');
   banner.style.display = 'block';

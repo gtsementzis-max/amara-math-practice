@@ -35,6 +35,7 @@
 }
 .qstory.adventure{font-size:1.2rem;font-weight:700;line-height:1.45}
 #qDemo.array-grid{margin-top:10px}
+.choice.shake{animation:nestshake .4s;border-color:var(--red)}
 </style>
 </head>
 <body>
@@ -46,13 +47,13 @@
     <div class="txt">
       <span class="badge">Lesson 6 · Big-number division</span>
       <h1>The Dragon Hoard Vault</h1>
-      <p>The hoard has too many coins to share one by one. Today Amara learns three ways to split big numbers fast — the rectangle, the box, and the Big 7 ladder — all built from the division she already knows.</p>
+      <p>The hoard is too big to share one coin at a time. Today you learn three fast ways to split big numbers: the rectangle, the box, and the Big 7 ladder.</p>
     </div>
   </div>
 
   <!-- Card 1: arrays / area model opener -->
   <div class="card">
-    <h2><span class="ico">🪙</span> Arrays: find the missing side</h2>
+    <h2><span class="ico">🪙</span> Arrays: find the missing side <span class="stage watch">1 · Watch 👀</span></h2>
     <div class="explain">
       <b>12 coins in 3 rows</b> make a rectangle with 4 in each row. 3 &times; 4 = 12, so <b>12 &divide; 3 = 4</b>.
       Division finds the <b>MISSING SIDE</b> of the rectangle.
@@ -69,14 +70,14 @@
         <div id="array2"></div>
       </div>
     </div>
-    <p class="note">Now imagine the rectangle as a <b>BOX</b>: 3 on the side, 12 inside, ? on top. When the number is big we split the box into friendly pieces — that is the next card.</p>
+    <p class="note">Now imagine the rectangle as a <b>BOX</b>: 3 on the side, 12 inside, ? on top. When the number is big we split the box into pieces you already know the answer to, like 60 = 3 × 20 — that is the next card.</p>
     <div id="box1"></div>
   </div>
 
   <!-- Card 2: I do — split the box -->
   <div class="card">
-    <h2><span class="ico">📦</span> Split the box</h2>
-    <p class="note" style="margin-top:-4px">Tap through each step. We cut the big number into friendly pieces the divisor can handle, then add up what goes on top.</p>
+    <h2><span class="ico">📦</span> Split the box <span class="stage watch">1 · Watch 👀</span></h2>
+    <p class="note" style="margin-top:-4px">Tap through each step. We cut the big number into easy pieces the divisor can handle (the <b>divisor</b> is the number you divide by — the 3 in 72 &divide; 3), then add up what goes on top.</p>
     <div class="section-label" id="boxProgress">Example 1 of 3</div>
     <div class="demo-expr" id="boxExpr"></div>
     <div class="demo-pic" id="boxPic"></div>
@@ -88,7 +89,7 @@
 
   <!-- Card 3: I do — Big 7 ladder -->
   <div class="card">
-    <h2><span class="ico">🐉</span> The Big 7 ladder (partial quotients)</h2>
+    <h2><span class="ico">🐉</span> The Big 7 ladder <span class="stage watch">1 · Watch 👀</span></h2>
     <p class="note" style="margin-top:-4px">Same boxes, written as a ladder: subtract a chunk you know, write how many groups it was, and keep going until you cannot subtract any more. Add up the groups.</p>
     <div class="section-label" id="ladderProgress">Example 1 of 3</div>
     <div class="demo-expr" id="ladderExpr"></div>
@@ -101,17 +102,17 @@
 
   <!-- Card 4: We do — raid the hoard -->
   <div class="card">
-    <h2><span class="ico">🏴‍☠️</span> Raid the hoard: take your own chunks</h2>
-    <p class="note" style="margin-top:-4px">Tap a chunk to take that many groups out of the hoard. Take 10s, 5s, 2s or 1s in any order you like — if a chunk is too big, the hoard will tell you. When fewer coins are left than the divisor, you are done.</p>
+    <h2><span class="ico">🏴‍☠️</span> Raid the hoard: take your own chunks <span class="stage help">2 · Try with help 🤝 · not scored</span></h2>
+    <p class="note" style="margin-top:-4px">Tap a chunk to take that many groups out of the hoard. Any order works. If a chunk is too big, the hoard says no. Stop when fewer coins are left than the divisor.</p>
     <div id="chunkActivity"></div>
   </div>
 
   <!-- Card 5: You do (scored) -->
   <div class="card">
-    <h2><span class="ico" id="section-ico">🪙</span> <span id="section-title">Vault Trials</span></h2>
+    <h2><span class="ico" id="section-ico">🪙</span> <span id="section-title">Vault Trials</span> <span class="stage own">3 · On your own 🏆 · this one counts</span></h2>
     <p class="note" id="section-note" style="margin-top:-4px"></p>
     <div class="progress-strip">
-      <span id="qcount">Progress: 1 / 15</span>
+      <span id="qcount">Progress: 1 / 18</span>
       <span id="scorecount">🔥 Score: 0</span>
     </div>
     <div class="qcard">
@@ -174,7 +175,7 @@ function makeRevealDemo(cfg){
 const boxExamples = [
   {t:72, d:3, r:0, answer:'24', chunks:[
     {part:60, groups:20, why:'Split 72 = 60 + 12. 60 is 3 × 20 — a tens chunk that fits, so 20 goes on top.'},
-    {part:12, groups:4,  why:'12 is 3 × 4 — a fact Amara knows, so 4 goes on top.'},
+    {part:12, groups:4,  why:'12 is 3 × 4 — a fact you know, so 4 goes on top.'},
   ]},
   {t:96, d:4, r:0, answer:'24', chunks:[
     {part:80, groups:20, why:'Split 96 = 80 + 16. 80 is 4 × 20 — a tens chunk that fits, so 20 goes on top.'},
@@ -271,7 +272,59 @@ function loadChunkRound(){
     }
   });
 }
-loadChunkRound();
+
+// One box round first: add the two tops, then raid the hoard with chunks.
+function loadBoxRound(){
+  const el = document.getElementById('chunkActivity');
+  el.innerHTML = `
+    <div class="build-wrap">
+      <div class="qtext">96 ÷ 4 = ?</div>
+      <div data-role="box"></div>
+      <div class="qtext" style="font-size:1rem">What goes on top in total? (80 is 4 × 20, 16 is 4 × 4)</div>
+      <div class="choices" data-role="choices"></div>
+      <div class="qfeedback" data-role="fb"></div>
+      <div class="build-success" data-role="success"></div>
+    </div>`;
+  const boxEl = el.querySelector('[data-role="box"]');
+  const choicesEl = el.querySelector('[data-role="choices"]');
+  const fbEl = el.querySelector('[data-role="fb"]');
+  const successEl = el.querySelector('[data-role="success"]');
+  const chunks = [{part:80, groups:20}, {part:16, groups:4}];
+  renderAreaBox(boxEl, 4, chunks, {revealed:2, hideTop:true});
+  let done = false;
+  const choices = ['24', '20', '26'];
+  shuffle(choices.map((text, i) => ({text, correct: i === 0}))).forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c.text;
+    btn.onclick = () => {
+      if(done) return;
+      if(c.correct){
+        done = true;
+        btn.classList.add('correct');
+        renderAreaBox(boxEl, 4, chunks, {revealed:2, sumLine:true});
+        fbEl.textContent = '🐲 Yes! 20 + 4 = 24, so 96 ÷ 4 = 24.';
+        fbEl.className = 'qfeedback ok';
+        successEl.style.display = 'block';
+        successEl.textContent = '✅ 96 ÷ 4 = 24';
+        const nb = document.createElement('button');
+        nb.className = 'btn green';
+        nb.style.marginTop = '10px';
+        nb.style.display = 'block';
+        nb.textContent = 'Now raid the hoard with chunks →';
+        nb.onclick = () => { loadChunkRound(); };
+        successEl.appendChild(nb);
+      } else {
+        btn.classList.add('wrong', 'shake');
+        fbEl.textContent = 'Add the two top numbers: 20 + 4.';
+        fbEl.className = 'qfeedback no';
+        setTimeout(() => btn.classList.remove('shake'), 400);
+      }
+    };
+    choicesEl.appendChild(btn);
+  });
+}
+loadBoxRound();
 
 // ---------- Card 5: You do — the quiz ----------
 // t = dividend, d = divisor, qt = quotient, r = remainder (t = qt × d + r, r < d).
@@ -293,13 +346,15 @@ const questions = [
   {part:'C', t:135, d:5, qt:27, r:0, chunks:[20,5,2], choices:['27','25','23','29']},
   {part:'C', t:87,  d:4, qt:21, r:3, chunks:[20,1],   choices:['21 R3','22 R1','20 R7','21 R1']},
   // Part D: hoard adventures (word problems)
-  {part:'D', kind:'Sharing',  t:76,  d:4, qt:19, r:0, chunks:[10,9], choices:['19','18','21','17'],
+  {part:'D', kind:'Sharing',  t:76,  d:4, qt:19, r:0, chunks:[10,5,4], choices:['19','18','21','17'],
     q:'💰 The hoard has <b>76 gold coins</b> to share equally into <b>4 chests</b>. How many coins in each chest?'},
   {part:'D', kind:'Grouping', t:90,  d:6, qt:15, r:0, chunks:[10,5], choices:['15','14','16','12'],
     q:'💎 There are <b>90 fire gems</b>. Each pouch holds <b>6 gems</b>. How many pouches can you fill?'},
   {part:'D', kind:'Sharing',  t:132, d:6, qt:22, r:0, chunks:[20,2], choices:['22','21','24','20'],
     q:'🐟 <b>132 fish</b> are shared equally between <b>6 dragons</b>. How many fish does each dragon get?'},
 ];
+// 🔀 Mix it up: three questions from Parts A, B and C again (same objects, so the answers match).
+[2, 6, 8].forEach(i => questions.push(Object.assign({}, questions[i], {mix:true})));
 
 let idx = 0, score = 0, answered = false;
 const LESSON_KEY = 'lesson6', TOTAL = questions.length;
@@ -312,13 +367,16 @@ const SECTIONS = {
   C:{ico:'🐉', title:'Part C — Big 7 Chunks',
      note:'Read the ladder: each chunk is a number of groups. <b>Add the groups</b> — and say the remainder if there is one.'},
   D:{ico:'🗺️', title:'Part D — Hoard Adventures',
-     note:'First say whether it is <b>Sharing</b> (how many in each) or <b>Grouping</b> (how many groups). Then split the big number into friendly chunks.'},
+     note:'First say whether it is <b>Sharing</b> (how many in each) or <b>Grouping</b> (how many groups). Then split the big number into easy chunks.'},
+  mix:{ico:'🔀', title:'Mix it up',
+     note:'Three questions from earlier — you have seen these before. Show what you remember!'},
 };
 
 function answerOf(item){ return item.r ? `${item.qt} R${item.r}` : `${item.qt}`; }
 function boxChunks(item){ return item.chunks.map(g => ({part: g * item.d, groups: g})); }
 function chunkExplain(item){
   const facts = item.chunks.map(g => `${item.d} × ${g} = ${g * item.d}`).join(' and ');
+  if(item.part === 'A') return `${facts}, so the missing side is ${item.qt}`;
   const sum = item.chunks.length > 1 ? `${item.chunks.join(' + ')} = ${item.qt}` : `that is ${item.qt}`;
   return `${facts}, ${sum}${item.r ? `, with ${item.r} left over` : ''}`;
 }
@@ -335,7 +393,7 @@ function shuffle(arr){
 function renderQuestion(){
   answered = false;
   const item = questions[idx];
-  const sec = SECTIONS[item.part];
+  const sec = SECTIONS[item.mix ? 'mix' : item.part];
   document.getElementById('qcount').textContent = `Progress: ${idx+1} / ${TOTAL}`;
   document.getElementById('scorecount').textContent = `🔥 Score: ${score}`;
   document.getElementById('section-ico').textContent = sec.ico;
@@ -350,7 +408,7 @@ function renderQuestion(){
   if(item.part === 'A'){
     story.innerHTML = `The coins make <b>${item.d} rows</b>. How many in each row?`;
   } else if(item.part === 'B'){
-    story.innerHTML = `The box is split into friendly pieces. What goes on top in total?`;
+    story.innerHTML = `The box is split into easy pieces. What goes on top in total?`;
   } else if(item.part === 'C'){
     story.innerHTML = `Add up the groups on the ladder.`;
   } else {
@@ -401,7 +459,9 @@ function selectAnswer(value, btn){
     feedback.className = 'qfeedback ok';
   } else {
     btn.classList.add('wrong');
-    feedback.textContent = `Not quite — ${chunkExplain(item)}, so ${item.t} ÷ ${item.d} = ${correct}.`;
+    feedback.textContent = item.part === 'A'
+      ? `Not quite — ${chunkExplain(item)}. ${item.t} ÷ ${item.d} = ${correct}.`
+      : `Not quite — ${chunkExplain(item)}, so ${item.t} ÷ ${item.d} = ${correct}.`;
     feedback.className = 'qfeedback no';
   }
   document.getElementById('scorecount').textContent = `🔥 Score: ${score}`;
@@ -421,7 +481,7 @@ function finish(){
   document.getElementById('qcount').textContent = 'Done!';
   const rec = mathSave(LESSON_KEY, score, TOTAL);
   const rank = score === TOTAL ? '🏆 Vault Master — the whole hoard, split perfectly!'
-             : score >= 11    ? '🐉 Treasure Keeper — the chunks are yours!'
+             : score >= 13    ? '🐉 Treasure Keeper — the chunks are yours!'
              :                  '🪙 Coin Counter — try smaller chunks and go again!';
   const banner = document.getElementById('doneBanner');
   banner.style.display = 'block';

@@ -10,6 +10,7 @@
   --orange:#ea580c;
   --gold:#ca8a04;
   --crimson:#be123c;
+  --pink:#db2777;
   --amber:#f59e0b;
   --green:#22c55e;
   --red:#ef4444;
@@ -223,3 +224,17 @@ footer.foot{text-align:center;color:var(--sub);font-size:.85rem;margin-top:30px}
 .longdiv .bring{color:var(--amber)}
 .longdiv .rem{color:#b45309}
 .longdiv .now{background:#fff4e5;border-radius:6px}
+
+/* fractions (Lesson 8): bar, pie, number line */
+.fbar-label{font-weight:800;margin-bottom:8px}
+.fbar{display:flex;border:3px solid var(--ink);border-radius:8px;overflow:hidden;height:44px;margin:8px 0;max-width:420px;background:#fff}
+.fbar .part{flex:1;border-right:2px solid var(--ink)}
+.fbar .part:last-child{border-right:0}
+.fbar .part.on{background:var(--purple)}
+.fbar .part.tappable{cursor:pointer}
+.fbar .part.tappable:hover{box-shadow:inset 0 0 0 3px rgba(139,92,246,.35)}
+.fpie{display:block;max-width:100%;height:auto}
+.fline{width:100%;max-width:520px;height:auto;margin:10px 0}
+.fline-wrap{display:block;max-width:520px;border-radius:12px}
+.fline-wrap.shake{animation:nestshake .4s}
+.fline-tick:hover line{stroke:var(--purple);stroke-width:4}

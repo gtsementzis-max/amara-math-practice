@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Dragon Feast — Amara's Math Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="dragon.css">
+<style>
+/* stage tags: Watch (I do) / Try with help (we do) / On your own (you do) */
+.stage{
+  display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+  border-radius:99px;padding:4px 12px;margin-left:auto;white-space:nowrap;
+}
+.stage.watch{background:#f3ecff;color:#6d28d9}
+.stage.help{background:#fff4e5;color:#c2410c}
+.stage.own{background:#e8f9ee;color:#15803d}
+.caption{font-size:.95rem;font-weight:700;color:var(--sub);margin:0 0 4px}
+/* pie beside bar */
+.pic-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin:12px 0}
+.pic-row .bar{flex:1;min-width:200px}
+/* numerator / denominator box */
+.numden{
+  display:grid;grid-template-columns:auto 1fr;gap:10px 16px;align-items:center;
+  background:#fff;border:1px solid #e6dcff;border-radius:14px;padding:14px 16px;margin:12px 0;
+}
+.numden .digit{
+  width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;font-weight:800;color:#fff;
+}
+.numden .digit.top{background:var(--purple)}
+.numden .digit.bottom{background:var(--ink)}
+.numden p{margin:0;font-size:1.02rem}
+.numden p b{color:#6d28d9}
+.numden .rule{grid-column:1 / -1;border-top:2px dashed #dccbff;height:0}
+/* stacked bars (equivalent fractions) */
+.stack{margin:10px 0}
+.stack .fbar{margin:4px 0 10px}
+/* side-by-side comparison */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin:10px 0}
+@media(max-width:640px){.cmp{grid-template-columns:1fr}}
+.example h3{margin:0 0 6px;font-size:1.05rem;color:#9a3412}
+.example p{margin:8px 0 0}
+.explain p{margin:0 0 6px}
+.explain p:last-child{margin:0}
+/* we-do rounds */
+.feed-hint{color:#b45309;font-weight:700;font-size:.95rem;margin:0 0 8px}
+/* quiz pictures */
+#qDemo .pic-row{margin:8px 0}
+#qDemo .fbar-label{margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav"><a class="back" href="index.html">&larr; Back to Math Practice</a></div>
+
+  <div class="dragon-hero">
+    <div class="big">🥧</div>
+    <div class="txt">
+      <span class="badge">Lesson 8 · Fractions</span>
+      <h1>The Dragon Feast</h1>
+      <p>At the Dragon Feast every pie is shared FAIRLY — cut into equal slices. A fraction tells you how many of those equal slices you mean. Today: what a fraction is, where it lives on the number line, fractions that look different but are equal, and which of two is bigger.</p>
+    </div>
+  </div>
+
+  <!-- Card 1: What is a fraction? (I do) -->
+  <div class="card">
+    <h2><span class="ico">🥧</span> What is a fraction? <span class="stage watch">Watch</span></h2>
+    <div class="pic-row">
+      <div id="pie1"></div>
+      <div class="bar" id="bar1"></div>
+    </div>
+    <div class="explain">
+      <p>A dragon pie is cut into <b>4 equal slices</b>. You eat <b>3</b> of them.</p>
+      <p>You ate <b>3/4</b> of the pie.</p>
+    </div>
+    <div class="numden">
+      <div class="digit top">3</div>
+      <p><b>Numerator</b> (top number) = the slices you have. Here: 3.</p>
+      <div class="rule"></div>
+      <div class="digit bottom">4</div>
+      <p><b>Denominator</b> (bottom number) = the EQUAL slices in the whole pie. Here: 4.</p>
+    </div>
+    <div class="example">
+      <h3>Not a fraction!</h3>
+      <div id="barUnequal"></div>
+      <p>These pieces are not equal. So the shaded piece is <b>NOT 1/3</b>. Fractions need <b>EQUAL</b> parts.</p>
+    </div>
+    <div class="pic-row" style="margin-top:16px">
+      <div id="pie2"></div>
+      <div class="bar" id="bar2"></div>
+    </div>
+    <p class="note">One more: 3 equal slices, 2 eaten. That is <b>2/3</b>. Top = 2 slices you have. Bottom = 3 equal slices in the pie.</p>
+  </div>
+
+  <!-- Card 2: A fraction is a number on the line -->
+  <div class="card">
+    <h2><span class="ico">📏</span> A fraction is a number on the line <span class="stage watch">Watch</span></h2>
+    <div id="line1"></div>
+    <div class="explain">
+      <p>Cut the space between 0 and 1 into <b>4 equal jumps</b>. Each jump is <b>1/4</b>.</p>
+      <p>Three jumps from 0 lands on <b>3/4</b>. So 3/4 is a number, and this is where it lives.</p>
+    </div>
+    <p class="caption" style="margin-top:14px">1/2 is halfway</p>
+    <div id="line2"></div>
+    <p class="caption" style="margin-top:14px">2/3 is two jumps of 1/3</p>
+    <div id="line3"></div>
+    <p class="note"><b>4/4</b> is the whole pie — that is <b>1</b>. The bigger the bottom number, the <b>SMALLER</b> each jump.</p>
+  </div>
+
+  <!-- Card 3: Equivalent fractions -->
+  <div class="card">
+    <h2><span class="ico">🪞</span> Same size, different name <span class="stage watch">Watch</span></h2>
+    <div class="stack">
+      <div id="eq1a"></div>
+      <div id="eq1b"></div>
+      <div id="eq1c"></div>
+    </div>
+    <div class="explain">
+      <p>The shaded part is the <b>SAME size</b> each time. So <b>1/2 = 2/4 = 4/8</b>.</p>
+      <p>Multiply the top and the bottom by the same number. You get an equal fraction: <b>1/2 × 2/2 = 2/4</b>.</p>
+    </div>
+    <div class="stack" style="margin-top:16px">
+      <div id="eq2a"></div>
+      <div id="eq2b"></div>
+      <div id="eq2c"></div>
+    </div>
+    <p class="note"><b>1/3 = 2/6 = 3/9</b>. Same size, different name. These are called <b>equivalent fractions</b>.</p>
+  </div>
+
+  <!-- Card 4: Which is bigger? -->
+  <div class="card">
+    <h2><span class="ico">⚖️</span> Which is bigger? <span class="stage watch">Watch</span></h2>
+    <div class="example">
+      <h3>Same bottom number</h3>
+      <div class="cmp"><div id="cmp1a"></div><div id="cmp1b"></div></div>
+      <p>Same size slices, more of them: <b>3/5 is bigger</b>.</p>
+    </div>
+    <div class="example" style="margin-top:12px">
+      <h3>Same top number</h3>
+      <div class="cmp"><div id="cmp2a"></div><div id="cmp2b"></div></div>
+      <p>One slice each. But thirds are bigger slices than quarters: <b>1/3 is bigger</b>.</p>
+    </div>
+    <div class="example" style="margin-top:12px">
+      <h3>Different top and bottom</h3>
+      <div class="cmp"><div id="cmp3a"></div><div id="cmp3b"></div></div>
+      <p>Rename 3/4 as 6/8. Then compare: 6/8 &gt; 5/8, so <b>3/4 is bigger</b>.</p>
+    </div>
+    <p class="note">Always look at the picture. The longer shaded bar is the bigger fraction.</p>
+  </div>
+
+  <!-- Card 5: Feed the dragons (we do, not scored) -->
+  <div class="card">
+    <h2><span class="ico">🐉</span> Feed the dragons <span class="stage help">Try with help</span></h2>
+    <p class="note" style="margin-top:-4px">Your turn, with a hint each time. Shade the bar, then find the fraction on the line. Not scored — just practice.</p>
+    <div class="section-label" id="feedProgress">Pie 1 of 4</div>
+    <p class="feed-hint" id="feedHint"></p>
+    <div id="feedActivity"></div>
+  </div>
+
+  <!-- Card 6: Feast Trials (you do, scored) -->
+  <div class="card">
+    <h2><span class="ico" id="section-ico">🥧</span> <span id="section-title">Feast Trials</span> <span class="stage own">On your own</span></h2>
+    <p class="note" id="section-note" style="margin-top:-4px"></p>
+    <div class="progress-strip">
+      <span id="qcount">Progress: 1 / 16</span>
+      <span id="scorecount">🔥 Score: 0</span>
+    </div>
+    <div class="qcard">
+      <div class="qstory" id="qstory"></div>
+      <div id="qDemo"></div>
+      <div class="qtext" id="qtext"></div>
+      <div class="choices" id="choices"></div>
+      <div class="qfeedback" id="feedback"></div>
+    </div>
+    <div style="text-align:right">
+      <button class="btn" id="nextBtn" style="display:none" onclick="nextQuestion()">Next &rarr;</button>
+    </div>
+    <div class="done-banner" id="doneBanner"></div>
+  </div>
+
+  <footer class="foot">Amara's Math Practice — practice runs entirely on this device.</footer>
+</div>
+
+<script src="common.js"></script>
+<script src="dragon.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+
+// ---------- Card 1: what is a fraction ----------
+renderFractionPie($('pie1'), 3, 4);
+renderFractionBar($('bar1'), 3, 4, {label:'3/4'});
+renderFractionBar($('barUnequal'), 1, 3, {unequal:true});
+renderFractionPie($('pie2'), 2, 3);
+renderFractionBar($('bar2'), 2, 3, {label:'2/3'});
+
+// ---------- Card 2: number line ----------
+renderFractionLine($('line1'), 4, {labels:true, mark:3});
+renderFractionLine($('line2'), 2, {labels:true, mark:1});
+renderFractionLine($('line3'), 3, {labels:true, mark:2});
+
+// ---------- Card 3: equivalent fractions ----------
+renderFractionBar($('eq1a'), 1, 2, {label:'1/2'});
+renderFractionBar($('eq1b'), 2, 4, {label:'2/4'});
+renderFractionBar($('eq1c'), 4, 8, {label:'4/8'});
+renderFractionBar($('eq2a'), 1, 3, {label:'1/3'});
+renderFractionBar($('eq2b'), 2, 6, {label:'2/6'});
+renderFractionBar($('eq2c'), 3, 9, {label:'3/9'});
+
+// ---------- Card 4: which is bigger ----------
+renderFractionBar($('cmp1a'), 3, 5, {label:'3/5'});
+renderFractionBar($('cmp1b'), 2, 5, {label:'2/5'});
+renderFractionBar($('cmp2a'), 1, 3, {label:'1/3'});
+renderFractionBar($('cmp2b'), 1, 4, {label:'1/4'});
+renderFractionBar($('cmp3a'), 3, 4, {label:'3/4'});
+renderFractionBar($('cmp3b'), 5, 8, {label:'5/8'});
+
+// ---------- Card 5: We do — feed the dragons ----------
+const feedRounds = [
+  {type:'shade', num:3, den:4, hint:'Hint: the bottom number is 4, so the bar has 4 equal parts. Shade 3 of them.'},
+  {type:'shade', num:2, den:3, hint:'Hint: 3 equal parts. The top number says how many to shade.'},
+  {type:'shade', num:5, den:8, hint:'Hint: 8 equal parts. Count as you tap: 1, 2, 3, 4, 5.'},
+  {type:'shade', num:3, den:6, hint:'Hint: 6 equal parts, shade 3. Look — is that the same as half?',
+    successText:(n, d) => `🐲 That is ${n}/${d} — ${n} of ${d} equal parts! And 3/6 is the same as 1/2!`},
+  {type:'line',  num:3, den:4, hint:'Hint: the line has 4 equal jumps. Start at 0 and count 3 jumps.'},
+  {type:'line',  num:2, den:3, hint:'Hint: 3 equal jumps. Two jumps from 0.'},
+  {type:'line',  num:5, den:8, hint:'Hint: 8 equal jumps. Count carefully: 1, 2, 3, 4, 5.'},
+];
+let feedIdx = 0;
+function loadFeedRound(){
+  const round = feedRounds[feedIdx];
+  const pies = feedRounds.filter(r => r.type === 'shade').length;
+  const lines = feedRounds.length - pies;
+  $('feedProgress').textContent = round.type === 'shade'
+    ? `Pie ${feedIdx + 1} of ${pies}`
+    : `Where does it live? Line ${feedIdx - pies + 1} of ${lines}`;
+  $('feedHint').textContent = round.hint;
+  const el = $('feedActivity');
+  const onComplete = (successEl) => {
+    const btn = document.createElement('button');
+    btn.className = 'btn green';
+    btn.style.marginTop = '10px';
+    btn.style.display = 'block';
+    const next = feedRounds[feedIdx + 1];
+    if(!next){
+      btn.textContent = "I'm ready for the Feast Trials!";
+      btn.onclick = () => { btn.remove(); };
+    } else {
+      if(round.type === 'shade' && next.type === 'shade') btn.textContent = 'Next pie →';
+      else if(round.type === 'shade') btn.textContent = 'Now: where does it live? →';
+      else btn.textContent = 'Next line →';
+      btn.onclick = () => { feedIdx++; loadFeedRound(); };
+    }
+    successEl.appendChild(btn);
+  };
+  const opts = {num: round.num, den: round.den, onComplete};
+  if(round.successText) opts.successText = round.successText;
+  if(round.type === 'shade') initShadeActivity(el, opts);
+  else initLinePlaceActivity(el, opts);
+}
+loadFeedRound();
+
+// ---------- Card 6: You do — Feast Trials ----------
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+// choices[0] is always the answer.
+const questions = [
+  // Part A: name the fraction (pie + bar)
+  {part:'A', num:3, den:4, answer:'3/4', choices:['3/4','4/3','1/4','3/1']},
+  {part:'A', num:2, den:3, answer:'2/3', choices:['2/3','3/2','1/3','2/5']},
+  {part:'A', num:5, den:8, answer:'5/8', choices:['5/8','3/8','8/5','5/3']},
+  {part:'A', num:1, den:6, answer:'1/6', choices:['1/6','6/1','5/6','1/5']},
+  // Part B: which fraction is the dot (number line)
+  {part:'B', num:1, den:4, answer:'1/4', choices:['1/4','1/2','3/4','1/3']},
+  {part:'B', num:2, den:3, answer:'2/3', choices:['2/3','1/3','2/4','3/3']},
+  {part:'B', num:3, den:5, answer:'3/5', choices:['3/5','2/5','3/4','5/3']},
+  {part:'B', num:7, den:8, answer:'7/8', choices:['7/8','6/8','7/7','1/8']},
+  // Part C: equivalent fractions (given bar above an empty bar)
+  {part:'C', n1:1, d1:2, num:2, den:4, q:'1/2 = ?/4', label2:'?/4', answer:'2/4', choices:['2/4','1/4','3/4','2/2']},
+  {part:'C', n1:2, d1:3, num:4, den:6, q:'2/3 = ?/6', label2:'?/6', answer:'4/6', choices:['4/6','2/6','3/6','5/6']},
+  {part:'C', n1:3, d1:4, num:6, den:8, q:'3/4 = ?/8', label2:'?/8', answer:'6/8', choices:['6/8','3/8','4/8','7/8']},
+  {part:'C', n1:1, d1:3, num:3, den:9, q:'1/3 = 3/?', label2:'3/?', answer:'3/9', choices:['3/9','3/6','3/3','1/9']},
+  // Part D: which is bigger (both bars); `why` is the one-line reason from Card 4
+  {part:'D', a:[3,5], b:[2,5], answer:'3/5', choices:['3/5','2/5','they are equal'],
+    why:'Same size slices (fifths), and 3 is more than 2 — so 3/5 is bigger.'},
+  {part:'D', a:[1,3], b:[1,4], answer:'1/3', choices:['1/3','1/4','they are equal'],
+    why:'One slice each, but thirds are bigger slices than quarters — so 1/3 is bigger.'},
+  {part:'D', a:[2,4], b:[1,2], answer:'they are equal', choices:['they are equal','2/4','1/2'],
+    why:'2/4 is 1/2 with a new name — the shaded parts are the same size, so they are equal.'},
+  {part:'D', a:[5,8], b:[3,4], answer:'3/4', choices:['3/4','5/8','they are equal'],
+    why:'Rename 3/4 as 6/8. 6/8 is more than 5/8 — so 3/4 is bigger.'},
+];
+
+let idx = 0, score = 0, answered = false;
+const LESSON_KEY = 'lesson8', TOTAL = questions.length;
+
+const SECTIONS = {
+  A:{ico:'🥧', title:'Part A — Name the fraction',
+     note:'Look at the pie. Count the <b>equal slices</b>. Count the <b>eaten</b> ones. Top = eaten, bottom = equal slices.'},
+  B:{ico:'📏', title:'Part B — On the number line',
+     note:'Count the <b>jumps from 0</b> to the dot. Every jump is one equal part.'},
+  C:{ico:'🪞', title:'Part C — Same size, different name',
+     note:'Same size, new name. <b>Multiply the top and the bottom by the same number.</b>'},
+  D:{ico:'⚖️', title:'Part D — Which is bigger?',
+     note:'Look at both bars. Which shaded part is <b>longer</b>? Say why.'},
+};
+
+function renderQuestion(){
+  answered = false;
+  const item = questions[idx];
+  const sec = SECTIONS[item.part];
+  $('qcount').textContent = `Progress: ${idx+1} / ${TOTAL}`;
+  $('scorecount').textContent = `🔥 Score: ${score}`;
+  $('section-ico').textContent = sec.ico;
+  $('section-title').textContent = sec.title;
+  $('section-note').innerHTML = sec.note;
+
+  const story = $('qstory');
+  const demo = $('qDemo');
+  demo.innerHTML = '';
+  demo.className = '';
+  let qtext = '';
+  if(item.part === 'A'){
+    story.innerHTML = 'How much of the pie is eaten?';
+    demo.innerHTML = '<div class="pic-row"><div data-role="pie"></div><div class="bar" data-role="bar"></div></div>';
+    renderFractionPie(demo.querySelector('[data-role="pie"]'), item.num, item.den);
+    renderFractionBar(demo.querySelector('[data-role="bar"]'), item.num, item.den);
+  } else if(item.part === 'B'){
+    story.innerHTML = 'Which fraction is the dot?';
+    renderFractionLine(demo, item.den, {mark:item.num, hideMarkLabel:true});
+  } else if(item.part === 'C'){
+    story.innerHTML = `<b>${item.q}</b>`;
+    demo.innerHTML = '<div data-role="given"></div><div data-role="target"></div>';
+    renderFractionBar(demo.querySelector('[data-role="given"]'), item.n1, item.d1, {label:`${item.n1}/${item.d1}`});
+    renderFractionBar(demo.querySelector('[data-role="target"]'), 0, item.den, {label:item.label2});
+    qtext = `${item.q}`;
+  } else {
+    story.innerHTML = 'Which is bigger?';
+    demo.innerHTML = '<div class="cmp"><div data-role="a"></div><div data-role="b"></div></div>';
+    renderFractionBar(demo.querySelector('[data-role="a"]'), item.a[0], item.a[1], {label:`${item.a[0]}/${item.a[1]}`});
+    renderFractionBar(demo.querySelector('[data-role="b"]'), item.b[0], item.b[1], {label:`${item.b[0]}/${item.b[1]}`});
+    qtext = `${item.a[0]}/${item.a[1]} or ${item.b[0]}/${item.b[1]}?`;
+  }
+  $('qtext').textContent = qtext;
+  $('feedback').textContent = '';
+  $('feedback').className = 'qfeedback';
+  $('nextBtn').style.display = 'none';
+  const choicesEl = $('choices');
+  choicesEl.innerHTML = '';
+  shuffle(item.choices).forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c;
+    btn.onclick = () => selectAnswer(c, btn);
+    choicesEl.appendChild(btn);
+  });
+}
+
+function okText(item){
+  if(item.part === 'A') return `🐲 Yes! ${item.num} of ${item.den} equal slices — that is ${item.num}/${item.den}. You counted the slices!`;
+  if(item.part === 'B') return `🐲 Yes! ${jumps(item.num)} of 1/${item.den} from 0 — the dot is ${item.num}/${item.den}. You counted the jumps!`;
+  if(item.part === 'C') return `🐲 Yes! ${item.n1}/${item.d1} = ${item.answer} — same size, new name. Watch the bar fill up!`;
+  return `🐲 Yes! ${item.why}`;
+}
+function noText(item){
+  if(item.part === 'A') return `Not quite — count the equal slices (${item.den}) and the eaten ones (${item.num}): ${item.num}/${item.den}. Look at the pie and count again.`;
+  if(item.part === 'B') return `Not quite — count the jumps from 0: ${jumps(item.num)} of 1/${item.den} = ${item.num}/${item.den}. Look at the line and count the ticks.`;
+  if(item.part === 'C') return `Not quite — multiply top and bottom by the same number: ${item.n1}/${item.d1} = ${item.answer}. Look at the bars — the shaded parts must be the same size.`;
+  return `Not quite. ${item.why} Look at the bars again.`;
+}
+function jumps(n){ return `${n} jump${n === 1 ? '' : 's'}`; }
+
+function selectAnswer(value, btn){
+  if(answered) return;
+  answered = true;
+  const item = questions[idx];
+  const correct = item.answer;
+  const feedback = $('feedback');
+  document.querySelectorAll('#choices .choice').forEach(b=>{
+    if(b.textContent === correct) b.classList.add('correct');
+  });
+  if(value === correct){
+    score++;
+    btn.classList.add('correct');
+    if(item.part === 'C'){
+      renderFractionBar($('qDemo').querySelector('[data-role="target"]'), item.num, item.den, {label:item.answer});
+    }
+    feedback.textContent = okText(item);
+    feedback.className = 'qfeedback ok';
+  } else {
+    btn.classList.add('wrong');
+    if(item.part === 'C'){
+      renderFractionBar($('qDemo').querySelector('[data-role="target"]'), item.num, item.den, {label:item.answer});
+    }
+    feedback.textContent = noText(item);
+    feedback.className = 'qfeedback no';
+  }
+  $('scorecount').textContent = `🔥 Score: ${score}`;
+  $('nextBtn').style.display = 'inline-block';
+  $('nextBtn').textContent = (idx === TOTAL-1) ? 'Finish' : 'Next →';
+}
+
+function nextQuestion(){
+  idx++;
+  if(idx >= TOTAL){ finish(); return; }
+  renderQuestion();
+}
+
+function finish(){
+  document.querySelector('.qcard').style.display = 'none';
+  $('nextBtn').style.display = 'none';
+  $('qcount').textContent = 'Done!';
+  const rec = mathSave(LESSON_KEY, score, TOTAL);
+  const rank = score === TOTAL ? '🏆 Feast Master — every slice counted!'
+             : score >= 12    ? '🥧 Pie Sharer — fair shares all round!'
+             :                  '🐣 Slice Apprentice — equal parts, count the slices, try again!';
+  const banner = $('doneBanner');
+  banner.style.display = 'block';
+  let msg = `<span class="rank">${rank}</span>You scored ${score} / ${TOTAL} (best so far: ${rec.best} / ${TOTAL}).`;
+  if(rec.best === TOTAL) msg += `<br>You've got it! 🎉`;
+  else msg += `<br>Nice work — you can always come back and try again.`;
+  msg += `<br><a class="btn green" style="margin-top:10px" href="index.html">Back to Math Practice →</a>`;
+  banner.innerHTML = msg;
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

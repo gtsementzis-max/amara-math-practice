@@ -14,6 +14,7 @@
   --amber:#f59e0b;
   --cyan:#0891b2;
   --lime:#65a30d;
+  --sky:#0284c7;
   --green:#22c55e;
   --red:#ef4444;
   --line:#e4e9f2;
@@ -321,3 +322,11 @@ footer.foot{text-align:center;color:var(--sub);font-size:.85rem;margin-top:30px}
 .step-list .step{display:flex;gap:10px;align-items:flex-start;background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
 .step-list .step .n{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.95rem}
 .trap{background:#fdeaea;border:1px solid #f5b5b5;border-radius:12px;padding:10px 14px;margin:10px 0;color:#b91c1c;font-weight:700}
+
+/* ---- Addition with carrying (Lesson 0d) ---- */
+.bt-sel{box-shadow:0 0 0 3px var(--blue);transform:scale(1.06)}
+.bt-bundle{outline:2px dashed var(--purple);outline-offset:2px}
+.bt-new{box-shadow:0 0 0 3px var(--green)}
+.bt-stack{display:grid;gap:8px}
+.bt-stack .bt-wrap{margin:2px 0}
+.bt-stack .bt-sub{font-weight:800;color:var(--ink);font-size:.95rem}

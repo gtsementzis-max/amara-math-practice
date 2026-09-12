@@ -807,7 +807,10 @@ function renderBaseTen(el, opts){
     for(let i=0;i<count;i++){
       const p = document.createElement('span');
       const isGone = i >= count - gone;
-      p.className = cls + (isGone ? ' bt-gone' : '') + (opts.tappable ? ' bt-tappable' : '');
+      p.className = cls + (isGone ? ' bt-gone' : '') + (opts.tappable ? ' bt-tappable' : '')
+        + (kind === 'ones' && opts.selectedOnes && opts.selectedOnes.has(i) ? ' bt-sel' : '')
+        + (kind === 'ones' && opts.highlightOnes && i < opts.highlightOnes ? ' bt-bundle' : '')
+        + (kind === 'tens' && opts.newTens && i >= count - opts.newTens ? ' bt-new' : '');
       p.setAttribute('aria-label', `${single}${isGone ? ' taken away' : ''}`);
       if(opts.tappable) p.onclick = () => opts.onTap(kind, i, p, grp);
       pieces.appendChild(p);
@@ -1033,4 +1036,208 @@ function columnWalkText(a, b){
     if(st.type === 'subtract') parts.push(st.text.replace(' = ?', ` = ${st.answer}.`));
   });
   return parts.join(' ') + ` Check: ${answer} + ${b} = ${a}.`;
+}
+
+// ---- Addition with carrying (Lesson 0d) ----
+
+// Guided "make a ten" manipulative for a 2-digit addition. Blocks start pushed
+// together (all rods, all cubes). Phases: decide (10 or more ones?) -> bundle
+// (tap 10 cubes; they become a rod) -> answer. Rounds without a carry skip the
+// bundle phase when she correctly says "No".
+function initMakeTenActivity(container, opts){
+  const { a, b, onComplete } = opts;
+  const answer = a + b;
+  const oA = a % 10, oB = b % 10;
+  let tens = Math.floor(a / 10) + Math.floor(b / 10), ones = oA + oB;
+  const selected = new Set();
+  let phase = 'decide', done = false;
+  container.innerHTML = `
+    <div class="build-wrap">
+      <div class="build-status" data-role="prompt"></div>
+      <div data-role="blocks"></div>
+      <div class="build-status" data-role="status"></div>
+      <div class="choices" data-role="choices" style="display:none"></div>
+      <div class="build-success" data-role="success"></div>
+    </div>
+  `;
+  const promptEl = container.querySelector('[data-role="prompt"]');
+  const blocksEl = container.querySelector('[data-role="blocks"]');
+  const statusEl = container.querySelector('[data-role="status"]');
+  const choicesEl = container.querySelector('[data-role="choices"]');
+  const successEl = container.querySelector('[data-role="success"]');
+
+  function render(){
+    if(phase === 'decide') promptEl.textContent = `Ones: ${oA} + ${oB} = ${ones}. Is that 10 or more?`;
+    else if(phase === 'bundle') promptEl.textContent = `Tap 10 cubes to bundle them into a ten. Selected: ${selected.size} of 10.`;
+    else promptEl.textContent = `Now: ${tens} tens and ${ones} ones. How many altogether?`;
+    renderBaseTen(blocksEl, { tens, ones, selectedOnes: selected, tappable: phase === 'bundle', size: 'lg', onTap: handleTap });
+    choicesEl.style.display = (phase === 'decide' || phase === 'answer') ? 'flex' : 'none';
+    if(phase === 'decide') buildDecide();
+    if(phase === 'answer' && !choicesEl.dataset.answerBuilt) buildAnswer();
+  }
+  function shake(grp){ grp.classList.add('shake'); setTimeout(()=>grp.classList.remove('shake'), 400); }
+  function handleTap(kind, i, el, grp){
+    if(done || phase !== 'bundle') return;
+    if(kind !== 'ones'){ shake(grp); statusEl.textContent = 'Tap the small cubes, not the rods.'; return; }
+    if(selected.has(i)){ selected.delete(i); statusEl.textContent = ''; }
+    else { selected.add(i); statusEl.textContent = ''; }
+    if(selected.size === 10){
+      selected.clear();
+      tens += 1; ones -= 10;
+      statusEl.textContent = `10 ones became 1 ten! Now ${tens} tens and ${ones} ones.`;
+      phase = (ones >= 10) ? 'bundle' : 'answer';
+    }
+    render();
+  }
+  function buildDecide(){
+    choicesEl.innerHTML = '';
+    const opts2 = [['Yes — bundle 10 into a ten', ones >= 10], ['No — leave them', ones < 10]];
+    (Math.random() < 0.5 ? opts2 : opts2.reverse()).forEach(([txt, ok]) => {
+      const btn = document.createElement('button');
+      btn.className = 'choice';
+      btn.textContent = txt;
+      btn.onclick = () => {
+        if(phase !== 'decide') return;
+        if(ok){
+          btn.classList.add('correct');
+          statusEl.textContent = ok && ones >= 10 ? `${ones} is 10 or more. A ten is hiding in there!` : `${ones} is less than 10, so the ones stay as they are.`;
+          phase = ones >= 10 ? 'bundle' : 'answer';
+          setTimeout(render, 350);
+        } else {
+          btn.classList.add('wrong');
+          statusEl.textContent = ones >= 10 ? `Count the cubes: ${ones}. That is 10 or more, so 10 of them can become a ten.` : `Count the cubes: ${ones}. That is less than 10, so there is nothing to bundle.`;
+        }
+      };
+      choicesEl.appendChild(btn);
+    });
+  }
+  function buildAnswer(){
+    choicesEl.dataset.answerBuilt = '1';
+    const pool = [answer, answer - 10, answer + 1, answer + 10].filter((v, i, arr) => v >= 0 && arr.indexOf(v) === i).slice(0, 3);
+    for(let k=pool.length-1;k>0;k--){ const j = Math.floor(Math.random()*(k+1)); [pool[k],pool[j]] = [pool[j],pool[k]]; }
+    choicesEl.innerHTML = '';
+    pool.forEach(v => {
+      const btn = document.createElement('button');
+      btn.className = 'choice';
+      btn.textContent = v;
+      btn.onclick = () => {
+        if(done) return;
+        if(v === answer){
+          done = true;
+          btn.classList.add('correct');
+          statusEl.textContent = '';
+          successEl.style.display = 'block';
+          successEl.textContent = `${a} + ${b} = ${answer}. ${(oA + oB) >= 10 ? 'You made a ten! ' : 'No ten to make this time. '}Check: ${answer} − ${b} = ${a}. ✓`;
+          render();
+          choicesEl.style.display = 'flex';
+          if(onComplete) onComplete(successEl);
+        } else {
+          btn.classList.add('wrong');
+          statusEl.textContent = `Not yet. Each rod is 10, each cube is 1: ${tens} rods and ${ones} cubes.`;
+        }
+      };
+      choicesEl.appendChild(btn);
+    });
+  }
+  render();
+}
+
+// Micro-steps of column addition a + b: add each column (carry included),
+// and when the sum is 10 or more, a 'carry' step: write the ones digit, carry
+// the ten. A final 'newcol' step appears when the carry starts a new column.
+function columnAdditionSteps(a, b){
+  const n = Math.max(String(a).length, String(b).length);
+  const top = String(a).padStart(n, '0').split('').map(Number).reverse();
+  const bot = String(b).padStart(n, '0').split('').map(Number).reverse();
+  const names = ['ones', 'tens', 'hundreds', 'thousands', 'ten thousands'];
+  const bigger = ['ten', 'hundred', 'thousand', 'ten thousand'];
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const carries = new Array(n + 1).fill(0);
+  const results = new Array(n + 1).fill(null);
+  const sums = new Array(n).fill(null);
+  const snap = () => ({ carries: carries.slice(), results: results.slice(), sums: sums.slice() });
+  const mk3 = v => [v, v + 1, v - 1].filter((x, i, arr) => x >= 0 && arr.indexOf(x) === i).slice(0, 3);
+  const steps = [];
+  for(let i=0;i<n;i++){
+    const parts = [];
+    if(carries[i] > 0) parts.push(carries[i]);
+    parts.push(top[i], bot[i]);
+    const sum = parts.reduce((x, y) => x + y, 0);
+    sums[i] = sum;
+    if(sum < 10) results[i] = sum;
+    steps.push({ type:'add', col:i, sum,
+      text:`${cap(names[i])}: ${parts.join(' + ')} = ?`,
+      choices: mk3(sum), answer: sum,
+      hint: carries[i] > 0 ? `Don't forget the carried ${carries[i]}. Add it first: ${carries[i]} + ${top[i]} = ${carries[i] + top[i]}, then + ${bot[i]}.` : `Count on from ${Math.max(top[i], bot[i])}.`,
+      after: snap() });
+    if(sum >= 10){
+      const tensPart = Math.floor(sum / 10), onesPart = sum % 10;
+      results[i] = onesPart;
+      carries[i + 1] = tensPart;
+      steps.push({ type:'carry', col:i, sum,
+        text:`${sum} is ${tensPart} ${tensPart === 1 ? bigger[i] : bigger[i] + 's'} and ${onesPart} ${names[i]}. Only one digit fits here. What do you write in the ${names[i]} column?`,
+        choices:[onesPart, sum, tensPart].filter((x, k, arr) => arr.indexOf(x) === k),
+        answer: onesPart,
+        hint:`${sum} = ${tensPart * 10} + ${onesPart}. Write the ${onesPart} here and carry the ${tensPart} ${bigger[i]} to the next column.`,
+        after: snap() });
+    }
+  }
+  if(carries[n] > 0){
+    results[n] = carries[n];
+    steps.push({ type:'newcol', col:n,
+      text:`There is no ${names[n]} column yet, so the carried ${carries[n]} starts one. What goes in the ${names[n]}?`,
+      choices:[carries[n], 0, carries[n] + 1].filter((x, k, arr) => arr.indexOf(x) === k),
+      answer: carries[n],
+      hint:`The carry is ${carries[n]} ${carries[n] === 1 ? bigger[n-1] : bigger[n-1] + 's'}. Nothing else is in that column, so write ${carries[n]}.`,
+      after: snap() });
+  }
+  return { steps, top, bot, n, answer: a + b, names, carries, results };
+}
+
+// Draws a + b in columns with carry marks above. opts.snapshot: a step's
+// 'after', null for the blank problem, or omitted for fully solved.
+// opts.activeCol highlights one column. Returns the steps model.
+function renderColumnAddition(el, a, b, opts){
+  opts = opts || {};
+  const model = columnAdditionSteps(a, b);
+  const { n, top, bot, steps } = model;
+  const extra = (String(a + b).length > n) ? 1 : 0;
+  const cols = n + extra;
+  let snap;
+  if(opts.snapshot === null) snap = { carries: new Array(n + 1).fill(0), results: new Array(n + 1).fill(null) };
+  else if(opts.snapshot) snap = opts.snapshot;
+  else snap = steps[steps.length - 1].after;
+  const heads = ['O', 'T', 'H', 'Th', 'TTh'];
+  const cell = (cls, col, html) => `<div class="cs-cell ${cls}${(opts.activeCol === col) ? ' cs-active' : ''}" data-col="${col}">${html}</div>`;
+  let s = '';
+  s += `<div class="cs-cell cs-head"></div>`;
+  for(let i=cols-1;i>=0;i--) s += cell('cs-head', i, heads[i]);
+  s += `<div class="cs-cell"></div>`;
+  for(let i=cols-1;i>=0;i--) s += cell('cs-marks', i, (snap.carries[i] > 0 && i < n) ? `<span>${snap.carries[i]}</span>` : '');
+  s += `<div class="cs-cell"></div>`;
+  for(let i=cols-1;i>=0;i--) s += cell('cs-top', i, i < n && !(i === n - 1 && top[i] === 0 && String(a).length < n) ? `${top[i]}` : '&nbsp;');
+  s += `<div class="cs-cell cs-sign">+</div>`;
+  for(let i=cols-1;i>=0;i--) s += cell('cs-bot', i, i < n && !(i === n - 1 && bot[i] === 0 && String(b).length < n) ? `${bot[i]}` : '&nbsp;');
+  s += `<div class="cs-rule"></div>`;
+  s += `<div class="cs-cell"></div>`;
+  for(let i=cols-1;i>=0;i--){
+    const r = snap.results[i];
+    s += cell('cs-res', i, (r === null || r === undefined) ? '&nbsp;' : `${r}`);
+  }
+  el.className = 'colsub';
+  el.style.gridTemplateColumns = `auto repeat(${cols}, 1fr)`;
+  el.innerHTML = s;
+  return model;
+}
+
+// Short plain-words walk of a + b for feedback text.
+function columnAddWalkText(a, b){
+  const { steps, answer } = columnAdditionSteps(a, b);
+  const parts = [];
+  steps.forEach(st => {
+    if(st.type === 'add') parts.push(st.text.replace(' = ?', ` = ${st.answer}.`));
+    if(st.type === 'carry') parts.push(`Write ${st.answer}, carry the ${Math.floor(st.sum / 10)}.`);
+    if(st.type === 'newcol') parts.push(`The carry starts a new column: ${st.answer}.`);
+  });
+  return parts.join(' ') + ` Check: ${answer} − ${b} = ${a}.`;
 }

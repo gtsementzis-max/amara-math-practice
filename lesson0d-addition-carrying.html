@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Make a Ten: Addition with Carrying — Amara's Math Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav"><a class="back" href="index.html">&larr; Back to Math Practice</a></div>
+  <h1>Lesson 0d: Make a Ten</h1>
+  <p class="sub">Adding big numbers. <b>47 + 25</b>: the ones make <b>12</b>. That's too many for one column!
+  So 10 of them bundle into a new ten. Teachers call this <b>carrying</b> (or regrouping).
+  It's the opposite of breaking a ten. Blocks first, then columns.</p>
+
+  <!-- 1 · WATCH: blocks -->
+  <div class="card">
+    <h2 style="margin-top:0">When the ones make 10 or more <span class="stage watch">1 · Watch 👀</span></h2>
+    <div class="explain">
+      <b>47 + 25.</b> 47 is <b>4 tens and 7 ones</b>. 25 is <b>2 tens and 5 ones</b>. Push them together and count the ones: 7 + 5 = <b>12</b>.
+    </div>
+    <div class="bt-panels">
+      <div class="bt-panel">
+        <div class="bt-title">1. Start: 47 and 25</div>
+        <div class="bt-stack">
+          <div><div class="bt-sub">47</div><div id="bt-a"></div></div>
+          <div><div class="bt-sub">25</div><div id="bt-b"></div></div>
+        </div>
+      </div>
+      <div class="bt-panel">
+        <div class="bt-title">2. Push together</div>
+        <div id="bt-together"></div>
+        <p style="color:var(--sub);font-size:.9rem;margin:6px 0 0">6 tens and 12 ones. The dashed cubes are a group of 10.</p>
+      </div>
+      <div class="bt-panel">
+        <div class="bt-title">3. Make a ten</div>
+        <div id="bt-made"></div>
+        <p style="color:var(--sub);font-size:.9rem;margin:6px 0 0">10 cubes became 1 rod (the green one). 7 tens and 2 ones = <b>72</b>.</p>
+      </div>
+    </div>
+    <p style="color:var(--sub);font-size:.95rem">So <b>47 + 25 = 72</b>. Making a ten does not change the number. It just tidies 10 loose ones into one rod.</p>
+  </div>
+
+  <!-- 1 · WATCH: columns -->
+  <div class="card">
+    <h2 style="margin-top:0">Write it in columns <span class="stage watch">1 · Watch 👀</span></h2>
+    <div class="explain">
+      Same idea, written down. The little purple <b>1</b> above the tens is the carried ten.
+    </div>
+    <div id="col-demo"></div>
+    <div class="step-list">
+      <div class="step"><div class="n">1</div><div><b>Ones first.</b> 7 + 5 = 12.</div></div>
+      <div class="step"><div class="n">2</div><div><b>Too big for one column.</b> 12 = 1 ten and 2 ones. Write <b>2</b>, carry the <b>1</b> ten.</div></div>
+      <div class="step"><div class="n">3</div><div><b>Tens.</b> Carry first: 1 + 4 + 2 = 7. Answer: <b>72</b>.</div></div>
+      <div class="step"><div class="n">✓</div><div><b>Check by subtracting.</b> 72 &minus; 25 = 47. It matches!</div></div>
+    </div>
+    <div class="trap">⚠️ Two traps: don't squeeze 12 into the ones column (47 + 25 is <b>not</b> 612), and don't forget the carry (it is <b>not</b> 62 either).</div>
+  </div>
+
+  <!-- 1 · WATCH: three digits -->
+  <div class="card">
+    <h2 style="margin-top:0">Three digits: carry twice <span class="stage watch">1 · Watch 👀</span></h2>
+    <div class="explain">
+      <b>358 + 276.</b> Same rule in every column: 10 or more? Write the ones digit, carry the rest to the left.
+    </div>
+    <div id="col-demo3"></div>
+    <p style="color:var(--sub);font-size:.95rem"><b>Ones:</b> 8 + 6 = 14. Write 4, carry 1.</p>
+    <p style="color:var(--sub);font-size:.95rem"><b>Tens:</b> 1 + 5 + 7 = 13. Write 3, carry 1.</p>
+    <p style="color:var(--sub);font-size:.95rem"><b>Hundreds:</b> 1 + 3 + 2 = 6. Answer: <b>634</b>. Check: 634 &minus; 276 = 358. ✓</p>
+  </div>
+
+  <!-- 1 · WATCH: new column -->
+  <div class="card">
+    <h2 style="margin-top:0">When the carry needs a new column <span class="stage watch">1 · Watch 👀</span></h2>
+    <div class="explain">
+      <b>84 + 59.</b> The tens add up to 14. There is no hundreds column yet, so the carried 1 <b>starts one</b>.
+    </div>
+    <div id="col-demo-new"></div>
+    <p style="color:var(--sub);font-size:.95rem"><b>Ones:</b> 4 + 9 = 13. Write 3, carry 1.</p>
+    <p style="color:var(--sub);font-size:.95rem"><b>Tens:</b> 1 + 8 + 5 = 14. Write 4, carry 1.</p>
+    <p style="color:var(--sub);font-size:.95rem"><b>Hundreds:</b> just the carried 1. Answer: <b>143</b>. Two-digit numbers can add up to three digits!</p>
+  </div>
+
+  <!-- 2 · TRY WITH HELP: blocks -->
+  <div class="card">
+    <h2 style="margin-top:0">Make a ten with blocks <span class="stage help">2 · Try with help 🤝 · not scored</span></h2>
+    <p class="sub" style="margin-top:-4px">The blocks are already pushed together. Decide if there is a ten hiding in the ones, then tap 10 cubes to bundle it.</p>
+    <div class="qtext" id="mtTitle" style="margin:6px 0"></div>
+    <div id="mtActivity"></div>
+    <div id="mtNext" style="margin-top:10px"></div>
+  </div>
+
+  <!-- 2 · TRY WITH HELP: columns -->
+  <div class="card">
+    <h2 style="margin-top:0">Columns, one step at a time <span class="stage help">2 · Try with help 🤝 · not scored</span></h2>
+    <p class="sub" style="margin-top:-4px">The glowing column is the one you are working on. Add, then decide what to write.</p>
+    <div class="qtext" id="colTitle" style="margin:6px 0"></div>
+    <div id="colActivity"></div>
+    <div id="colNext" style="margin-top:10px"></div>
+  </div>
+
+  <!-- 3 · ON YOUR OWN -->
+  <div class="card">
+    <h2 style="margin-top:0">Your turn <span class="stage own">3 · On your own 🏆 · this one counts</span></h2>
+    <p style="color:var(--sub);margin-top:-4px">Two digits, then three digits, then carries that start a new column, then a mix. Ones first, every time.</p>
+    <div class="progress-strip">
+      <span id="qcount">Question 1 of 18</span>
+      <span id="scorecount">Score: 0</span>
+    </div>
+    <div class="section-label" id="sectionLabel"></div>
+    <div class="qcard">
+      <div class="qtext" id="qtext"></div>
+      <div id="qDemo"></div>
+      <div class="choices" id="choices"></div>
+      <div class="qfeedback" id="feedback"></div>
+      <div id="qSolved"></div>
+    </div>
+    <div style="text-align:right">
+      <button class="btn" id="nextBtn" style="display:none" onclick="nextQuestion()">Next &rarr;</button>
+    </div>
+    <div class="done-banner" id="doneBanner"></div>
+  </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+// ---- Watch demos ----
+renderBaseTen(document.getElementById('bt-a'), {tens:4, ones:7});
+renderBaseTen(document.getElementById('bt-b'), {tens:2, ones:5});
+renderBaseTen(document.getElementById('bt-together'), {tens:6, ones:12, highlightOnes:10});
+renderBaseTen(document.getElementById('bt-made'), {tens:7, ones:2, newTens:1});
+renderColumnAddition(document.getElementById('col-demo'), 47, 25);
+renderColumnAddition(document.getElementById('col-demo3'), 358, 276);
+renderColumnAddition(document.getElementById('col-demo-new'), 84, 59);
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+// ---- Try with help: make a ten with blocks (3 rounds, last one has no carry) ----
+const mtRounds = [{a:47,b:25},{a:36,b:48},{a:52,b:36}];
+let mtIdx = 0;
+function startMtRound(){
+  const r = mtRounds[mtIdx];
+  document.getElementById('mtTitle').textContent = `Round ${mtIdx+1} of ${mtRounds.length}:  ${r.a} + ${r.b} = ?`;
+  document.getElementById('mtNext').innerHTML = '';
+  initMakeTenActivity(document.getElementById('mtActivity'), {
+    a: r.a, b: r.b,
+    onComplete: () => {
+      const next = document.getElementById('mtNext');
+      if(mtIdx < mtRounds.length - 1){
+        next.innerHTML = '<button class="btn" onclick="mtIdx++;startMtRound()">Try another &rarr;</button>';
+      } else {
+        next.innerHTML = '<div class="build-success" style="display:block">All 3 rounds done! You know when to make a ten — and when not to. 🎉</div>';
+      }
+    }
+  });
+}
+startMtRound();
+
+// ---- Try with help: columns step by step (2 rounds + bonus new column) ----
+const colRounds = [{a:47,b:25},{a:358,b:276}];
+const colBonus = {a:84,b:59};
+let colIdx = 0;
+function startColRound(round, isBonus){
+  const {a, b} = round;
+  document.getElementById('colTitle').textContent = (isBonus ? 'Bonus (a new column): ' : `Round ${colIdx+1} of ${colRounds.length}:  `) + `${a} + ${b} = ?`;
+  document.getElementById('colNext').innerHTML = '';
+  const box = document.getElementById('colActivity');
+  box.innerHTML = `
+    <div class="build-wrap">
+      <div data-role="cols"></div>
+      <div class="build-status" data-role="prompt"></div>
+      <div class="choices" data-role="choices"></div>
+      <div class="build-status" data-role="status"></div>
+      <div class="build-success" data-role="success"></div>
+    </div>`;
+  const colsEl = box.querySelector('[data-role="cols"]');
+  const promptEl = box.querySelector('[data-role="prompt"]');
+  const choicesEl = box.querySelector('[data-role="choices"]');
+  const statusEl = box.querySelector('[data-role="status"]');
+  const successEl = box.querySelector('[data-role="success"]');
+  const { steps, answer } = columnAdditionSteps(a, b);
+  let k = 0, misses = 0;
+
+  function showStep(){
+    const st = steps[k];
+    const prev = k === 0 ? null : steps[k-1].after;
+    renderColumnAddition(colsEl, a, b, {snapshot: prev, activeCol: st.col});
+    promptEl.textContent = `Step ${k+1} of ${steps.length}: ${st.text}`;
+    statusEl.textContent = '';
+    misses = 0;
+    choicesEl.innerHTML = '';
+    shuffle(st.choices).forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'choice';
+      btn.textContent = c;
+      btn.onclick = () => pick(c, btn);
+      choicesEl.appendChild(btn);
+    });
+  }
+  function pick(c, btn){
+    const st = steps[k];
+    if(String(c) === String(st.answer)){
+      btn.classList.add('correct');
+      k++;
+      if(k >= steps.length){
+        renderColumnAddition(colsEl, a, b, {});
+        promptEl.textContent = '';
+        choicesEl.innerHTML = '';
+        successEl.style.display = 'block';
+        successEl.textContent = `${a} + ${b} = ${answer}. Check: ${answer} − ${b} = ${a}. ✓ Every step was yours!`;
+        const next = document.getElementById('colNext');
+        if(!isBonus && colIdx < colRounds.length - 1){
+          next.innerHTML = '<button class="btn" onclick="colIdx++;startColRound(colRounds[colIdx],false)">Try another &rarr;</button>';
+        } else if(!isBonus){
+          next.innerHTML = '<div class="build-success" style="display:block">Both rounds done! 🎉</div>' +
+            '<button class="btn ghost" style="margin-top:8px" onclick="startColRound(colBonus,true)">Bonus: a carry that starts a new column &rarr;</button>';
+        } else {
+          next.innerHTML = '<div class="build-success" style="display:block">New column — handled! You are ready for the quiz. 🎉</div>';
+        }
+      } else {
+        setTimeout(showStep, 350);
+      }
+    } else {
+      btn.classList.add('wrong');
+      misses++;
+      statusEl.textContent = st.hint + (misses >= 2 ? ' Look at the glowing column.' : '');
+    }
+  }
+  showStep();
+}
+startColRound(colRounds[0], false);
+
+// ---- On your own: 18 questions ----
+const PARTS = {A:'Part A · Two digits', B:'Part B · Three digits', C:'Part C · A new column', mix:'🔀 Mix it up'};
+const questions = [
+  {a:47,b:25,part:'A'},{a:38,b:46,part:'A'},{a:56,b:27,part:'A'},{a:63,b:24,part:'A'},{a:75,b:18,part:'A'},{a:29,b:37,part:'A'},
+  {a:358,b:276,part:'B'},{a:425,b:137,part:'B'},{a:267,b:485,part:'B'},{a:519,b:293,part:'B'},{a:346,b:178,part:'B'},{a:682,b:159,part:'B'},
+  {a:84,b:59,part:'C'},{a:657,b:485,part:'C'},{a:93,b:68,part:'C'},
+  {a:38,b:46,part:'mix',mix:true},{a:267,b:485,part:'mix',mix:true},{a:84,b:59,part:'mix',mix:true},
+].map(q => ({...q, ans: q.a + q.b}));
+
+// Classic mistakes: forgetting every carry, and gluing the whole column sum in.
+function noCarry(a, b){
+  const n = Math.max(String(a).length, String(b).length);
+  const ta = String(a).padStart(n,'0').split('').map(Number);
+  const tb = String(b).padStart(n,'0').split('').map(Number);
+  return parseInt(ta.map((d,i)=>(d + tb[i]) % 10).join(''), 10);
+}
+function glued(a, b){
+  const n = Math.max(String(a).length, String(b).length);
+  const ta = String(a).padStart(n,'0').split('').map(Number);
+  const tb = String(b).padStart(n,'0').split('').map(Number);
+  return parseInt(ta.map((d,i)=>String(d + tb[i])).join(''), 10);
+}
+function mkChoices(item){
+  const {a, b, ans} = item;
+  const pool = [ans];
+  const g = glued(a, b);
+  const cands = [noCarry(a, b), (g <= 9999 ? g : -1), ans + 10, ans - 10, ans + 1, ans - 1, ans + 100];
+  for(const v of cands){
+    if(pool.length >= 4) break;
+    if(v >= 0 && v !== ans && !pool.includes(v)) pool.push(v);
+  }
+  return pool;
+}
+
+let idx = 0, score = 0, answered = false;
+const LESSON_KEY = 'lesson0d', TOTAL = questions.length;
+
+function renderQuestion(){
+  answered = false;
+  const item = questions[idx];
+  document.getElementById('qcount').textContent = `Question ${idx+1} of ${TOTAL}`;
+  document.getElementById('scorecount').textContent = `Score: ${score}`;
+  if(idx === 0 || questions[idx-1].part !== item.part){
+    document.getElementById('sectionLabel').textContent = PARTS[item.part];
+  }
+  document.getElementById('qtext').textContent = `${item.a} + ${item.b} = ?`;
+  const demo = document.getElementById('qDemo');
+  if(item.mix){
+    demo.className = '';
+    demo.style.gridTemplateColumns = '';
+    demo.innerHTML = '<p class="take-caption">No columns drawn this time. Picture them in your head, or use paper.</p>';
+  } else {
+    renderColumnAddition(demo, item.a, item.b, {snapshot: null});
+  }
+  document.getElementById('qSolved').innerHTML = '';
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'qfeedback';
+  document.getElementById('nextBtn').style.display = 'none';
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  shuffle(mkChoices(item)).forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c;
+    btn.onclick = () => selectAnswer(c, btn);
+    choicesEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(value, btn){
+  if(answered) return;
+  answered = true;
+  const item = questions[idx];
+  const feedback = document.getElementById('feedback');
+  document.querySelectorAll('#choices .choice').forEach(b=>{
+    if(parseInt(b.textContent,10) === item.ans) b.classList.add('correct');
+  });
+  if(value === item.ans){
+    score++;
+    btn.classList.add('correct');
+    feedback.textContent = `Yes! ${item.a} + ${item.b} = ${item.ans}. Check: ${item.ans} − ${item.b} = ${item.a}. ✓`;
+    feedback.className = 'qfeedback ok';
+  } else {
+    btn.classList.add('wrong');
+    let trap = '';
+    if(value === noCarry(item.a, item.b)) trap = ' That is the forgotten carry: the ten that moved left got lost.';
+    else if(value === glued(item.a, item.b)) trap = ' That is the squeeze trap: two digits got squeezed into one column. Write one digit and carry the other.';
+    feedback.textContent = `Not quite — ${item.a} + ${item.b} = ${item.ans}.${trap} Here is every step:`;
+    feedback.className = 'qfeedback no';
+    const solved = document.getElementById('qSolved');
+    solved.innerHTML = '<div data-role="cols"></div><p class="take-caption"></p>';
+    renderColumnAddition(solved.querySelector('[data-role="cols"]'), item.a, item.b, {});
+    solved.querySelector('p').textContent = columnAddWalkText(item.a, item.b);
+  }
+  document.getElementById('scorecount').textContent = `Score: ${score}`;
+  document.getElementById('nextBtn').style.display = 'inline-block';
+  document.getElementById('nextBtn').textContent = (idx === TOTAL-1) ? 'Finish' : 'Next →';
+}
+
+function nextQuestion(){
+  idx++;
+  if(idx >= TOTAL){
+    finish();
+    return;
+  }
+  renderQuestion();
+}
+
+function finish(){
+  document.querySelector('.qcard').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('sectionLabel').style.display = 'none';
+  document.getElementById('qcount').textContent = 'Done!';
+  const rec = mathSave(LESSON_KEY, score, TOTAL);
+  let msg;
+  if(score >= 16) msg = '⭐ Carrying Star! You make tens and hundreds without dropping a single carry.';
+  else if(score >= 12) msg = '💪 Strong work! A little more practice and every column will feel easy.';
+  else msg = '🌱 Good practice. Try again — ones first, write one digit, carry the rest.';
+  const banner = document.getElementById('doneBanner');
+  banner.style.display = 'block';
+  banner.innerHTML = `${msg}<br>You scored ${score} / ${TOTAL} (best so far: ${rec.best} / ${TOTAL}).<br>
+    <a class="btn green" style="margin-top:10px" href="lesson1-multiplication-review.html">Continue to Lesson 1: The Dragon Hatchery &rarr;</a>`;
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

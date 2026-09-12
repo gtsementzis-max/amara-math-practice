@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Subtraction with Blocks — Amara's Math Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav"><a class="back" href="index.html">&larr; Back to Math Practice</a></div>
+  <h1>Lesson 0b: Subtraction with Blocks</h1>
+  <p class="sub">Subtraction is addition backwards. You already know <b>9 + 4 = 13</b>. So <b>13 &minus; 9 = 4</b>.
+  We'll use blocks so you can see every fact. We start by taking away <b>9</b>, then <b>8</b>, then <b>7</b>,
+  all the way down to <b>1</b>.</p>
+
+  <!-- 1 · WATCH: take away -->
+  <div class="card">
+    <h2 style="margin-top:0">What taking away looks like <span class="stage watch">1 · Watch 👀</span></h2>
+    <div class="explain">
+      <b>13 &minus; 9</b> means: start with <b>13 blocks</b>. Take <b>9</b> away. Count what is left.
+    </div>
+    <div id="demo-blocks"></div>
+    <p style="color:var(--sub);font-size:.95rem">The crossed-out blocks are gone. Only <b>4</b> solid blocks are left. So <b>13 &minus; 9 = 4</b>.</p>
+    <p style="color:var(--sub);font-size:.95rem">Tip: each row holds 10 blocks. The little gap splits each row into 5 and 5, so you can count fast.</p>
+  </div>
+
+  <!-- 1 · WATCH: addition backwards -->
+  <div class="card">
+    <h2 style="margin-top:0">Subtraction is addition backwards <span class="stage watch">1 · Watch 👀</span></h2>
+    <div class="explain">
+      Every addition fact hides two subtraction facts. If <b>9 + 4 = 13</b>, then <b>13 &minus; 9 = 4</b> and <b>13 &minus; 4 = 9</b>.
+    </div>
+    <div id="family-blocks"></div>
+    <p style="color:var(--sub);font-size:.95rem">9 blue blocks and 4 orange blocks make 13. Take the 9 blue away and the 4 orange are left.</p>
+    <div class="fact-family">
+      <div class="fact">9 + 4 = 13<small>you know this one</small></div>
+      <div class="fact">4 + 9 = 13<small>same blocks, swapped</small></div>
+      <div class="fact sub">13 &minus; 9 = 4<small>take the blue away</small></div>
+      <div class="fact sub">13 &minus; 4 = 9<small>take the orange away</small></div>
+    </div>
+    <p style="color:var(--sub);font-size:.95rem">Stuck on <b>13 &minus; 9</b>? Ask yourself: <b>9 plus what makes 13?</b> The answer is 4.</p>
+  </div>
+
+  <!-- 1 · WATCH: count back -->
+  <div class="card">
+    <h2 style="margin-top:0">Count back for small take-aways <span class="stage watch">1 · Watch 👀</span></h2>
+    <div class="explain">
+      Taking away <b>1, 2 or 3</b>? Just count back. <b>12 &minus; 3</b>: start at 12, hop back 3 times: <b>11, 10, 9</b>.
+    </div>
+    <div id="line-countback"></div>
+    <p style="color:var(--sub);font-size:.95rem">You land on <b>9</b>. So <b>12 &minus; 3 = 9</b>. Say the numbers out loud as you hop.</p>
+  </div>
+
+  <!-- 1 · WATCH: jump to 10 -->
+  <div class="card">
+    <h2 style="margin-top:0">Jump to 10 for big take-aways <span class="stage watch">1 · Watch 👀</span></h2>
+    <div class="explain">
+      Taking away a big number like <b>9</b>? Hop to <b>10</b> first. <b>13 &minus; 9</b>: hop back 3 to land on 10. Then hop back 6 more.
+    </div>
+    <div id="line-jumpten"></div>
+    <p style="color:var(--sub);font-size:.95rem">3 + 6 = 9, so you took away 9 in two hops. You land on <b>4</b>. So <b>13 &minus; 9 = 4</b>.</p>
+    <p style="color:var(--sub);font-size:.95rem">10 is a friendly number. Landing on it first makes the rest easy.</p>
+  </div>
+
+  <!-- 2 · TRY WITH HELP: explore -->
+  <div class="card">
+    <h2 style="margin-top:0">Try it yourself <span class="stage help">2 · Try with help 🤝 · not scored</span></h2>
+    <p class="sub" style="margin-top:-4px">Change the numbers. Watch the blocks, the number line and the answer change together.</p>
+    <div class="stepper-row">
+      <div class="stepper">
+        <button class="btn ghost" onclick="changeTry('t',-1)" aria-label="one less to start">&minus;</button>
+        <span id="tryTVal">13</span>
+        <button class="btn ghost" onclick="changeTry('t',1)" aria-label="one more to start">+</button>
+      </div>
+      <div class="block-plus">&minus;</div>
+      <div class="stepper">
+        <button class="btn ghost" onclick="changeTry('k',-1)" aria-label="take away one less">&minus;</button>
+        <span id="tryKVal">9</span>
+        <button class="btn ghost" onclick="changeTry('k',1)" aria-label="take away one more">+</button>
+      </div>
+    </div>
+    <div id="tryBlocks"></div>
+    <div id="tryLine"></div>
+    <div class="example" id="tryEquation" style="text-align:center;font-size:1.3rem;font-weight:800">13 &minus; 9 = 4</div>
+  </div>
+
+  <!-- 2 · TRY WITH HELP: tap to take away -->
+  <div class="card">
+    <h2 style="margin-top:0">Take away by tapping <span class="stage help">2 · Try with help 🤝 · not scored</span></h2>
+    <p class="sub" style="margin-top:-4px">Tap blocks to cross them out. Tapped one too many? Tap it again to put it back. Then tell me how many are left.</p>
+    <div class="qtext" id="takeTitle" style="margin:6px 0"></div>
+    <div id="takeActivity"></div>
+    <div id="takeNext" style="margin-top:10px"></div>
+  </div>
+
+  <!-- 2 · TRY WITH HELP: think addition -->
+  <div class="card">
+    <h2 style="margin-top:0">Think addition <span class="stage help">2 · Try with help 🤝 · not scored</span></h2>
+    <p class="sub" style="margin-top:-4px">Two steps. First pick the addition fact that helps. Then use it to subtract.</p>
+    <div id="thinkActivity"></div>
+  </div>
+
+  <!-- 3 · ON YOUR OWN -->
+  <div class="card">
+    <h2 style="margin-top:0">Practice, one number at a time <span class="stage own">3 · On your own 🏆 · this one counts</span></h2>
+    <p style="color:var(--sub);margin-top:-4px">Take away 9 first, then 8, then 7, down to 1 (5 questions each). Then a quick mix with no picture.</p>
+    <div class="progress-strip">
+      <span id="qcount">Question 1 of 50</span>
+      <span id="scorecount">Score: 0</span>
+    </div>
+    <div class="section-label" id="sectionLabel"></div>
+    <div class="qcard">
+      <div id="qDemo"></div>
+      <div class="qtext" id="qtext"></div>
+      <div class="choices" id="choices"></div>
+      <div class="qfeedback" id="feedback"></div>
+    </div>
+    <div style="text-align:right">
+      <button class="btn" id="nextBtn" style="display:none" onclick="nextQuestion()">Next &rarr;</button>
+    </div>
+    <div class="done-banner" id="doneBanner"></div>
+  </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+// ---- Watch demos ----
+renderSubtractionBlocks(document.getElementById('demo-blocks'), 13, 9, {caption: '13 blocks, take away 9, 4 left'});
+renderAdditionBlocks(document.getElementById('family-blocks'), 9, 4);
+renderSubtractLine(document.getElementById('line-countback'), 12, 3, {mode:'ones'});
+renderSubtractLine(document.getElementById('line-jumpten'), 13, 9, {mode:'ten'});
+
+// ---- Try it yourself: stepper ----
+let tryT = 13, tryK = 9;
+function renderTry(){
+  document.getElementById('tryTVal').textContent = tryT;
+  document.getElementById('tryKVal').textContent = tryK;
+  renderSubtractionBlocks(document.getElementById('tryBlocks'), tryT, tryK);
+  renderSubtractLine(document.getElementById('tryLine'), tryT, tryK, {mode: tryK <= 3 ? 'ones' : 'ten'});
+  document.getElementById('tryEquation').textContent = `${tryT} − ${tryK} = ${tryT - tryK}`;
+}
+function changeTry(which, delta){
+  if(which === 't') tryT = Math.min(18, Math.max(2, tryT + delta));
+  else tryK = Math.min(9, Math.max(1, tryK + delta));
+  if(tryK > tryT) tryK = tryT;
+  renderTry();
+}
+renderTry();
+
+// ---- Take away by tapping: 3 rounds ----
+const takeRounds = [{t:11,k:4},{t:12,k:5},{t:14,k:6}];
+let takeIdx = 0;
+function startTakeRound(){
+  const r = takeRounds[takeIdx];
+  document.getElementById('takeTitle').textContent = `Round ${takeIdx+1} of ${takeRounds.length}:  ${r.t} − ${r.k} = ?`;
+  document.getElementById('takeNext').innerHTML = '';
+  initTakeAwayActivity(document.getElementById('takeActivity'), {
+    total: r.t, take: r.k,
+    onComplete: () => {
+      const next = document.getElementById('takeNext');
+      if(takeIdx < takeRounds.length - 1){
+        next.innerHTML = '<button class="btn" onclick="takeIdx++;startTakeRound()">Try another &rarr;</button>';
+      } else {
+        next.innerHTML = '<div class="build-success" style="display:block">All 3 rounds done! You can take away and count what is left. 🎉</div>';
+      }
+    }
+  });
+}
+startTakeRound();
+
+// ---- Think addition: 3 rounds, two steps each ----
+const thinkRounds = [{t:15,k:7},{t:13,k:8},{t:17,k:9}];
+let thinkIdx = 0;
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function startThinkRound(){
+  const r = thinkRounds[thinkIdx], t = r.t, k = r.k, a = t - k;
+  const box = document.getElementById('thinkActivity');
+  box.innerHTML = `
+    <div class="build-wrap">
+      <div class="qtext" style="margin:6px 0">Round ${thinkIdx+1} of ${thinkRounds.length}:  ${t} − ${k} = ?</div>
+      <div class="build-status" data-role="prompt">Step 1: Which addition fact helps? Find the one that makes ${t}.</div>
+      <div class="choices" data-role="facts"></div>
+      <div data-role="blocks"></div>
+      <div class="build-status" data-role="status"></div>
+      <div class="choices" data-role="answers" style="display:none"></div>
+      <div class="build-success" data-role="success"></div>
+      <div data-role="next" style="margin-top:10px"></div>
+    </div>`;
+  const promptEl = box.querySelector('[data-role="prompt"]');
+  const factsEl = box.querySelector('[data-role="facts"]');
+  const blocksEl = box.querySelector('[data-role="blocks"]');
+  const statusEl = box.querySelector('[data-role="status"]');
+  const answersEl = box.querySelector('[data-role="answers"]');
+  const successEl = box.querySelector('[data-role="success"]');
+  const nextEl = box.querySelector('[data-role="next"]');
+  let step = 1;
+
+  const facts = shuffle([
+    {txt:`${k} + ${a} = ${t}`, ok:true, makes:t},
+    {txt:`${k} + ${a-1} = ${t-1}`, ok:false, makes:t-1},
+    {txt:`${k} + ${a+1} = ${t+1}`, ok:false, makes:t+1},
+  ]);
+  facts.forEach(f => {
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = f.txt;
+    btn.onclick = () => {
+      if(step !== 1) return;
+      if(f.ok){
+        step = 2;
+        btn.classList.add('correct');
+        statusEl.textContent = '';
+        renderAdditionBlocks(blocksEl, k, a);
+        promptEl.textContent = `Step 2: ${k} blue + ${a} orange = ${t}. So ${t} − ${k} = ? (Hint: how many orange blocks?)`;
+        answersEl.style.display = 'flex';
+      } else {
+        btn.classList.add('wrong');
+        statusEl.textContent = `That fact makes ${f.makes}, not ${t}. Look for the one that makes ${t}.`;
+      }
+    };
+    factsEl.appendChild(btn);
+  });
+
+  shuffle([a, a-1, a+1]).forEach(v => {
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = v;
+    btn.onclick = () => {
+      if(step !== 2) return;
+      if(v === a){
+        step = 3;
+        btn.classList.add('correct');
+        statusEl.textContent = '';
+        successEl.style.display = 'block';
+        successEl.textContent = `${k} + ${a} = ${t}, so ${t} − ${k} = ${a}. That is addition backwards. Nice!`;
+        if(thinkIdx < thinkRounds.length - 1){
+          nextEl.innerHTML = '<button class="btn" onclick="thinkIdx++;startThinkRound()">Try another &rarr;</button>';
+        } else {
+          nextEl.innerHTML = '<div class="build-success" style="display:block">All 3 rounds done! Now you have a trick for every big take-away. 🎉</div>';
+        }
+      } else {
+        btn.classList.add('wrong');
+        statusEl.textContent = `Count the orange blocks. ${k} plus how many orange makes ${t}?`;
+      }
+    };
+    answersEl.appendChild(btn);
+  });
+}
+startThinkRound();
+
+// ---- On your own: Kumon-style drill, take away 9 down to 1, then a mix ----
+// Each family is Lesson 0's addition family turned backwards, so every fact
+// here is one she has already built with blocks (9 + 4 = 13 -> 13 - 9 = 4).
+const FAMILIES = {9:[2,5,1,7,9], 8:[3,6,1,8,4], 7:[4,2,7,9,5], 6:[5,3,8,1,6], 5:[6,2,9,4,5],
+                  4:[7,3,8,5,4], 3:[8,4,9,6,3], 2:[9,5,7,8,2], 1:[9,8,6,4,1]};
+const questions = [];
+[9,8,7,6,5,4,3,2,1].forEach(f => FAMILIES[f].forEach(o => questions.push({t:f+o, k:f, a:o, family:f})));
+[[14,9],[16,8],[12,7],[9,4],[7,3]].forEach(([t,k]) => questions.push({t, k, a:t-k, family:'mix', mix:true}));
+
+function mkChoices(correct){
+  const pool = [correct];
+  for(const d of [-2,-1,1,2,3,-3]){
+    if(pool.length >= 4) break;
+    const v = correct + d;
+    if(v >= 0 && !pool.includes(v)) pool.push(v);
+  }
+  return pool;
+}
+
+function strategy(item){
+  const {t, k, a} = item;
+  if(k <= 3){
+    const seq = [];
+    for(let i=1;i<=k;i++) seq.push(t - i);
+    return `Count back ${k} from ${t}: ${seq.join(', ')}.`;
+  }
+  return `Think addition: ${k} + ${a} = ${t}, so ${t} − ${k} = ${a}.`;
+}
+
+let idx = 0, score = 0, answered = false;
+const LESSON_KEY = 'lesson0b', TOTAL = questions.length;
+
+function renderQuestion(){
+  answered = false;
+  const item = questions[idx];
+  document.getElementById('qcount').textContent = `Question ${idx+1} of ${TOTAL}`;
+  document.getElementById('scorecount').textContent = `Score: ${score}`;
+  const isFirstOfFamily = idx === 0 || questions[idx-1].family !== item.family;
+  if(isFirstOfFamily){
+    document.getElementById('sectionLabel').textContent = item.mix ? '🔀 Mix it up — no picture this time' : `Take away ${item.family}`;
+  }
+  const demo = document.getElementById('qDemo');
+  if(item.mix){
+    demo.className = '';
+    demo.innerHTML = '<p class="take-caption">No blocks this time. Use a trick: count back, or think addition.</p>';
+  } else {
+    renderSubtractionBlocks(demo, item.t, item.k);
+  }
+  document.getElementById('qtext').textContent = `${item.t} − ${item.k} = ?`;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'qfeedback';
+  document.getElementById('nextBtn').style.display = 'none';
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  shuffle(mkChoices(item.a)).forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c;
+    btn.onclick = () => selectAnswer(c, btn);
+    choicesEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(value, btn){
+  if(answered) return;
+  answered = true;
+  const item = questions[idx];
+  const feedback = document.getElementById('feedback');
+  document.querySelectorAll('#choices .choice').forEach(b=>{
+    if(parseInt(b.textContent,10) === item.a) b.classList.add('correct');
+  });
+  if(value === item.a){
+    score++;
+    btn.classList.add('correct');
+    feedback.textContent = `Yes! ${item.t} − ${item.k} = ${item.a}.` + (item.mix ? ' ' + strategy(item) : '');
+    feedback.className = 'qfeedback ok';
+  } else {
+    btn.classList.add('wrong');
+    if(item.mix){
+      renderSubtractionBlocks(document.getElementById('qDemo'), item.t, item.k, {caption: 'Here are the blocks. Count the solid ones.'});
+      feedback.textContent = `Not quite — ${item.t} − ${item.k} = ${item.a}. ${strategy(item)}`;
+    } else {
+      feedback.textContent = `Not quite — ${item.t} − ${item.k} = ${item.a}. Count the solid blocks again. ${strategy(item)}`;
+    }
+    feedback.className = 'qfeedback no';
+  }
+  document.getElementById('scorecount').textContent = `Score: ${score}`;
+  document.getElementById('nextBtn').style.display = 'inline-block';
+  document.getElementById('nextBtn').textContent = (idx === TOTAL-1) ? 'Finish' : 'Next →';
+}
+
+function nextQuestion(){
+  idx++;
+  if(idx >= TOTAL){
+    finish();
+    return;
+  }
+  renderQuestion();
+}
+
+function finish(){
+  document.querySelector('.qcard').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('sectionLabel').style.display = 'none';
+  document.getElementById('qcount').textContent = 'Done!';
+  const rec = mathSave(LESSON_KEY, score, TOTAL);
+  let msg;
+  if(score >= 45) msg = '⭐ Subtraction Star! You know your facts.';
+  else if(score >= 35) msg = '💪 Strong work! A little more practice and every fact will be quick.';
+  else msg = '🌱 Good practice. Try again and use the tricks — you will beat your best.';
+  const banner = document.getElementById('doneBanner');
+  banner.style.display = 'block';
+  banner.innerHTML = `${msg}<br>You scored ${score} / ${TOTAL} (best so far: ${rec.best} / ${TOTAL}).<br>
+    <a class="btn green" style="margin-top:10px" href="lesson1-multiplication-review.html">Continue to Lesson 1: The Dragon Hatchery &rarr;</a>`;
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

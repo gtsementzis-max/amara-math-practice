@@ -23,6 +23,16 @@
     </div>
   </a>
 
+  <a class="lesson card" href="lesson0b-subtraction-blocks.html" style="text-decoration:none">
+    <div class="lesson-num" style="background:var(--cyan)">0b</div>
+    <div class="lesson-body">
+      <h3>Subtraction with Blocks</h3>
+      <p>Addition backwards: take blocks away, count back, jump to 10. Drills from taking away 9 down to 1, then a mix.</p>
+      <div class="bar-track"><div class="bar-fill" id="bar-lesson0b" style="background:var(--cyan)"></div></div>
+      <div class="bar-label" id="label-lesson0b">0 / 50</div>
+    </div>
+  </a>
+
   <a class="lesson card" href="lesson1-multiplication-review.html" style="text-decoration:none">
     <div class="lesson-num" style="background:var(--blue)">1</div>
     <div class="lesson-body">
@@ -116,6 +126,7 @@ function refreshBars(){
   const data = mathLoad();
   const lessons = [
     {key:'lesson0', total:45},
+    {key:'lesson0b', total:50},
     {key:'lesson1', total:62},
     {key:'lesson2', total:10},
     {key:'lesson3', total:15},

@@ -604,3 +604,173 @@ function initLinePlaceActivity(container, opts){
 function ordinalDen(d){
   return ({2:'half', 3:'third', 4:'quarter', 5:'fifth', 6:'sixth', 7:'seventh', 8:'eighth', 9:'ninth', 10:'tenth'})[d] || `${d}th`;
 }
+
+// ---- Subtraction with blocks (Lesson 0b) ----
+
+// Draws `total` unit blocks in ten-frame rows (10 per row, a small gap after
+// the 5th) with the taken-away blocks crossed out. By default the LAST `take`
+// blocks are crossed; opts.takenSet (a Set of indexes) crosses specific ones
+// instead. opts.tappable + opts.onTap(index, blockEl) make blocks interactive.
+// opts.size: 'md' (34px, default) | 'lg' (44px tap targets) | 'sm' (22px).
+// opts.caption adds a short line under the blocks. Returns the group element.
+function renderSubtractionBlocks(el, total, take, opts){
+  opts = opts || {};
+  const size = opts.size || 'md';
+  el.className = 'addend-blocks sub-blocks';
+  el.innerHTML = '';
+  const grp = document.createElement('div');
+  grp.className = 'block-group wide ' + size;
+  for(let i=0;i<total;i++){
+    const blk = document.createElement('span');
+    const gone = opts.takenSet ? opts.takenSet.has(i) : (i >= total - take);
+    blk.className = 'block block-a' + (gone ? ' block-gone' : '') + (opts.tappable ? ' tappable' : '');
+    blk.setAttribute('aria-label', gone ? 'block taken away' : 'block');
+    if(opts.tappable){ blk.onclick = () => opts.onTap(i, blk); }
+    grp.appendChild(blk);
+  }
+  el.appendChild(grp);
+  if(opts.caption){
+    const cap = document.createElement('div');
+    cap.className = 'take-caption';
+    cap.textContent = opts.caption;
+    el.appendChild(cap);
+  }
+  return grp;
+}
+
+// Number line 0..max with hops going BACK from `start`.
+// mode 'ones'  = `back` single hops (count back one at a time).
+// mode 'ten'   = one hop down to 10, then one hop for the rest (jump to 10);
+//                falls back to a single hop when the fact doesn't cross 10.
+// opts.showAnswer=false hides the landing number (shows "?").
+function renderSubtractLine(el, start, back, opts){
+  opts = opts || {};
+  const max = opts.max || 20, mode = opts.mode || 'ones';
+  const showAnswer = opts.showAnswer !== false;
+  const answer = start - back;
+  const W = 720, H = 150, padL = 26, padR = 26, baseY = 96;
+  const unit = (W - padL - padR) / max;
+  const x = v => Math.round((padL + v * unit) * 10) / 10;
+  let hops = [];
+  if(mode === 'ten' && start > 10 && answer < 10){
+    hops = [[start, 10, '−' + (start - 10)], [10, answer, '−' + (10 - answer)]];
+  } else if(mode === 'ten'){
+    hops = [[start, answer, '−' + back]];
+  } else {
+    for(let k=0;k<back;k++) hops.push([start - k, start - k - 1, String(k + 1)]);
+  }
+  let s = `<svg class="numline" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Number line from 0 to ${max}, hopping back ${back} from ${start}">`;
+  s += `<line x1="${padL-10}" y1="${baseY}" x2="${W-padR+10}" y2="${baseY}" stroke="#5c6b84" stroke-width="2"/>`;
+  for(let v=0; v<=max; v++){
+    const big = (v === 10 || v === 0 || v === max);
+    s += `<line x1="${x(v)}" y1="${baseY-(big?8:5)}" x2="${x(v)}" y2="${baseY+(big?8:5)}" stroke="#5c6b84" stroke-width="${big?2.5:1.5}"/>`;
+    s += `<text x="${x(v)}" y="${baseY+24}" font-size="14" font-weight="${big?800:700}" text-anchor="middle" fill="${v===10?'var(--blue,#3b82f6)':'#5c6b84'}" font-family="inherit">${v}</text>`;
+  }
+  hops.forEach(([from, to, label]) => {
+    const len = from - to;
+    const arcH = Math.min(44, 16 + len * 4);
+    const midX = (x(from) + x(to)) / 2;
+    s += `<path d="M${x(from)} ${baseY-3} Q${midX} ${baseY-3-arcH*2} ${x(to)} ${baseY-3}" fill="none" stroke="var(--purple,#8b5cf6)" stroke-width="3" stroke-linecap="round"/>`;
+    s += `<polygon points="${x(to)},${baseY-3} ${x(to)+10},${baseY-15} ${x(to)+2},${baseY-16}" fill="var(--purple,#8b5cf6)"/>`;
+    s += `<text x="${midX}" y="${baseY-9-arcH}" font-size="14" font-weight="800" text-anchor="middle" fill="var(--purple,#8b5cf6)" font-family="inherit">${label}</text>`;
+  });
+  // start marker
+  s += `<circle cx="${x(start)}" cy="${baseY}" r="7" fill="#fff" stroke="var(--blue,#3b82f6)" stroke-width="3"/>`;
+  s += `<text x="${x(start)}" y="${baseY+44}" font-size="13" font-weight="800" text-anchor="middle" fill="var(--blue,#3b82f6)" font-family="inherit">start</text>`;
+  // landing marker
+  const rx = x(answer);
+  s += `<circle cx="${rx}" cy="${baseY}" r="7" fill="var(--amber,#f59e0b)" stroke="#fff" stroke-width="2"/>`;
+  s += `<rect x="${rx-18}" y="${baseY+30}" width="36" height="22" rx="11" fill="var(--amber,#f59e0b)"/>`;
+  s += `<text x="${rx}" y="${baseY+46}" font-size="15" font-weight="800" text-anchor="middle" fill="#fff" font-family="inherit">${showAnswer ? answer : '?'}</text>`;
+  s += '</svg>';
+  el.innerHTML = s;
+  return { hops: hops.length, answer };
+}
+
+// Guided take-away manipulative: tap `take` blocks to cross them out, then pick
+// how many are left. Tapping a crossed block puts it back. Extra taps shake the
+// group and show a hint. Never a dead end: wrong answers keep the choices open.
+function initTakeAwayActivity(container, opts){
+  const { total, take, onComplete } = opts;
+  const answer = total - take;
+  const taken = new Set();
+  container.innerHTML = `
+    <div class="build-wrap">
+      <div class="build-status" data-role="prompt"></div>
+      <div data-role="blocks"></div>
+      <div class="build-status" data-role="status"></div>
+      <div class="choices" data-role="choices" style="display:none"></div>
+      <div class="build-success" data-role="success"></div>
+    </div>
+  `;
+  const promptEl = container.querySelector('[data-role="prompt"]');
+  const blocksEl = container.querySelector('[data-role="blocks"]');
+  const statusEl = container.querySelector('[data-role="status"]');
+  const choicesEl = container.querySelector('[data-role="choices"]');
+  const successEl = container.querySelector('[data-role="success"]');
+  let done = false;
+
+  function render(){
+    if(taken.size < take){
+      promptEl.textContent = `Tap ${take} blocks to take them away. Taken so far: ${taken.size} of ${take}.`;
+    } else {
+      promptEl.textContent = `All ${take} are taken away. How many blocks are left?`;
+    }
+    const grp = renderSubtractionBlocks(blocksEl, total, take, {
+      takenSet: taken, tappable: !done, size: 'lg', onTap: (i, blk) => handleTap(i, grp)
+    });
+    if(taken.size === take && !done){
+      choicesEl.style.display = 'flex';
+      if(!choicesEl.childElementCount) buildChoices();
+    } else if(!done){
+      choicesEl.style.display = 'none';
+    }
+  }
+
+  function handleTap(i, grp){
+    if(done) return;
+    if(taken.has(i)){
+      taken.delete(i);
+      statusEl.textContent = 'Put back. Tap a blue block to take it away.';
+    } else if(taken.size >= take){
+      grp.classList.add('shake');
+      statusEl.textContent = `You already took away ${take}. Now count the solid blue blocks.`;
+      setTimeout(()=>grp.classList.remove('shake'), 400);
+      return;
+    } else {
+      taken.add(i);
+      statusEl.textContent = '';
+    }
+    render();
+  }
+
+  function buildChoices(){
+    const pool = [answer, answer + 1, Math.max(0, answer - 1), answer + 2]
+      .filter((v, i, a) => a.indexOf(v) === i).slice(0, 3);
+    for(let k=pool.length-1;k>0;k--){ const j = Math.floor(Math.random()*(k+1)); [pool[k],pool[j]] = [pool[j],pool[k]]; }
+    choicesEl.innerHTML = '';
+    pool.forEach(v => {
+      const btn = document.createElement('button');
+      btn.className = 'choice';
+      btn.textContent = v;
+      btn.onclick = () => {
+        if(done) return;
+        if(v === answer){
+          done = true;
+          btn.classList.add('correct');
+          statusEl.textContent = '';
+          successEl.style.display = 'block';
+          successEl.textContent = `${total} take away ${take} leaves ${answer}. So ${total} − ${take} = ${answer}. You did it!`;
+          render();
+          if(onComplete) onComplete(successEl);
+        } else {
+          btn.classList.add('wrong');
+          statusEl.textContent = 'Not yet. Count only the solid blue blocks — skip the crossed ones.';
+        }
+      };
+      choicesEl.appendChild(btn);
+    });
+  }
+
+  render();
+}

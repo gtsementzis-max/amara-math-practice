@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Break a Ten: Subtraction with Regrouping — Amara's Math Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav"><a class="back" href="index.html">&larr; Back to Math Practice</a></div>
+  <h1>Lesson 0c: Break a Ten</h1>
+  <p class="sub">Big numbers now. <b>42 &minus; 17</b> has a problem: you can't take 7 ones from 2 ones.
+  The fix is to <b>break a ten</b> into 10 ones. Teachers call this <b>regrouping</b> (or borrowing).
+  We'll see it with blocks first, then write it in columns.</p>
+
+  <!-- 1 · WATCH: blocks -->
+  <div class="card">
+    <h2 style="margin-top:0">When there aren't enough ones <span class="stage watch">1 · Watch 👀</span></h2>
+    <div class="explain">
+      <b>42 &minus; 17.</b> 42 is <b>4 tens and 2 ones</b>. We need to take away <b>1 ten and 7 ones</b>. Ones first: 2 &minus; 7? Not enough ones!
+    </div>
+    <div class="bt-panels">
+      <div class="bt-panel">
+        <div class="bt-title">1. Start: 42</div>
+        <div id="bt-before"></div>
+        <p style="color:var(--sub);font-size:.9rem;margin:6px 0 0">Only 2 ones. We need 7.</p>
+      </div>
+      <div class="bt-panel">
+        <div class="bt-title">2. Break a ten</div>
+        <div id="bt-broken"></div>
+        <p style="color:var(--sub);font-size:.9rem;margin:6px 0 0">One rod becomes 10 cubes. Still 42, just 3 tens and 12 ones.</p>
+      </div>
+      <div class="bt-panel">
+        <div class="bt-title">3. Take away 17</div>
+        <div id="bt-after"></div>
+        <p style="color:var(--sub);font-size:.9rem;margin:6px 0 0">Cross out 7 ones and 1 ten. Left: 2 tens and 5 ones = <b>25</b>.</p>
+      </div>
+    </div>
+    <p style="color:var(--sub);font-size:.95rem">So <b>42 &minus; 17 = 25</b>. Breaking a ten does not change the number. It just makes the ones easy to take away.</p>
+  </div>
+
+  <!-- 1 · WATCH: columns -->
+  <div class="card">
+    <h2 style="margin-top:0">Write it in columns <span class="stage watch">1 · Watch 👀</span></h2>
+    <div class="explain">
+      Same idea, written down. The little purple numbers show the broken ten: <b>4</b> tens become <b>3</b>, and <b>2</b> ones become <b>12</b>.
+    </div>
+    <div id="col-demo"></div>
+    <div class="step-list">
+      <div class="step"><div class="n">1</div><div><b>Ones first.</b> 2 &minus; 7? Not enough.</div></div>
+      <div class="step"><div class="n">2</div><div><b>Break a ten.</b> Cross out the 4, write 3. The 2 becomes 12.</div></div>
+      <div class="step"><div class="n">3</div><div><b>Subtract the ones.</b> 12 &minus; 7 = 5.</div></div>
+      <div class="step"><div class="n">4</div><div><b>Subtract the tens.</b> 3 &minus; 1 = 2. Answer: <b>25</b>.</div></div>
+      <div class="step"><div class="n">✓</div><div><b>Check with addition.</b> 25 + 17 = 42. It matches!</div></div>
+    </div>
+    <div class="trap">⚠️ The trap: don't flip the digits. 7 &minus; 2 = 5 looks easy, but 42 &minus; 17 is <b>not</b> 35. Always break a ten instead.</div>
+  </div>
+
+  <!-- 1 · WATCH: three digits -->
+  <div class="card">
+    <h2 style="margin-top:0">Three digits: break a hundred too <span class="stage watch">1 · Watch 👀</span></h2>
+    <div class="explain">
+      <b>325 &minus; 168.</b> Same rule in every column: not enough? Break one from the column to the left.
+    </div>
+    <div id="col-demo3"></div>
+    <p style="color:var(--sub);font-size:.95rem"><b>Ones:</b> 5 &minus; 8? Break a ten: 2 tens become 1, 5 becomes 15. 15 &minus; 8 = 7.</p>
+    <p style="color:var(--sub);font-size:.95rem"><b>Tens:</b> 1 &minus; 6? Break a hundred: 3 hundreds become 2, 1 becomes 11. 11 &minus; 6 = 5.</p>
+    <p style="color:var(--sub);font-size:.95rem"><b>Hundreds:</b> 2 &minus; 1 = 1. Answer: <b>157</b>. Check: 157 + 168 = 325. ✓</p>
+  </div>
+
+  <!-- 1 · WATCH: zero in the middle -->
+  <div class="card">
+    <h2 style="margin-top:0">When the tens are zero <span class="stage watch">1 · Watch 👀</span></h2>
+    <div class="explain">
+      <b>405 &minus; 138.</b> Ones: 5 &minus; 8? Not enough. But there are <b>0 tens</b> to break! So break a <b>hundred</b> first.
+    </div>
+    <div id="col-demo0"></div>
+    <p style="color:var(--sub);font-size:.95rem"><b>Step 1:</b> Break a hundred. 4 hundreds become 3. The 0 tens become 10 tens.</p>
+    <p style="color:var(--sub);font-size:.95rem"><b>Step 2:</b> Now break a ten. 10 tens become 9. The 5 ones become 15.</p>
+    <p style="color:var(--sub);font-size:.95rem"><b>Then subtract:</b> 15 &minus; 8 = 7. 9 &minus; 3 = 6. 3 &minus; 1 = 2. Answer: <b>267</b>.</p>
+  </div>
+
+  <!-- 2 · TRY WITH HELP: blocks -->
+  <div class="card">
+    <h2 style="margin-top:0">Break a ten with blocks <span class="stage help">2 · Try with help 🤝 · not scored</span></h2>
+    <p class="sub" style="margin-top:-4px">Tap a rod to break it. Tap cubes and rods to take them away. Tap a crossed piece to put it back.</p>
+    <div class="qtext" id="btTitle" style="margin:6px 0"></div>
+    <div id="btActivity"></div>
+    <div id="btNext" style="margin-top:10px"></div>
+  </div>
+
+  <!-- 2 · TRY WITH HELP: columns -->
+  <div class="card">
+    <h2 style="margin-top:0">Columns, one step at a time <span class="stage help">2 · Try with help 🤝 · not scored</span></h2>
+    <p class="sub" style="margin-top:-4px">The glowing column is the one you are working on. Pick what to do at each step.</p>
+    <div class="qtext" id="colTitle" style="margin:6px 0"></div>
+    <div id="colActivity"></div>
+    <div id="colNext" style="margin-top:10px"></div>
+  </div>
+
+  <!-- 3 · ON YOUR OWN -->
+  <div class="card">
+    <h2 style="margin-top:0">Your turn <span class="stage own">3 · On your own 🏆 · this one counts</span></h2>
+    <p style="color:var(--sub);margin-top:-4px">Two digits, then three digits, then zeros in the middle, then a mix. Break a ten (or a hundred) whenever you need to.</p>
+    <div class="progress-strip">
+      <span id="qcount">Question 1 of 18</span>
+      <span id="scorecount">Score: 0</span>
+    </div>
+    <div class="section-label" id="sectionLabel"></div>
+    <div class="qcard">
+      <div class="qtext" id="qtext"></div>
+      <div id="qDemo"></div>
+      <div class="choices" id="choices"></div>
+      <div class="qfeedback" id="feedback"></div>
+      <div id="qSolved"></div>
+    </div>
+    <div style="text-align:right">
+      <button class="btn" id="nextBtn" style="display:none" onclick="nextQuestion()">Next &rarr;</button>
+    </div>
+    <div class="done-banner" id="doneBanner"></div>
+  </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+// ---- Watch demos ----
+renderBaseTen(document.getElementById('bt-before'), {tens:4, ones:2});
+renderBaseTen(document.getElementById('bt-broken'), {tens:3, ones:12});
+renderBaseTen(document.getElementById('bt-after'), {tens:3, ones:12, goneTens:1, goneOnes:7});
+renderColumnSubtraction(document.getElementById('col-demo'), 42, 17);
+renderColumnSubtraction(document.getElementById('col-demo3'), 325, 168);
+renderColumnSubtraction(document.getElementById('col-demo0'), 405, 138);
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+// ---- Try with help: break a ten with blocks (3 rounds) ----
+const btRounds = [{a:42,b:15},{a:63,b:26},{a:81,b:25}];
+let btIdx = 0;
+function startBtRound(){
+  const r = btRounds[btIdx];
+  document.getElementById('btTitle').textContent = `Round ${btIdx+1} of ${btRounds.length}:  ${r.a} − ${r.b} = ?`;
+  document.getElementById('btNext').innerHTML = '';
+  initBreakTenActivity(document.getElementById('btActivity'), {
+    a: r.a, b: r.b,
+    onComplete: () => {
+      const next = document.getElementById('btNext');
+      if(btIdx < btRounds.length - 1){
+        next.innerHTML = '<button class="btn" onclick="btIdx++;startBtRound()">Try another &rarr;</button>';
+      } else {
+        next.innerHTML = '<div class="build-success" style="display:block">All 3 rounds done! Breaking a ten is your superpower now. 🎉</div>';
+      }
+    }
+  });
+}
+startBtRound();
+
+// ---- Try with help: columns step by step (2 rounds + optional zero bonus) ----
+const colRounds = [{a:42,b:17},{a:325,b:168}];
+const colBonus = {a:405,b:138};
+let colIdx = 0;
+function startColRound(round, isBonus){
+  const {a, b} = round;
+  document.getElementById('colTitle').textContent = (isBonus ? 'Bonus (zero in the middle): ' : `Round ${colIdx+1} of ${colRounds.length}:  `) + `${a} − ${b} = ?`;
+  document.getElementById('colNext').innerHTML = '';
+  const box = document.getElementById('colActivity');
+  box.innerHTML = `
+    <div class="build-wrap">
+      <div data-role="cols"></div>
+      <div class="build-status" data-role="prompt"></div>
+      <div class="choices" data-role="choices"></div>
+      <div class="build-status" data-role="status"></div>
+      <div class="build-success" data-role="success"></div>
+    </div>`;
+  const colsEl = box.querySelector('[data-role="cols"]');
+  const promptEl = box.querySelector('[data-role="prompt"]');
+  const choicesEl = box.querySelector('[data-role="choices"]');
+  const statusEl = box.querySelector('[data-role="status"]');
+  const successEl = box.querySelector('[data-role="success"]');
+  const { steps, answer } = columnSubtractionSteps(a, b);
+  let k = 0, misses = 0;
+
+  function showStep(){
+    const st = steps[k];
+    const prev = k === 0 ? null : steps[k-1].after;
+    renderColumnSubtraction(colsEl, a, b, {snapshot: prev, activeCol: st.col});
+    promptEl.textContent = `Step ${k+1} of ${steps.length}: ${st.text}`;
+    statusEl.textContent = '';
+    misses = 0;
+    choicesEl.innerHTML = '';
+    shuffle(st.choices).forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'choice';
+      btn.textContent = c;
+      btn.onclick = () => pick(c, btn);
+      choicesEl.appendChild(btn);
+    });
+  }
+  function pick(c, btn){
+    const st = steps[k];
+    if(String(c) === String(st.answer)){
+      btn.classList.add('correct');
+      k++;
+      if(k >= steps.length){
+        renderColumnSubtraction(colsEl, a, b, {});
+        promptEl.textContent = '';
+        choicesEl.innerHTML = '';
+        successEl.style.display = 'block';
+        successEl.textContent = `${a} − ${b} = ${answer}. Check: ${answer} + ${b} = ${a}. ✓ Every step was yours!`;
+        const next = document.getElementById('colNext');
+        if(!isBonus && colIdx < colRounds.length - 1){
+          next.innerHTML = '<button class="btn" onclick="colIdx++;startColRound(colRounds[colIdx],false)">Try another &rarr;</button>';
+        } else if(!isBonus){
+          next.innerHTML = '<div class="build-success" style="display:block">Both rounds done! 🎉</div>' +
+            '<button class="btn ghost" style="margin-top:8px" onclick="startColRound(colBonus,true)">Bonus: try one with a zero in the middle &rarr;</button>';
+        } else {
+          next.innerHTML = '<div class="build-success" style="display:block">Zero in the middle — handled! You are ready for the quiz. 🎉</div>';
+        }
+      } else {
+        setTimeout(showStep, 350);
+      }
+    } else {
+      btn.classList.add('wrong');
+      misses++;
+      statusEl.textContent = st.hint + (misses >= 2 ? ' Look at the glowing column.' : '');
+    }
+  }
+  showStep();
+}
+startColRound(colRounds[0], false);
+
+// ---- On your own: 18 questions ----
+const PARTS = {A:'Part A · Two digits', B:'Part B · Three digits', C:'Part C · Zero in the middle', mix:'🔀 Mix it up'};
+const questions = [
+  {a:42,b:17,part:'A'},{a:63,b:28,part:'A'},{a:70,b:36,part:'A'},{a:86,b:34,part:'A'},{a:91,b:45,part:'A'},{a:54,b:17,part:'A'},
+  {a:325,b:168,part:'B'},{a:452,b:236,part:'B'},{a:613,b:247,part:'B'},{a:740,b:385,part:'B'},{a:528,b:193,part:'B'},{a:836,b:279,part:'B'},
+  {a:405,b:138,part:'C'},{a:300,b:147,part:'C'},{a:602,b:358,part:'C'},
+  {a:63,b:28,part:'mix',mix:true},{a:613,b:247,part:'mix',mix:true},{a:300,b:147,part:'mix',mix:true},
+].map(q => ({...q, ans: q.a - q.b}));
+
+// The classic mistake: subtracting the smaller digit from the bigger in each column.
+function flipDigits(a, b){
+  const n = String(a).length;
+  const ta = String(a).padStart(n,'0').split('').map(Number);
+  const tb = String(b).padStart(n,'0').split('').map(Number);
+  return parseInt(ta.map((d,i)=>Math.abs(d - tb[i])).join(''), 10);
+}
+function mkChoices(item){
+  const {a, b, ans} = item;
+  const pool = [ans];
+  const cands = [flipDigits(a, b), ans + 10, ans - 10, ans + 1, ans - 1, ans + 100, ans - 100];
+  for(const v of cands){
+    if(pool.length >= 4) break;
+    if(v >= 0 && v !== ans && !pool.includes(v)) pool.push(v);
+  }
+  return pool;
+}
+
+let idx = 0, score = 0, answered = false;
+const LESSON_KEY = 'lesson0c', TOTAL = questions.length;
+
+function renderQuestion(){
+  answered = false;
+  const item = questions[idx];
+  document.getElementById('qcount').textContent = `Question ${idx+1} of ${TOTAL}`;
+  document.getElementById('scorecount').textContent = `Score: ${score}`;
+  if(idx === 0 || questions[idx-1].part !== item.part){
+    document.getElementById('sectionLabel').textContent = PARTS[item.part];
+  }
+  document.getElementById('qtext').textContent = `${item.a} − ${item.b} = ?`;
+  const demo = document.getElementById('qDemo');
+  if(item.mix){
+    demo.className = '';
+    demo.style.gridTemplateColumns = '';
+    demo.innerHTML = '<p class="take-caption">No columns drawn this time. Picture them in your head, or use paper.</p>';
+  } else {
+    renderColumnSubtraction(demo, item.a, item.b, {snapshot: null});
+  }
+  document.getElementById('qSolved').innerHTML = '';
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'qfeedback';
+  document.getElementById('nextBtn').style.display = 'none';
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  shuffle(mkChoices(item)).forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c;
+    btn.onclick = () => selectAnswer(c, btn);
+    choicesEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(value, btn){
+  if(answered) return;
+  answered = true;
+  const item = questions[idx];
+  const feedback = document.getElementById('feedback');
+  document.querySelectorAll('#choices .choice').forEach(b=>{
+    if(parseInt(b.textContent,10) === item.ans) b.classList.add('correct');
+  });
+  if(value === item.ans){
+    score++;
+    btn.classList.add('correct');
+    feedback.textContent = `Yes! ${item.a} − ${item.b} = ${item.ans}. Check: ${item.ans} + ${item.b} = ${item.a}. ✓`;
+    feedback.className = 'qfeedback ok';
+  } else {
+    btn.classList.add('wrong');
+    const flipped = flipDigits(item.a, item.b);
+    const trap = (value === flipped && flipped !== item.ans) ? ' That is the flip trap: you took the small digit from the big one. Break a ten instead.' : '';
+    feedback.textContent = `Not quite — ${item.a} − ${item.b} = ${item.ans}.${trap} Here is every step:`;
+    feedback.className = 'qfeedback no';
+    const solved = document.getElementById('qSolved');
+    solved.innerHTML = '<div data-role="cols"></div><p class="take-caption"></p>';
+    renderColumnSubtraction(solved.querySelector('[data-role="cols"]'), item.a, item.b, {});
+    solved.querySelector('p').textContent = columnWalkText(item.a, item.b);
+  }
+  document.getElementById('scorecount').textContent = `Score: ${score}`;
+  document.getElementById('nextBtn').style.display = 'inline-block';
+  document.getElementById('nextBtn').textContent = (idx === TOTAL-1) ? 'Finish' : 'Next →';
+}
+
+function nextQuestion(){
+  idx++;
+  if(idx >= TOTAL){
+    finish();
+    return;
+  }
+  renderQuestion();
+}
+
+function finish(){
+  document.querySelector('.qcard').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('sectionLabel').style.display = 'none';
+  document.getElementById('qcount').textContent = 'Done!';
+  const rec = mathSave(LESSON_KEY, score, TOTAL);
+  let msg;
+  if(score >= 16) msg = '⭐ Regrouping Star! You can break tens and hundreds like a pro.';
+  else if(score >= 12) msg = '💪 Strong work! A little more practice and every column will feel easy.';
+  else msg = '🌱 Good practice. Try again — ones first, and break a ten when you need to.';
+  const banner = document.getElementById('doneBanner');
+  banner.style.display = 'block';
+  banner.innerHTML = `${msg}<br>You scored ${score} / ${TOTAL} (best so far: ${rec.best} / ${TOTAL}).<br>
+    <a class="btn green" style="margin-top:10px" href="lesson1-multiplication-review.html">Continue to Lesson 1: The Dragon Hatchery &rarr;</a>`;
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

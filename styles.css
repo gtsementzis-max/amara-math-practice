@@ -13,6 +13,7 @@
   --pink:#db2777;
   --amber:#f59e0b;
   --cyan:#0891b2;
+  --lime:#65a30d;
   --green:#22c55e;
   --red:#ef4444;
   --line:#e4e9f2;
@@ -278,3 +279,45 @@ footer.foot{text-align:center;color:var(--sub);font-size:.85rem;margin-top:30px}
 .fact-family .fact small{display:block;font-size:.8rem;font-weight:700;color:var(--sub);margin-top:4px}
 .line-pair{display:grid;gap:6px;margin:8px 0}
 .line-pair .line-title{font-weight:800;color:var(--ink)}
+
+/* ---- Subtraction with regrouping (Lesson 0c): base-ten blocks + columns ---- */
+.bt-wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start;margin:12px 0}
+.bt-group{display:flex;flex-direction:column;gap:6px}
+.bt-label{font-weight:800;color:var(--sub);font-size:.9rem}
+.bt-pieces{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end}
+.bt-flat{width:52px;height:52px;border-radius:6px;background:var(--purple);
+  background-image:linear-gradient(rgba(255,255,255,.55) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.55) 1px,transparent 1px);
+  background-size:5.2px 5.2px;position:relative}
+.bt-rod{width:18px;height:90px;border-radius:4px;background:var(--teal);
+  background-image:linear-gradient(rgba(255,255,255,.65) 1px,transparent 1px);background-size:100% 9px;position:relative}
+.bt-cube{width:24px;height:24px;border-radius:5px;background:var(--amber);position:relative}
+.bt-pieces:has(.bt-cube){max-width:150px}
+.bt-wrap.lg .bt-rod{width:26px;height:110px;background-size:100% 11px}
+.bt-wrap.lg .bt-cube{width:36px;height:36px;border-radius:7px}
+.bt-wrap.lg .bt-pieces:has(.bt-cube){max-width:210px}
+.bt-wrap.lg .bt-pieces{gap:7px}
+.bt-gone{opacity:.45}
+.bt-gone::after{content:'✕';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:var(--red);line-height:1;opacity:1}
+.bt-rod.bt-gone::after{font-size:18px}
+.bt-tappable{cursor:pointer;transition:transform .12s}
+.bt-tappable:hover{transform:scale(1.06);box-shadow:0 0 0 3px rgba(59,130,246,.4)}
+.bt-group.shake{animation:blockshake .4s}
+.bt-panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:10px 0}
+.bt-panel{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:12px}
+.bt-panel .bt-title{font-weight:800;margin-bottom:4px}
+.bt-panel .bt-wrap{margin:6px 0;gap:14px}
+
+.colsub{display:inline-grid;gap:0 8px;font-size:1.7rem;font-weight:800;font-variant-numeric:tabular-nums;margin:10px 0;
+  padding:10px 16px 12px;background:#fffbea;border:1px solid #fbe8a9;border-radius:14px;line-height:1.15}
+.colsub .cs-cell{text-align:center;min-width:1.5em;padding:1px 4px;border-radius:8px}
+.colsub .cs-head{font-size:.7rem;font-weight:800;color:var(--sub);letter-spacing:.06em;text-transform:uppercase}
+.colsub .cs-marks{font-size:1rem;color:var(--purple);display:flex;flex-direction:column-reverse;align-items:center;min-height:1.3em;line-height:1.1}
+.colsub .cs-marks s,.colsub .cs-top s{color:#9aa3b5;text-decoration-color:var(--red);text-decoration-thickness:2px}
+.colsub .cs-sign{color:var(--sub);text-align:right}
+.colsub .cs-rule{grid-column:1/-1;border-top:3px solid var(--ink);margin:4px 0 2px}
+.colsub .cs-res{color:#15803d}
+.colsub .cs-active{background:#dbeafe;box-shadow:0 0 0 2px #93c5fd}
+.step-list{display:grid;gap:8px;margin:10px 0}
+.step-list .step{display:flex;gap:10px;align-items:flex-start;background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.step-list .step .n{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.95rem}
+.trap{background:#fdeaea;border:1px solid #f5b5b5;border-radius:12px;padding:10px 14px;margin:10px 0;color:#b91c1c;font-weight:700}

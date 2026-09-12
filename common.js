@@ -774,3 +774,263 @@ function initTakeAwayActivity(container, opts){
 
   render();
 }
+
+// ---- Subtraction with regrouping (Lesson 0c) ----
+
+// Base-ten blocks: hundreds flats, tens rods, ones cubes, each group labelled.
+// opts: {hundreds, tens, ones, goneHundreds, goneTens, goneOnes (counts crossed
+// from the end), tappable, onTap(kind, index, el), size:'md'|'lg', labels:true}
+function renderBaseTen(el, opts){
+  opts = opts || {};
+  const size = opts.size || 'md';
+  const labels = opts.labels !== false;
+  el.className = 'bt-wrap ' + size;
+  el.innerHTML = '';
+  const kinds = [
+    ['hundreds', 'bt-flat', opts.hundreds || 0, opts.goneHundreds || 0, 'hundred'],
+    ['tens', 'bt-rod', opts.tens || 0, opts.goneTens || 0, 'ten'],
+    ['ones', 'bt-cube', opts.ones || 0, opts.goneOnes || 0, 'one'],
+  ];
+  const groups = {};
+  kinds.forEach(([kind, cls, count, gone, single]) => {
+    if(count === 0 && kind === 'hundreds') return;
+    const grp = document.createElement('div');
+    grp.className = 'bt-group bt-' + kind;
+    if(labels){
+      const lab = document.createElement('div');
+      lab.className = 'bt-label';
+      lab.textContent = `${count} ${count === 1 ? single : kind}`;
+      grp.appendChild(lab);
+    }
+    const pieces = document.createElement('div');
+    pieces.className = 'bt-pieces';
+    for(let i=0;i<count;i++){
+      const p = document.createElement('span');
+      const isGone = i >= count - gone;
+      p.className = cls + (isGone ? ' bt-gone' : '') + (opts.tappable ? ' bt-tappable' : '');
+      p.setAttribute('aria-label', `${single}${isGone ? ' taken away' : ''}`);
+      if(opts.tappable) p.onclick = () => opts.onTap(kind, i, p, grp);
+      pieces.appendChild(p);
+    }
+    grp.appendChild(pieces);
+    el.appendChild(grp);
+    groups[kind] = grp;
+  });
+  return groups;
+}
+
+// Guided "break a ten" manipulative for a 2-digit subtraction that needs
+// regrouping in the ones. Phases: break (tap a rod) -> ones (tap cubes) ->
+// tens (tap rods) -> answer. Every wrong tap gets a hint; nothing is a dead end.
+function initBreakTenActivity(container, opts){
+  const { a, b, onComplete } = opts;
+  const bT = Math.floor(b / 10), bO = b % 10;
+  const answer = a - b;
+  let tens = Math.floor(a / 10), ones = a % 10;
+  let broke = false, goneOnes = 0, goneTens = 0, done = false;
+  container.innerHTML = `
+    <div class="build-wrap">
+      <div class="build-status" data-role="prompt"></div>
+      <div data-role="blocks"></div>
+      <div class="build-status" data-role="status"></div>
+      <div class="choices" data-role="choices" style="display:none"></div>
+      <div class="build-success" data-role="success"></div>
+    </div>
+  `;
+  const promptEl = container.querySelector('[data-role="prompt"]');
+  const blocksEl = container.querySelector('[data-role="blocks"]');
+  const statusEl = container.querySelector('[data-role="status"]');
+  const choicesEl = container.querySelector('[data-role="choices"]');
+  const successEl = container.querySelector('[data-role="success"]');
+
+  function phase(){
+    if(!broke) return 'break';
+    if(goneOnes < bO) return 'ones';
+    if(goneTens < bT) return 'tens';
+    return 'answer';
+  }
+  function render(){
+    const ph = phase();
+    if(ph === 'break') promptEl.textContent = `Ones first: take away ${bO} ones. You only have ${ones}. Tap a ten rod to break it into 10 ones.`;
+    else if(ph === 'ones') promptEl.textContent = `Now you have ${ones} ones. Tap ${bO} cubes to take them away. Taken: ${goneOnes} of ${bO}.`;
+    else if(ph === 'tens') promptEl.textContent = `Ones done! Now tap ${bT} ${bT === 1 ? 'rod' : 'rods'} to take away ${bT} ${bT === 1 ? 'ten' : 'tens'}. Taken: ${goneTens} of ${bT}.`;
+    else promptEl.textContent = 'All taken away. How many are left? Count the solid rods and cubes.';
+    renderBaseTen(blocksEl, { tens, ones, goneTens, goneOnes, tappable: !done, size: 'lg', onTap: handleTap });
+    choicesEl.style.display = (ph === 'answer') ? 'flex' : 'none';
+    if(ph === 'answer' && !choicesEl.childElementCount) buildChoices();
+  }
+  function shake(grp){ grp.classList.add('shake'); setTimeout(()=>grp.classList.remove('shake'), 400); }
+  function handleTap(kind, i, el, grp){
+    if(done) return;
+    const ph = phase();
+    const isGone = el.classList.contains('bt-gone');
+    if(ph === 'break'){
+      if(kind === 'tens'){ broke = true; tens -= 1; ones += 10; statusEl.textContent = `You broke a ten into 10 ones. Now: ${tens} tens and ${ones} ones.`; }
+      else { shake(grp); statusEl.textContent = `Only ${ones} ones here — not enough. Tap a ten rod to break it first.`; return; }
+    } else if(ph === 'ones'){
+      if(kind === 'ones' && !isGone){ goneOnes++; statusEl.textContent = ''; }
+      else if(kind === 'ones' && isGone){ goneOnes--; statusEl.textContent = 'Put back. Tap a solid cube to take it away.'; }
+      else { shake(grp); statusEl.textContent = 'Ones first! Take away the ones before the tens.'; return; }
+    } else if(ph === 'tens'){
+      if(kind === 'tens' && !isGone){ goneTens++; statusEl.textContent = ''; }
+      else if(kind === 'tens' && isGone){ goneTens--; statusEl.textContent = 'Put back. Tap a solid rod to take it away.'; }
+      else if(kind === 'ones' && isGone){ goneOnes--; statusEl.textContent = 'Put back one cube. Tap it again when you are ready.'; }
+      else { shake(grp); statusEl.textContent = `You already took away ${bO} ones. Tap the rods now.`; return; }
+    } else {
+      if(isGone){ if(kind === 'ones') goneOnes--; else goneTens--; statusEl.textContent = 'Put back. Tap it again when you are ready.'; }
+      else { shake(grp); statusEl.textContent = 'Everything is taken away. Now pick the answer below.'; return; }
+    }
+    render();
+  }
+  function buildChoices(){
+    const pool = [answer, answer + 10, answer - 1, answer + 1].filter((v, i, arr) => v >= 0 && arr.indexOf(v) === i).slice(0, 3);
+    for(let k=pool.length-1;k>0;k--){ const j = Math.floor(Math.random()*(k+1)); [pool[k],pool[j]] = [pool[j],pool[k]]; }
+    choicesEl.innerHTML = '';
+    pool.forEach(v => {
+      const btn = document.createElement('button');
+      btn.className = 'choice';
+      btn.textContent = v;
+      btn.onclick = () => {
+        if(done) return;
+        if(v === answer){
+          done = true;
+          btn.classList.add('correct');
+          statusEl.textContent = '';
+          successEl.style.display = 'block';
+          successEl.textContent = `${a} − ${b} = ${answer}. You broke a ten, took away the ones, then the tens. Check: ${answer} + ${b} = ${a}. ✓`;
+          render();
+          choicesEl.style.display = 'flex';
+          if(onComplete) onComplete(successEl);
+        } else {
+          btn.classList.add('wrong');
+          statusEl.textContent = `Not yet. Each solid rod is 10, each solid cube is 1. ${tens - goneTens} rods and ${ones - goneOnes} cubes.`;
+        }
+      };
+      choicesEl.appendChild(btn);
+    });
+  }
+  render();
+}
+
+// Builds the micro-steps of column subtraction a − b (a > b, up to 4 digits):
+// decide (regroup or not) -> regroup (what the digit becomes; handles zeros by
+// borrowing from the next column first) -> subtract, column by column.
+// Each step carries the column it works on and a snapshot ('after') of the
+// regroup marks + written results once the step is done.
+function columnSubtractionSteps(a, b){
+  const n = String(a).length;
+  const top = String(a).padStart(n, '0').split('').map(Number).reverse();
+  const bot = String(b).padStart(n, '0').split('').map(Number).reverse();
+  const names = ['ones', 'tens', 'hundreds', 'thousands'];
+  const bigger = ['ten', 'hundred', 'thousand', 'ten thousand'];
+  const single = ['one', 'ten', 'hundred', 'thousand'];
+  const unit = (v, i) => `${v} ${v === 1 ? single[i] : names[i]}`;
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const last = arr => arr[arr.length - 1];
+  const marks = top.map(d => [d]);
+  const results = new Array(n).fill(null);
+  const snap = () => ({ marks: marks.map(m => m.slice()), results: results.slice() });
+  const mk3 = v => [v, v + 1, v - 1].filter((x, i, arr) => x >= 0 && arr.indexOf(x) === i).slice(0, 3);
+  const steps = [];
+  for(let i=0;i<n;i++){
+    const cur = last(marks[i]), bd = bot[i];
+    if(cur < bd){
+      steps.push({ type:'decide', col:i,
+        text:`${cap(names[i])}: ${cur} − ${bd}. ${cur} is less than ${bd}. What do you do?`,
+        choices:[`Break a ${bigger[i]}`, `Flip it: ${bd} − ${cur} = ${bd - cur}`, `Skip the ${names[i]}`],
+        answer:`Break a ${bigger[i]}`,
+        hint:`You can't take ${bd} from ${cur}, and flipping the digits is a trap. Break a ${bigger[i]} into 10 ${names[i]}.`,
+        after: snap() });
+      let j = i + 1;
+      while(j < n && last(marks[j]) === 0) j++;
+      if(j >= n) throw new Error('a must be bigger than b');
+      for(let k=j;k>i;k--){
+        const fromVal = last(marks[k]), toVal = last(marks[k-1]);
+        marks[k].push(fromVal - 1);
+        marks[k-1].push(toVal + 10);
+        const zeroCase = (k - 1 > i);
+        steps.push({ type:'regroup', col:k-1,
+          text: zeroCase
+            ? `No ${names[k-1]} to break! Break a ${bigger[k-1]} instead: ${unit(fromVal, k)} become${fromVal === 1 ? 's' : ''} ${fromVal-1}. The ${unit(toVal, k-1)} become${toVal === 1 ? 's' : ''} how many?`
+            : `Break a ${bigger[k-1]}: ${unit(fromVal, k)} become${fromVal === 1 ? 's' : ''} ${fromVal-1}. The ${unit(toVal, k-1)} become${toVal === 1 ? 's' : ''} how many?`,
+          choices:[toVal + 10, toVal + 1, toVal + 9],
+          answer: toVal + 10,
+          hint:`One ${bigger[k-1]} is 10 ${names[k-1]}. ${toVal} + 10 = ${toVal + 10}.`,
+          after: snap() });
+      }
+    } else if(i < n - 1){
+      steps.push({ type:'decide', col:i,
+        text:`${cap(names[i])}: ${cur} − ${bd}. What do you do?`,
+        choices:[`Just subtract: ${cur} − ${bd} = ${cur - bd}`, `Break a ${bigger[i]}`],
+        answer:`Just subtract: ${cur} − ${bd} = ${cur - bd}`,
+        hint:`${cur} is enough to take ${bd} away. No need to break anything.`,
+        after: snap() });
+    }
+    const t = last(marks[i]);
+    results[i] = t - bd;
+    steps.push({ type:'subtract', col:i,
+      text:`${cap(names[i])}: ${t} − ${bd} = ?`,
+      choices: mk3(t - bd),
+      answer: t - bd,
+      hint:`Count back ${bd} from ${t}, or think: ${bd} plus what makes ${t}?`,
+      after: snap() });
+  }
+  return { steps, top, bot, n, answer: a - b, names };
+}
+
+// Draws a − b in columns with regroup marks. opts.snapshot: a step's 'after'
+// (progress so far), null for the blank problem, or omitted for fully solved.
+// opts.activeCol highlights one column. Returns the steps model.
+function renderColumnSubtraction(el, a, b, opts){
+  opts = opts || {};
+  const model = columnSubtractionSteps(a, b);
+  const { n, top, bot, steps } = model;
+  let snap;
+  if(opts.snapshot === null) snap = { marks: top.map(d => [d]), results: new Array(n).fill(null) };
+  else if(opts.snapshot) snap = opts.snapshot;
+  else snap = steps[steps.length - 1].after;
+  const heads = ['O', 'T', 'H', 'Th'];
+  const cell = (cls, col, html) => `<div class="cs-cell ${cls}${(opts.activeCol === col) ? ' cs-active' : ''}" data-col="${col}">${html}</div>`;
+  let s = '';
+  // header row
+  s += `<div class="cs-cell cs-head"></div>`;
+  for(let i=n-1;i>=0;i--) s += cell('cs-head', i, heads[i]);
+  // regroup marks row (newest on top)
+  s += `<div class="cs-cell"></div>`;
+  for(let i=n-1;i>=0;i--){
+    const changes = snap.marks[i].slice(1);
+    const inner = changes.map((v, idx) => (idx === changes.length - 1) ? `<span>${v}</span>` : `<s>${v}</s>`).join('');
+    s += cell('cs-marks', i, inner);
+  }
+  // top row
+  s += `<div class="cs-cell"></div>`;
+  for(let i=n-1;i>=0;i--){
+    const changed = snap.marks[i].length > 1;
+    s += cell('cs-top', i, changed ? `<s>${top[i]}</s>` : `${top[i]}`);
+  }
+  // bottom row
+  s += `<div class="cs-cell cs-sign">−</div>`;
+  for(let i=n-1;i>=0;i--) s += cell('cs-bot', i, `${bot[i]}`);
+  s += `<div class="cs-rule"></div>`;
+  // result row
+  s += `<div class="cs-cell"></div>`;
+  for(let i=n-1;i>=0;i--){
+    const r = snap.results[i];
+    s += cell('cs-res', i, r === null ? '&nbsp;' : `${r}`);
+  }
+  el.className = 'colsub';
+  el.style.gridTemplateColumns = `auto repeat(${n}, 1fr)`;
+  el.innerHTML = s;
+  return model;
+}
+
+// Short plain-words walk of a − b for feedback text.
+function columnWalkText(a, b){
+  const { steps, answer } = columnSubtractionSteps(a, b);
+  const parts = [];
+  steps.forEach(st => {
+    if(st.type === 'regroup') parts.push(st.text.replace(/ The (\d+) (\w+) (becomes?) how many\?$/, ` The $1 $2 $3 ${st.answer}.`));
+    if(st.type === 'subtract') parts.push(st.text.replace(' = ?', ` = ${st.answer}.`));
+  });
+  return parts.join(' ') + ` Check: ${answer} + ${b} = ${a}.`;
+}
